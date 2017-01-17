@@ -1,0 +1,1125 @@
+@charset "UTF-8";
+body  {
+	font: 100% Verdana, Arial, Helvetica, sans-serif;
+	background: #e8e8e8;
+	margin: 0; /* zaleca się wyzerowanie dopełnienia i marginesu elementu body, tak aby mogły być uwzględniane różne domyślne ustawienia przeglądarki */
+	padding: 0;
+	text-align: center; /* kontener zostaje wyśrodkowany w oknach przeglądarek IE 5*. Następnie tekst określony przez selektor #container jest wyrównywany domyślnie do lewej */
+	color: #000000;
+        min-width:440px;
+}
+.overTime #container { 
+	width: 100%;  /* szerokość kontenera będzie stanowić 100% szerokości okna przeglądarki */
+        min-width:440px;
+	background: #FFFFFF;
+	margin: 0 auto; /* automatyczne marginesy (w połączeniu z szerokością) powodują wyśrodkowanie strony */
+	border: 0px solid #000000;
+	text-align: left; /* ustawienie to przesłania domyślne ustawienie wyrównania tekstu: środkowanie w elemencie body. */
+} 
+.overTime #header { 
+	background: #336666;
+	display:flex;
+	/*border-top:#e8e8e8 solid 1px;
+	border-bottom:#275857 solid 1px;*/
+	padding: 0;  /* takie dopełnienie jest zgodne z wielkością wyrównania do lewej tych elementów div, które leżą poniżej. Jeśli w elemencie #header użyto obrazu zamiast tekstu, można usunąć dopełnienie. */
+
+} 
+.overTime #header h1 {
+	margin: 0; /* wyzerowanie marginesu w ostatnim elemencie nagłówka #header pozwoli uniknąć skrócenia marginesów – tj. dodania niepotrzebnych spacji między elementami div. Jeśli element div ma obramowanie, czynność ta jest niepotrzebna, ponieważ obramowanie również zapobiega skróceniu marginesów */
+	padding: 10px 0; /* użycie dopełnienia, a nie marginesu, pozwoli utrzymać odpowiednią odległość między elementem a krawędziami elementu div */
+}
+.overTime #mainContent { 
+	margin: 0 10px 0 10px; /* ustawienie lewego marginesu powinno odpowiadać ustawieniu nagłówka i stopki, bo to zapewnia  poprawne wyrównanie elementów. */
+} 
+.overTime a {
+	text-decoration:none;
+        color: #fff;
+}
+
+.overTime .button {
+    height: 26px;
+    border: solid black 1px;
+    color: black;
+    background-color: #fff;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font: 16px/28px "Arial", Gadget, sans-serif;
+    margin: 10px 0px;
+    padding: 0px 5px;
+    cursor: pointer;
+    outline: none;
+}
+
+.overTime .button:disabled {
+    height: 28px;
+    border: solid black 1px;
+    cursor: auto;
+    color: grey;
+    
+}
+
+.overTime .wlinii h1 {
+    display: inline-block;
+}
+.overTime .panel h2 {padding: 0px; margin: 0px;}
+
+.overTime #footer { 
+	padding: 0 10px; /* takie dopełnienie jest zgodne z wielkością wyrównania do lewej tych elementów div, które leżą powyżej. */
+	background:#DDDDDD;
+	clear:both;
+} 
+.overTime #footer p {
+	margin: 0; /* wyzerowanie marginesów pierwszego elementu w stopce pozwoli uniknąć ewentualnego skrócenia marginesów - tj. dodania niepotrzebnych spacji między elementami div */
+	padding: 10px 0; /* użycie dopełnienia zapewni marginesy, a jednocześnie uniemożliwi ich skrócenie */
+}
+.overTime #szukajka {
+	background: #336666;
+	flex-basis:50%;
+        flex-shrink:1;
+	height:60px;
+}
+.overTime #szukajka:hover {
+    background-color:#34734f;
+}
+
+.overTime input, select {
+    border: solid #336666 1px;
+    padding-left: 0px;
+    height: 26px;
+    font-family: sans-serif;
+    font-size:1em;
+    outline:none;
+    -ms-box-sizing:content-box;
+    -moz-box-sizing:content-box;
+    -webkit-box-sizing:content-box; 
+     box-sizing:content-box;
+}
+.overTime input.error, select.error {
+    border: solid #f00 1px;
+}
+/*INPUT TYPE FILE PRZESYLANIE ZDJĘCIA W FORMIE PRZYCISKU JAKO ZDJECIE*/
+div.upload {
+    width: 200px;
+    height: 200px;
+    text-align: center;
+    font: 12px/200px "Arial", Gadget, sans-serif;
+    /*background: url(https://lh6.googleusercontent.com/-dqTIJRTqEAQ/UJaofTQm3hI/AAAAAAAABHo/w7ruR1SOIsA/s157/upload.png);*/
+    overflow: hidden;
+    text-align: center;
+}
+div.upload .index-1 {
+    z-index: 1;
+    position: absolute;
+    text-align: center;
+    width: 200px !important;
+    height: 200px !important;
+    line-height: 1em;
+    font: 12px/200px "Arial", Gadget, sans-serif;
+}
+
+div.upload .index-2 {
+    z-index: 101;
+    position: absolute;
+    text-align: center;
+    width: 200px !important;
+    height: 200px !important;
+    line-height: 1em;
+    font: 12px/200px "Arial", Gadget, sans-serif;
+}
+
+
+div.upload input {
+    position: absolute;
+    display: block !important;
+    width: 200px !important;
+    height: 200px !important;
+    opacity: 0 !important;
+    overflow: hidden !important;
+    z-index: 100;
+    cursor: pointer;
+}
+
+/*Kolory tla danych w profilu zolnierza*/
+.blekitne {
+    background-color: #6BB2B2;
+}
+
+.blekitne:hover {
+    background-color: #8FB2B2;
+}
+
+.overTime #menu {
+    display:none;
+    margin:0;
+    top:0px;
+    left:0px;
+    height:60px;
+    width:100%;
+    background-color:#59B2B2;
+    position:absolute;
+}
+.overTime #dialog {
+    display:none;
+}
+.overTime .tytul > p {
+    margin-left: 10px;
+    white-space:nowrap;
+}
+
+.overTime .tytul > p.right {
+  flex-basis:100%;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  justify-content: flex-end;
+      
+}
+
+.overTime .podpis > p.dane {
+  
+    max-width: 200px;
+    line-height: 1.4em;
+    margin-left: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.podpowiedzi {
+	background-color:#F8F8F8;
+	padding:10px;
+	box-shadow: inset -5px -5px 5px #FAFAFA;
+}
+/*wyswietli gdy rozdzielczosc jest mniejsza niz 800px*/
+@media (max-width: 800px) {
+    .displaynone {
+            display:none;
+    }
+    a.profil {
+            padding:0 8px 0 8px;
+            margin-right:0px;
+            display:block;
+            font-weight:normal;
+            color:#FFF;
+            text-decoration:none;
+            font: 14px/60px "Arial", Gadget, sans-serif;
+            height:60px;
+    }
+    a.szukajmin {
+            display:block;
+            background-image:url(img/lay/lupaduza.png);
+            background-repeat:no-repeat;
+            background-position:center;
+            width:100%;
+            height:60px;
+    }
+
+    a.ustawienia:hover {
+            background-color:#34734f;
+    }
+}
+
+/*wyswietli wszystko gdy rozdzialka wieksza niz 801*/
+@media (min-width: 801px) {
+    .displaynonemax {
+            display:none;
+    }
+    a.profil {
+            padding:0 8px 0 8px;
+            margin-right:30px;
+            display:block;
+            font-weight:normal;
+            color:#FFF;
+            text-decoration:none;
+            font: 14px/60px "Arial", Gadget, sans-serif;
+            height:60px;
+    }
+}
+
+
+/*GORNE MENU*/
+/*Ustawienie pozycjonowania elementów flex menu*/
+#headleft {
+  flex-basis:60px;
+  height:60px;
+ background: #336666;
+}
+
+#headcenter {
+  flex-basis:25%;
+  padding-left:5px;
+  padding-right:11px;
+  height:60px;
+  background: #336666;
+}
+#headcenter:hover {
+background-color:#34734f;
+}
+
+#headright {
+  flex-basis:75%;
+  height:60px;
+  background: #336666;
+  display:flex;
+  justify-content: flex-end;
+}
+
+/*koniecbpozycjonowania tych elementow*/
+
+
+/* stare klasy
+.overTime #kontener {
+	position:relative;
+	margin: 0 auto;
+}
+.right {
+	float:right;
+}
+.left {
+	float:left;
+}
+*/
+/* Różne użyteczne klasy */
+
+.clearfloat { /* tę klasę należy umieścić w elemencie div lub break, powinna ona stanowić ostatni element kontenera zawierającego element pływający */
+    clear:both;
+    height:0;
+    line-height: 0px;
+}
+
+input[type=search] { /* klasa do szukajki*/
+	height:26px;
+	font-size: 14px;
+	margin-top:16px;
+	padding-left:5px;
+	cursor:text;     
+	text-shadow: 0 0.2px black;
+	border:0px;
+	outline:none;
+	width:100%;
+	-webkit-border-radius:5px 5px 5px 5px;
+	-khtml-border-radius:5px 5px 5px 5px;
+	-moz-border-radius:5px 5px 5px 5px;
+	border-radius:5px 5px 5px 5px;
+}
+
+.szukaj { /* tę klasę należy umieścić w elemencie input typu szukającego*/
+	color: 000;
+	display:none;
+	height:26px;
+	margin-top:17px;
+	width:26px;
+	cursor: pointer;
+	border:0px;
+	-webkit-border-radius:0 5px 5px 0;
+	-khtml-border-radius:0 5px 5px 0;
+	-moz-border-radius:0 5px 5px 0;
+	border-radius:0 5px 5px 0;
+	/*background-image:url(img/lay/lupa.png);*/
+}
+
+a.logo {
+	display:block;
+	background-image:url(img/lay/logo.png);
+	background-repeat:no-repeat;
+	background-position:center;
+	width:60px;
+	height:60px;
+	float:left;
+}
+
+a.logo:hover {
+	background-color:#34734f;
+}
+
+/*Ikony w pasku menu po najechaniu na logo overtime*/
+a.addovertime {
+
+	display:block;
+	float:left;
+	background-image:url(img/lay/plus.png);
+	background-repeat:no-repeat;
+	background-position:8px 8px;
+	text-align:left;
+	padding-right:8px;
+	padding-left:18px;
+	font: 14px/75px "Arial", Gadget, sans-serif;
+	color:#FFF;
+	height:60px;
+	text-decoration:none;
+
+}
+
+a.addovertime:hover {
+	background-color:#336666;
+}
+
+/*Buttony w gornym menu*/
+a.wyloguj {
+	padding:0 8px 0 8px;
+	display:block;
+	color:#FFF;
+	text-decoration:none;
+	background-color:#275857;
+	font: bold 14px/60px "Arial", Gadget, sans-serif;
+	height:60px;
+
+}
+a.wyloguj:hover {
+	background-color:#C40000;
+}
+
+a.ustawienia {
+    padding:0 8px 0 8px;
+	display:block;
+	background-image:url(img/lay/settings.png);
+	background-repeat:no-repeat;
+	background-position:center;
+	width:29px;
+	height:60px;
+}
+
+a.ustawienia:hover {
+	background-color:#34734f;
+}
+/*
+a.profil {
+	padding:0 8px 0 8px;
+	margin-right:30px;
+	display:block;
+	font-weight:normal;
+	color:#FFF;
+	text-decoration:none;
+	font: 14px/60px "Arial", Gadget, sans-serif;
+	height:60px;
+}
+*/
+a.profil:hover {
+	background-color:#34734f;
+}
+
+img.avatar {
+	background-position:center;
+
+}
+
+img.avatar {
+	border:1px solid #517171;
+	-webkit-border-radius:5px 5px 5px 5px;
+	-khtml-border-radius:5px 5px 5px 5px;
+	-moz-border-radius:5px 5px 5px 5px;
+	border-radius:5px 5px 5px 5px;
+}
+
+.zaokraglij {
+	border:1px solid #e6e6e6;
+	-webkit-border-radius:5px 5px 5px 5px;
+	-khtml-border-radius:5px 5px 5px 5px;
+	-moz-border-radius:5px 5px 5px 5px;
+	border-radius:5px 5px 5px 5px;
+}
+
+/*Profil zolnierza*/
+/*Panele na stronie, moze regulowane*/
+.panel{
+	background-color:#59B2B2;
+	text-align: left;
+        margin:5px;
+}
+
+.flex-container.nowrap {
+    flex-wrap: nowrap;
+    -webkit-flex-wrap: nowrap;
+}
+/*zdjecie wyswietlane w profilu zolnierza*/
+.panel.zdjecie {
+    flex-basis:222px;
+    -webkit-flex-basis:222px;
+    -khtml-flex-basis:222px;
+    -moz-flex-basis:222px;
+    -ms-flex-basis:222px;
+    -o-flex-basis:222px;
+}
+/*opis do zdjecia w profilu zolnierza, czyli dane klucza eskadry stopien*/
+.panel.dane {
+    flex-basis: 328px;
+    -webkit-flex-basis:328px;
+    -khtml-flex-basis:328px;
+    -moz-flex-basis:328px;
+    -ms-flex-basis:328px;
+    -o-ms-flex-basis:328px;
+}
+
+/*marginesy*/
+p {
+    margin: 0px;
+    padding: 0px;
+}
+.ml-10 {
+    margin-left: 10px;
+}
+.mr-10 {
+    margin-right: 10px;
+}
+.mb-10{
+    margin-bottom: 10px;
+}
+
+.mt-10{
+    margin-top: 10px;
+}
+
+/*paddingi*/
+.pb-10{
+    padding-bottom: 10px;
+}
+.pl-10{
+    padding-left: 10px;
+}
+.plr-5{
+    padding: 0px 5px;
+}
+input.pl-5{
+    padding-left: 5px;
+}
+
+/*szerokosci paneli do flexboksu*/
+.panel.siedemset {
+    width: 700px;
+}
+.panel.szescset {
+    width: 620px;
+}
+.panel.piecset{
+    width: 500px;
+}
+.panel.czterysta {
+    width: 400px;
+}
+.panel.trzysta {
+    width: 305px;
+}
+.panel.dwiescie {
+    width: 200px;
+}
+.panel.sto {
+    width: 100px;
+}
+.panel.czterdziesci {
+    width: 53px;
+}
+/*
+* html .panel {
+  position:absolute;
+  top:expression((x=(document.documentElement.offsetHeight-this.offsetHeight)/2)<0?0:x+'px');
+  left:50%;
+  margin-left:-250px; /* połowa szerokosci warstwy 
+}
+*/
+.tytul {
+	padding: 0px;
+        background-color:#336666;
+	min-height:40px;
+	font: bold 1em/40px "Arial", Gadget, sans-serif;
+	color:#FFF;
+	cursor: default;
+        list-style: none;
+        display: -webkit-box;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        flex-wrap:nowrap;
+        -webkit-flex-flow: nowrap;
+        overflow: hidden;
+        text-overflow: clip;
+}
+.tytul:hover {
+	background-color:#C40000;
+}
+
+.podpis {
+	padding: 0px;
+        background-color:#8FB2B2;
+	min-height:40px;
+	font: bold 1em/40px "Arial", Gadget, sans-serif;
+	color:#FFF;
+	cursor: pointer;
+}
+.podpis:hover {
+	background-color:#667F7F;
+}
+
+.zawartosc {
+	padding:10px;
+	color:#FFF;
+	text-shadow:#333 0.5px 0.5px;
+}
+.wysrodkuj {
+    text-align:center;
+}
+.wiersz-25{
+ height: 25px;
+ padding-bottom: 2px;
+ font: 1em/25px "Arial", Gadget, sans-serif; 
+}
+/*DODAWANIE NADGODZIN*/
+
+input.datanadgodzin {
+	text-align:center;
+}
+
+input.ggodzin{
+	text-align:center;
+}
+
+input.odstep{
+	margin-bottom:4px;
+}
+
+
+#dialog button {
+	margin-top:4px;
+        margin-right: 4px;
+	color: #fff;
+	display:inline-block;
+	position:relative;
+	background-color: #336666;
+	text-align:center;
+	overflow:hidden;
+	width:40px;
+	height:40px;
+	visibility:visible;
+	font: 16px/25px "Arial", Gadget, sans-serif;
+	-webkit-border-radius: 50%;	-khtml-border-radius: 50%;	-moz-border-radius: 50%;	border-radius: 50%;
+	border:solid 5px #ededed;
+	text-shadow:#333 0.5px 0.5px;
+	padding:0px 0px;
+	cursor:pointer;
+}
+
+#dialog button:hover {
+
+	border:solid 5px #8FB2B2;
+
+}
+
+input.zapisz {
+	margin-top:5px;
+	color: #fff;
+	display:inline-block;
+	position:relative;
+	background-color: #336666;
+	text-align:center;
+	overflow:hidden;
+	width:60px;
+	height:60px;
+	visibility:visible;
+	font: 14px/35px "Arial", Gadget, sans-serif;
+	-webkit-border-radius: 50%;	-khtml-border-radius: 50%;	-moz-border-radius: 50%;	border-radius: 50%;
+	border:solid 5px #FFF;
+	text-shadow:#333 0.5px 0.5px;
+	padding:0px 0px;
+	cursor:pointer;
+}
+
+input.zapisz:hover {
+	background-color:#59B2B2;
+}
+
+input.zapisz:focus {
+	background-color:#59B2B2 ;
+	outline:none;
+}
+.animacja:hover {
+	animation-name:migniecie;
+        animation-duration:2s;
+        animation-iteration-count:infinite;
+        -webkit-animation-name:migniecie;
+        -webkit-animation-duration:2s;
+        -webkit-animation-iteration-count:infinite;
+}
+@keyframes migniecie
+      {
+        0% { border:solid 5px #d9d9d9;}
+		25%	{border:solid 5px #999;}
+        75% {border:solid 5px #999;}
+		100% {border:solid 5px #d9d9d9;}
+      }
+	  
+	  @-webkit-keyframes migniecie
+      {
+        0% { border:solid 5px #d9d9d9;}
+		25%	{border:solid 5px #999;}
+        75% {border:solid 5px #999;}
+		100% {border:solid 5px #d9d9d9;}
+      }
+	  
+.ladowanie {
+	  
+	  	animation-name:ladowanie;
+        animation-duration:1s;
+        -webkit-animation-name:ladowanie;
+        -webkit-animation-duration:1s;
+        -webkit-animation-iteration-count:1;
+}
+	  
+	  @keyframes ladowanie
+{
+  0% { opacity: 0; }
+  /*25% { opacity: 0.25; }
+  50% { opacity: 0.5; }
+  75% { opacity: 0.75; }*/
+  100% { opacity: 1; }
+}
+.delete {
+    background-color: #99443D;
+    display: block;
+    text-align: center;
+    font: 12px/2rem "Arial", Gadget, sans-serif;
+}
+.delete:hover {
+	background-color:#F00;
+}
+#tabela {
+    width:100%;
+    border-spacing:0px 2px;
+}
+
+/*TABELA dane tabelaryczne*/
+
+table {
+    width:100%;
+    border-spacing:0px 2px;
+    border:0px;
+    
+}
+td {
+    margin:0px;
+    text-align:center;
+}
+
+td.left, th.left {
+    text-align:left;
+}
+
+td.right, th.right {
+    text-align:right;
+}
+
+td.center, th.center {
+    text-align:center;
+}
+
+th{
+    text-align: center;
+}
+.empty-cells {
+    empty-cells:hide;
+}
+
+.edytuj {
+    background-color: #397373;
+    display: block;
+    text-align: center;
+    font: 12px/2rem "Arial", Gadget, sans-serif;
+}
+input.edytuj {
+    background-color: #397373;
+    color: white;
+    padding: 0px;
+    border: none;
+    margin: 0px;
+    outline: none;
+    display: block;
+    width: 100%;
+    height: 32px;
+    text-align: center;
+    font-family: "Arial", Gadget, sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+}
+.anuluj {
+    background-color: #664633;
+    display: block;
+    text-align: center;
+    font: 12px/2rem "Arial", Gadget, sans-serif;
+}
+input.aktualizuj {
+    background-color: #332E14;
+    color: white;
+    padding: 0px;
+    border: none;
+    margin: 0px;
+    outline: none;
+    display: block;
+    width: 100%;
+    height: 32px;
+    text-align: center;
+    font-family: "Arial", Gadget, sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+}
+.usun {
+    background-color: #99443D;
+    display: block;
+    text-align: center;
+    font: 12px/2rem "Arial", Gadget, sans-serif;
+}
+
+
+
+/*elastyczne pudeleczka na strone glowna*/
+.flex-container {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  flex-wrap:wrap;
+  -webkit-flex-flow: row wrap;
+  justify-content: center;
+}
+
+/*wykorzystujemy to do okreslenia kolejnosci elementow flex - przydatne*/
+.order-1{
+    order:1;
+}
+
+.order-2{
+    order:2;
+}
+
+.order-3{
+    order:3;
+}
+
+.order-4{
+    order:4;
+}
+
+/*gorne ikony menu glowne menu na stronie*/
+
+.flex-item {
+  background:#59B2B2;
+  width: 200px;
+  height: 150px;
+  margin:5px;
+  color: white;
+  font: 1em "Arial", Gadget, sans-serif;
+  text-align: center;
+  cursor:pointer;
+}
+.flex-item:hover {
+  background:#6BB2B2;
+}
+.flex-item span {
+	display:block;
+	background-color:#336666;
+	width:100%;
+	height:30px;
+	font: 16px/30px "Arial", Gadget, sans-serif;
+}
+.flex-item span:hover {
+	background-color:#667F7F;
+}
+
+	  
+/*----rozne dziwadla----*/
+/*IKONY IKONY IKONY Ikony wykorzystane w gornym panelu menu*/
+/*zegarek*/
+.zegar {
+	visibility:visible;
+	margin-left:50%;
+	font: 14px/35px "Arial", Gadget, sans-serif;
+	-webkit-border-radius: 50%;	-khtml-border-radius: 50%;	-moz-border-radius: 50%;	border-radius: 50%;
+	box-shadow:#333 0.5px 0.5px;
+	position: relative;
+	left:-36px;
+	top:24px;
+	width:60px;
+	height:60px;
+	border:6px solid #fff;
+	z-index:10;
+}
+.minutnik {
+	position:relative;
+	width:48%;
+	height:4px;
+	margin-top:50%;
+	top:-2px;
+	margin-left:50%;
+	left:-2px;
+	background-color:#FFF;
+	z-index:50;
+	-webkit-border-radius: 2px 0 0 2px;	-khtml-border-radius: 2px 0 0 2px;	-moz-border-radius: 2px 0 0 2px;	border-radius: 2px 0 0 2px;
+}
+.godzinka {
+	position:relative;
+	width:35%;
+	height:4px;
+	margin-top:8%;
+	top:-2px;
+	left:-2px;
+	margin-left:35%;
+	background-color:#900;
+	-webkit-transform: rotate(94deg);
+	-moz-transform: rotate(94deg);
+	-ms-transform: rotate(94deg);
+	-o-transform: rotate(94deg);
+	transform: rotate(94deg);
+	-webkit-border-radius: 2px 0px 0px 2px;	-khtml-border-radius: 2px 0px 0px 2px;	-moz-border-radius: 2px 0px 0px 2px;	border-radius: 2px 0px 0px 2px;
+	z-index:49;
+}
+/*kalendarz*/
+.kalendarz {
+	position: relative;
+	color:#900;
+	width:60px;
+	height:43px;
+	visibility:visible;
+	margin-left:50%;
+	left:-36px;
+	top:24px;
+	border:6px solid #fff;
+	border-top-width:18px;
+	padding-top:5px;
+	-webkit-border-radius: 10% 10% 0 0;	-khtml-border-radius: 10% 10% 0 0;	-moz-border-radius: 10% 10% 0 0;	border-radius: 10% 10% 0 0;
+	box-shadow:#333 0.5px 0.5px; 
+	text-shadow:#333 0.5px 0.5px;
+}
+.kalendarz:after {
+	content:"Sobota";
+	font-size:14px;
+	color:#fff;
+	margin:0px;
+	padding:0px;
+	text-align:justify;
+	text-shadow:#333 0.5px 0.5px;
+}
+/*mini kalendarz - wykorzystaj sluzby*/
+.minkalendarz {
+	position: relative;
+	font-size:8px;
+	color:#900;
+	width:26px;
+	height:16px;
+	visibility:visible;
+	margin-left:50%;
+	left:-36px;
+	top:10px;
+	border:2px solid #fff;
+	margin-bottom:4px;
+	border-top-width:6px;
+	padding-bottom:5px;
+	-webkit-border-radius: 10% 10% 0 0;	-khtml-border-radius: 10% 10% 0 0;	-moz-border-radius: 10% 10% 0 0;	border-radius: 10% 10% 0 0;
+	box-shadow:#333 0.5px 0.5px; 
+	text-shadow:#333 0.5px 0.5px;
+}
+.minkalendarz:after {
+	content:"Sobota";
+	font-size:8px;
+	color:#fff;
+	margin:0px;
+	padding:0px;
+	text-align:justify;
+	text-shadow:#333 0.5px 0.5px;
+}
+/*domek godzin*/
+.domek {
+	position:relative;
+	top:-20px;
+	left:-1px;
+}
+.sciany {
+	top:-18px;
+	position: relative;
+	width:56px;
+	height:30px;
+	border-bottom: 5px solid #FFF;
+	border-left: 5px solid #FFF;
+	border-right: 5px solid #FFF;
+	left:-30px;
+	margin-left:50%;
+	z-index:12;
+	box-shadow:#333 0.5px 0.5px;
+	text-shadow:#333 0.5px 0.5px;
+}
+.daszek {
+	top:20px;
+	position: relative;
+	width:38px;
+	height:60px;
+	border-top: 6px solid #900;
+	border-left: 4px solid #900;
+	left:-20px;
+	margin-left:50%;
+	z-index:13;
+	-webkit-transform: rotate(60deg);
+	-moz-transform: rotate(60deg);
+	-ms-transform: rotate(60deg);
+	-o-transform: rotate(60deg);
+	transform: rotate(60deg);
+}
+.zegardom {
+	visibility:visible;
+	margin-left:50%;
+	font: 14px/35px "Arial", Gadget, sans-serif;
+	-webkit-border-radius: 50%;	-khtml-border-radius: 50%;	-moz-border-radius: 50%;	border-radius: 50%;
+	box-shadow:#333 0.5px 0.5px;
+	position: relative;
+	border:4px solid #fff;
+	width:25px;
+	height:25px;
+	top:10px;
+	left:-40px;
+	z-index:15;
+}
+.mindom {
+	position:relative;
+	width:48%;
+	height:2px;
+	margin-top:50%;
+	top:-1px;
+	margin-left:50%;
+	left:-1px;
+	background-color:#FFF;
+	z-index:50;
+	-webkit-border-radius: 2px 0 0 2px;	-khtml-border-radius: 2px 0 0 2px;	-moz-border-radius: 2px 0 0 2px;	border-radius: 2px 0 0 2px;
+}
+.godzdom {
+	position:relative;
+	width:35%;
+	height:2px;
+	margin-top:8%;
+	top:-1px;
+	left:-1px;
+	margin-left:35%;
+	background-color:#900;
+	-webkit-transform: rotate(94deg);
+	-moz-transform: rotate(94deg);
+	-ms-transform: rotate(94deg);
+	-o-transform: rotate(94deg);
+	transform: rotate(94deg);
+	-webkit-border-radius: 2px 0px 0px 2px;	-khtml-border-radius: 2px 0px 0px 2px;	-moz-border-radius: 2px 0px 0px 2px;	border-radius: 2px 0px 0px 2px;
+	z-index:49;
+}
+/*moje nadgodziny*/
+.ubranie {
+	position:relative;
+	top:0px;
+	left:0px;
+}
+.cialo {
+	top:-10px;
+	position: relative;
+	width:60px;
+	height:80px;
+	border-top: 4px solid #900;
+	border-left: 4px solid #900;
+	left:-30px;
+	margin-left:50%;
+	z-index:13;
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	transform: rotate(45deg);
+        -webkit-border-radius: 80%;	-khtml-border-radius: 80%;	-moz-border-radius: 80%;	border-radius: 80%;
+}
+.glowagodz {
+	visibility:visible;
+	margin-left:50%;
+	font: 14px/35px "Arial", Gadget, sans-serif;
+	-webkit-border-radius: 50%;	-khtml-border-radius: 50%;	-moz-border-radius: 50%;	border-radius: 50%;
+	box-shadow:#333 0.5px 0.5px;
+	position: relative;
+	border:4px solid #fff;
+	width:25px;
+	height:25px;
+	top:50px;
+	left:-12px;
+	z-index:15;
+}
+/*moje sluzby*/
+.glowakal {
+	position: relative;
+        z-index:14;
+	font-size:8px;
+	color:#900;
+	width:26px;
+	height:16px;
+	visibility:visible;
+	margin-left:50%;
+	left:-10px;
+	top:50px;
+	border:2px solid #fff;
+	margin-bottom:4px;
+	border-top-width:6px;
+	padding-bottom:5px;
+	-webkit-border-radius: 10% 10% 0 0;	-khtml-border-radius: 10% 10% 0 0;	-moz-border-radius: 10% 10% 0 0;	border-radius: 10% 10% 0 0;
+	box-shadow:#333 0.5px 0.5px; 
+	text-shadow:#333 0.5px 0.5px;
+}
+.glowakal:after {
+	content:"Sobota";
+	font-size:8px;
+	color:#fff;
+	margin:0px;
+	padding:0px;
+	text-align:justify;
+	text-shadow:#333 0.5px 0.5px;}
+/*------------Koniec glupich ikon w panelu na stronie glownej------------*/
+
+/*INNE UZYWANE PRZY JQUERY I JS*/
+#select-all {
+    
+     /*jezeli obsluga js jest wylaczona to ma ukryc select-all w przegladarce, bo i tak nie bedzie dzialac*/
+}
+/*inputy radio przy wyborze ilosci dni za sluzby*/
+input[type=radio] {
+    display:none; 
+    margin:10px;
+}
+
+input[type=radio] + label {
+    display:inline-block;
+    margin:-2px;
+    padding: 4px 12px;
+    background-color: #fff;
+    border: #336666 solid 1px;
+    text-shadow: none; 
+    color: gray;
+}
+
+input[type=radio]:checked + label { 
+    background-image: none;
+    background-color:#59b2b2;
+    border-color: #336666;
+    color: #fff;
+    text-shadow: none; 
+}
+
+/*KOLORY*/
+
+/*zlozone*/
+.zlozony-1{background-color: #3D6999;}
+.zlozony-2{background-color: #146BCC;}
+.zlozony-3{background-color: #735C56;}
+.zlozony-4{background-color: #99443D;}
+
+/*dopelniajace*/
+.dopelniajacy-1{background-color: #47B2B2;}
+.dopelniajacy-2{background-color: #6BB2B2;}
+.dopelniajacy-3{background-color: #B26436;}
+.dopelniajacy-4{background-color: #664633;}
+
+/*triada*/
+.dopelniajacy-1{background-color: #47B2B2;}
+.dopelniajacy-2{background-color: #6BB2B2;}
+.dopelniajacy-3{background-color: #B26436;}
+.dopelniajacy-4{background-color: #664633;}
