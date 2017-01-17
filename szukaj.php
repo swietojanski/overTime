@@ -1,0 +1,91 @@
+<?php
+  
+function szukaj($go) {
+$wyrazenia = mysql_real_escape_string($go);
+
+//wybieramy wyszukiwarke wg uprawnien
+switch ($_SESSION['permissions']){
+    case 1:
+        //admin
+        $szukaj = mysql_query("SELECT *, stopnie.Skrot AS StSkrot FROM zolnierze, stopnie WHERE stopnie.idStopien = zolnierze.idStopien AND CONCAT_WS(' ',stopnie.Skrot, zolnierze.Nazwisko, zolnierze.Imie) LIKE '%".$wyrazenia."%' ORDER BY Nazwisko") 
+        or die('Błąd zapytania'); 
+        break;
+    case 2:
+        //dowodca grupy
+        echo "i equals 2";
+        break; 
+    case 3:
+        //dowodca eskadry
+        $idDowodcy = id_zolnierza();
+        $szukaj = mysql_query("SELECT *, stopnie.Skrot AS StSkrot  FROM zolnierze, stopnie, eskadry WHERE stopnie.idStopien = zolnierze.idStopien AND zolnierze.idEskadry = eskadry.idEskadry AND eskadry.DcaEskadry = '$idDowodcy' AND CONCAT_WS(' ',stopnie.Skrot, zolnierze.Nazwisko, zolnierze.Imie) LIKE '%$wyrazenia%' ORDER BY Nazwisko") 
+        or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry'); 
+        break;
+    case 4:
+        //szef eskadry
+        $idEskadry = id_eskadry();
+        $szukaj = mysql_query("SELECT *, stopnie.Skrot AS StSkrot  FROM zolnierze, stopnie, eskadry WHERE stopnie.idStopien = zolnierze.idStopien AND zolnierze.idEskadry = eskadry.idEskadry AND eskadry.idEskadry = '$idEskadry' AND CONCAT_WS(' ',stopnie.Skrot, zolnierze.Nazwisko, zolnierze.Imie) LIKE '%$wyrazenia%' ORDER BY Nazwisko") 
+        or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry'); 
+        break;
+    case 5:
+        //dowodca klucza
+        $idKlucza = id_klucza();
+        $szukaj = mysql_query("SELECT *, stopnie.Skrot AS StSkrot FROM zolnierze, stopnie, klucze WHERE stopnie.idStopien = zolnierze.idStopien AND zolnierze.idKlucza = klucze.idKlucza AND klucze.idKlucza = '$idKlucza' AND CONCAT_WS(' ',stopnie.Skrot, zolnierze.Nazwisko, zolnierze.Imie) LIKE '%$wyrazenia%' ORDER BY Nazwisko") 
+        or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry'); 
+        break;
+    case 6:
+        //zolnierz
+        header('Location: index.php');
+        break;
+}
+
+$znalezionych = mysql_num_rows($szukaj);
+  
+/* 
+wyświetlamy wyniki, sprawdzamy, 
+czy zapytanie zwróciło wartość większą od 0 
+*/ 
+    if(mysql_num_rows($szukaj) == 1) {
+           $kogo = mysql_fetch_object($szukaj);
+           //echo "<meta http-equiv=\"refresh\" content=\"0; URL=index.php?id=panele/profil/zolnierz&profil=$kogo->idZolnierza\">";
+           header('Location: index.php?id=panele/profil/zolnierz&profil='.$kogo->idZolnierza);
+    } elseif (mysql_num_rows($szukaj) > 1) { 
+        /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
+        echo "<div class=\"flex-container\">";
+        while($kogo = mysql_fetch_object($szukaj)) {  
+            echo "<div class=\"flex-container\">";
+                echo "<a href=\"index.php?id=panele/profil/zolnierz&profil=$kogo->idZolnierza\" title=\"Profil: ".$kogo->StSkrot." ".$kogo->Nazwisko." ".$kogo->Imie."\" id=\"profil\"><div class=\"panel\">";
+                    echo "<div class=\"zawartosc blekitne wybrane\" >";
+                        echo "<img src=\"img/profiles/thumbnail/$kogo->Zdjecie\" width=\"200px\" align=\"absmiddle\" alt=\"Zdjęcie profiliwe\" class=\"zaokraglij\">";
+                    echo "</div>";   
+                    echo "<div class=\"podpis\">";
+                        echo "<p class=\"dane\"><abbr title=\"$kogo->Pelna\">".$kogo->StSkrot."</abbr><br> ".$kogo->Nazwisko." ".$kogo->Imie."</p>";
+                    echo "</div>";
+                echo "</div></a>";
+            echo "</div>";    
+        }
+        echo "</div>"; 
+    } else{
+        echo "Brak wyników wyszukiwania";
+    }
+    
+    
+   
+    
+    
+}
+
+
+
+
+echo "<h1>Wyszukiwanie żołnierzy</h1>";
+echo "<h2 class=\"podpowiedzi zaokraglij\">Szukana fraza: ".$_GET['wyrazenie']."</h2>";
+?>
+
+<div class="panel">
+   <div class="tytul">
+      <p>znalezieni</p>
+   </div>
+   <div class="zawartosc" >
+       <?php if (isset($_GET['wyrazenie'])){szukaj($_GET['wyrazenie']);}else{header('Location: index.php');}?>
+   </div>    
+</div>
