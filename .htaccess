@@ -1,5 +1,0 @@
-Options FollowSymLinks
-RewriteEngine On
-
-RewriteRule ^szukaj-([^-]*).php$ index.php?id=szukaj&wyrazenie=$1 [L]
-RewriteRule ^index-([^-]*).htm$ index.php?zmienna=$1
