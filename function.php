@@ -892,6 +892,64 @@ echo "</div>";
 
 }
 
+//DODAWANIE SLUZB DODWANIE SLUZB DODAWANIE SLUZB
+//Dodawanie sluzb sobie samemu
+//DODAWANIE SLUZB DODWANIE SLUZB DODAWANIE SLUZB
+function dodajSluzby (){
+    //zmienne pobraane z formularza
+$data = $_POST['data'];
+$iledni = $_POST['iledni'];
+$dyzur = $_POST['sluzba'];
+$liczenie=count($data); //zliczenie ilosci wystapien pola data input
+
+if(empty($_POST['data']) && empty($_POST['iledni']))//sprawdzamy czy pole data nie jest puste
+{
+    echo "Uzupełnij formularz";
+   
+} else {
+    $czyje_id = id_zolnierza();    // pobranie id zalogowanego zolnierza z konta uzytkownika
+    $kto_dodal = $_SESSION['user']; //wyciagniecie z sesji nazwy uzytkownika
+    echo "<div class=\"flex-container\">";
+        echo "<div class=\"panel szescset\">";
+            echo "<div class=\"tytul\">";
+                echo "<p>dodane nadgodziny</p>";
+            echo "</div>";
+    
+    for($a=0;$a<$liczenie;$a++)
+        {
+            //$data = '12-22-2009';
+            $dataq = explode("-", $data[$a]);
+            $dataq = $dataq[2]."-".$dataq[1]."-".$dataq[0];
+            $godzinaq = $iledni[$a]*480; //mnozymy podana ilosc dni razy 8 godzin (1 dzien wolny) i zapisujemy jako inty do bazy
+            $powodyq = $dyzur[$a];
+            
+            //sprawdzenie czy podana data istnieje juz w bazie
+            $sprawdzenie = mysql_query("SELECT * FROM sluzby, zolnierze WHERE kto_mial = '$czyje_id' AND idZolnierza = kto_mial AND kiedy LIKE '".$dataq."'");
+            $wystapien = (int)mysql_num_rows($sprawdzenie); //zliczenie ilosci wystapien zapytania, powinno dac zero jezeli daty nie ma
+                        
+            if ($wystapien == 0){ //jezeli daty nie ma w bazie to ja doda
+                $zapytanie = "INSERT INTO `sluzby` (`kto_mial`, `ile`, `kiedy`,`kto_dodal`, `kiedy_dodal`, `idTyp`) VALUES ( '$czyje_id', '$godzinaq', '$dataq', '$kto_dodal', NOW(), '$powodyq')";       
+                $wykonaj = mysql_query($zapytanie); 
+                echo "<div class=\"zawartosc blekitne\" >";
+                echo("Za dzień ".$data[$a]." dodałeś ".$iledni[$a]." godz.<br>");
+                echo "</div>";  
+            }elseif ($wystapien > 0){ //jezeli data juz istnieje w bazie wyrzuci komunikat o jej istnieniu
+                $r = mysql_fetch_object($sprawdzenie);
+                echo "<div class=\"zawartosc blekitne\" >";
+                echo "<strong>Ta data już istnieje: </strong>";
+                echo("za dzień ".$data[$a]." dodałeś ".(($r->ile)/480)." dn.<br>");
+                echo "</div>";   
+            }  
+        }
+        echo "</div>";
+    echo "</div>";
+}
+
+
+}
+
+
+
 
 //WYŚWIETLENIE LISTY POWODÓW DLA KTORYCH ODBIERAMY NADGODZINY
 function listaPowodow() {
@@ -904,6 +962,23 @@ or die('Błąd zapytania');
         while($r = mysql_fetch_object($powod)) {  
 
             echo "<option value=\"$r->idPowod\">".$r->Skrot."</option>";
+
+        } 
+        echo "</select>"; 
+    }
+}
+
+//WYŚWIETLENIE LISTY POWODÓW DLA KTORYCH ODBIERAMY NADGODZINY
+function listaSluzb() {
+$dyzur = mysql_query("SELECT *  FROM dyzurny") 
+or die('Błąd zapytania'); 
+    if(mysql_num_rows($dyzur) > 0) { 
+        /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
+        echo "<select name=\"sluzba[]\" required style=\"max-width:150px;\">"; 
+        echo "<option value=\"\" selected disabled>Wybierz służbę</option>";
+        while($r = mysql_fetch_object($dyzur)) {  
+
+            echo "<option value=\"$r->idDyzurny\">".$r->Skrot."</option>";
 
         } 
         echo "</select>"; 
