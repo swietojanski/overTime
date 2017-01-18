@@ -30,11 +30,11 @@
                             <td>1</td>
                             <td><input type="text" name="data[]" class="datanadgodzin" placeholder="20-05-2016" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])-(0[1-9]|1[012])-[0-9]{4}" required="true" size="19"></td>
                             <td>
-                                <input type="radio" value="480" name="iledni" class="iledni" placeholder="1" required="true" id="dni1"><label for="dni1">1</label>
-                                <input type="radio" value="960" name="iledni" class="iledni" placeholder="1" required="true" id="dni2"><label for="dni2">2</label>
+                                <input type="radio" value="1" name="iledni[]" class="iledni" placeholder="1" required="true" id="dni1"><label for="dni1">1</label>
+                                <input type="radio" value="2" name="iledni[]" class="iledni" placeholder="1" required="true" id="dni2"><label for="dni2">2</label>
                             </td>
                             <td>
-                                <?php //listaRodzajow()?> 
+                                <?php listaSluzb()?> 
                             </td>
                         </tr>
                     </tbody>
@@ -46,7 +46,7 @@
     </div>
 </div>
 <?php
-    //dodajSluzby();
+    dodajSluzby();
 
 /*
 foreach($data as $idkiedy) {
@@ -99,10 +99,10 @@ $(document).ready(function() {
         var f1  = '<td><input type="text" name="data[]" class="datanadgodzin" placeholder="20-05-2016" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])-(0[1-9]|1[012])-[0-9]{4}" required="true" size="19"></td>';
  
         //druga kom�rka
-        var f2  = '<td><input type="text" name="godzina[]" class="ggodzin" placeholder="2.5" required="true" size="19" id="godzina-'+liczba+'"></td>';
+        var f2  = '<td><input type="radio" value="1" name="iledni[] '+liczba+'" class="iledni" placeholder="1" required="true" id="dni1-'+liczba+'"><label for="dni1-'+liczba+'">1</label> <input type="radio" value="2" name="iledni[] '+liczba+'" class="iledni" placeholder="1" required="true" id="dni2-'+liczba+'"><label for="dni2-'+liczba+'">2</label></td>';
  
         //trzecia kom�rka
-        var f3  = '<td><?php listaPowodow()?></td>';
+        var f3  = '<td><?php listaSluzb()?></td>';
         //trzecia kom�rka
         
         var f4  = '<td><a class="delete plr-5" href="#" title="Usuń wiersz">Usuń</a></td>';
