@@ -82,7 +82,7 @@ $(document).ready(function() {
         var f1  = '<td><input type="text" name="data[]" class="datanadgodzin" placeholder="20-05-2016" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])-(0[1-9]|1[012])-[0-9]{4}" required="true" size="19"></td>';
  
         //druga kom�rka
-        var f2  = '<td><input type="text" name="godzina[]" class="ggodzin" placeholder="2.5" required="true" size="19" id="godzina-'+liczba+'"></td>';
+        var f2  = '<td><input type="text" name="godzina[] '+liczba+'" class="ggodzin" placeholder="2.5" required="true" size="19" id="godzina-'+liczba+'"></td>';
  
         //trzecia kom�rka
         var f3  = '<td><?php listaPowodow()?></td>';

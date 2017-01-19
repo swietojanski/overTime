@@ -56,8 +56,8 @@ echo "<div class=\"flex-container\">";
 //trzeci
         echo "<div class=\"panel trzysta\">";
             echo "<div class=\"tytul\"><p>wykorzystane służby</p></div>";
-            echo "<div class=\"zawartosc\">";
-                echo "Przykladowa zawartosc nadgodzin";
+            echo "<div class=\"zawartosc wysrodkuj\">";
+                sumaSluzb(id_zolnierza(), 1);
             echo "</div>";    
             echo "</div>";
 //czwarty

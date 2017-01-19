@@ -824,6 +824,22 @@ function sumaNadgodzin ($czyje_id, $rozszerz){ //pobieramy id zolnierza oraz wyb
     
 }
 
+function sumaSluzb ($czyje_id, $rozszerz){ //pobieramy id zolnierza oraz wybieramy opcje z dodatkowym opisem rozszerz po wpisaniu 1
+    
+        $zapytanie = mysql_query("SELECT Round(SUM(sluzby.ile)/60,1) AS sumagodzin, Round(SUM(sluzby.ile)/480,1) AS sumadni  FROM sluzby WHERE kto_mial='$czyje_id'") or die('Błąd zapytania');
+        $r = mysql_fetch_object($zapytanie);
+        $wykorzystane=2;//ilosc wykorzystanych nadgodzin
+        
+        
+        if ($rozszerz==1){//wyswietla dodatkowo stan w przeliczeniu godziny, dni
+            echo "<h1>".round(($r->sumadni),0)."</h1>";
+            echo "godz.: ".$r->sumagodzin." | dni: ".$r->sumadni;     
+        } else {
+          echo "<h1>".round(($r->sumadni),0)."/".$wykorzystane."/".((round(($r->sumadni),0))-$wykorzystane)."</h1>";  
+        }
+    
+}
+
 function dodajNadgodziny (){
     //zmienne pobraane z formularza
 $data = $_POST['data'];
