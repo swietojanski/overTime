@@ -51,7 +51,7 @@ if(isset($_GET['id'])) {
 ?>
     
 <h2>Przydatne </h2>
-<p>Coś tutaj będzie.</p> 
+<p class="ml-10">Służba piątek - 1 dzień.</p> <p class="ml-10">Służba sobota - 2 dni.</p> <p class="ml-10">Służba niedziela - 1 dzień.</p> <br>
 	<!-- koniec #mainContent --></div>
 
 
