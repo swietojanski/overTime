@@ -13,14 +13,26 @@ if(mysql_num_rows($stopnie) > 0) {
     echo "</select>"; 
 }
 }
+
+/*<?php   stopnie()?> wyswietlenie listy stopni wojskowych*/
 ?>
 
-<form>
-<label>Imię </label><input name="imie" type="text" placeholder="Krzysztof" />
-<label>Nazwisko </label><input name="imie" type="text" placeholder="Świętojański" />
-<label>Stopień 
-<?php   stopnie()?>
-</label>
-<label>Telefon </label><input type="tel" pattern="[0-9]{9}" placeholder="603 403 395" />
-</form>
 
+<?php
+if($_SESSION['permissions']>0 && $_SESSION['permissions']<10){
+echo "<h1> Ustawienia </h1>";
+echo "<h2 class=\"podpowiedzi zaokraglij\">Tutaj zmienisz swoje ustawienia oraz hasło do konta.</h2>";
+echo "<div class=\"flex-container\">";
+    echo "<div class=\"panel\">";
+        echo "<div class=\"tytul\">";
+            echo "<p>zmiana hasła</p>";
+        echo "</div>";
+        echo "<div class=\"zawartosc\" >";
+        zmienHaslo();
+        echo "</div>";
+    echo "</div>";
+echo "</div>";
+}  else {
+    echo "Czego tutaj szukasz? Nie masz wystarczających uprawnień!";
+}
+?>

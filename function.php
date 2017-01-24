@@ -1,4 +1,7 @@
 <?php
+//warunek ktory nie pozwoli skorzystac z zadnej funkcji jezeli nie jestesmy zalogowani
+if ($_SESSION['auth'] == TRUE) {
+    
 
 //Wyswietli id profilu aktualnie zalogowanego uzytkownika lub po podaniu loginu jakiegos uzytkownika
 function id_zolnierza($kogo) {
@@ -493,7 +496,7 @@ function dodajUzytkownika(){
         {
             echo "<form name=\"dodajUzytkownika\" method=\"post\" action=\"index.php?id=panele/admin/dodajUzytkownika\">";
             echo "<div class=\"zawartosc wysrodkuj\">";
-            echo "<input type=\"text\" name=\"dodajlogin\"  size=\"40\" required=\"true\" maxlength=\"40\" placeholder=\"$placelog...\" class=\"mb-10 pl-5 $errorlog\" pattern='^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$' title=\"Min. 2 znaki. Format: nazwa(bez znaków specjalnych) + liczba\"><br>";
+            echo "<input type=\"text\" name=\"dodajlogin\"  size=\"40\" required=\"true\" maxlength=\"40\" placeholder=\"$placelog...\" class=\"mb-10 pl-5 $errorlog\" pattern='^[a-zA-Z][a-zA-Z0-9-_\.]{3,20}$' title=\"Min. 4 znaki. Format: nazwa(bez znaków specjalnych)\"><br>";
             echo "<input type=\"password\" name=\"dodajhaslo\" size=\"40\" required=\"true\" maxlength=\"40\" placeholder=\"$placepas...\" class=\"mb-10 pl-5 $errorpas\" pattern='(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$' title=\"Min. 8 znaków, wielka i mała litera oraz znak specjalny\"><br>";  
             //Funkcja wyswietlajaca liste uprawnien
                 uprawnienia();//wywolanie
@@ -947,7 +950,7 @@ if(empty($_POST['data']) && empty($_POST['iledni']))//sprawdzamy czy pole data n
                 $zapytanie = "INSERT INTO `sluzby` (`kto_mial`, `ile`, `kiedy`,`kto_dodal`, `kiedy_dodal`, `idTyp`) VALUES ( '$czyje_id', '$godzinaq', '$dataq', '$kto_dodal', NOW(), '$powodyq')";       
                 $wykonaj = mysql_query($zapytanie); 
                 echo "<div class=\"zawartosc blekitne\" >";
-                echo("Za dzień ".$data[$a]." dodałeś ".$iledni[$a]." godz.<br>");
+                echo("Za dzień ".$data[$a]." dodałeś ".$iledni[$a]." dn.<br>");
                 echo "</div>";  
             }elseif ($wystapien > 0){ //jezeli data juz istnieje w bazie wyrzuci komunikat o jej istnieniu
                 $r = mysql_fetch_object($sprawdzenie);
@@ -1095,5 +1098,66 @@ or die('Błąd zapytania');
         echo"Nie dodałeś jeszcze eskadr, zrobić lub kliknij <a href=\"index.php?id=panele/dodaj/dodajEskadre\">tutaj</a>";
     }
 }
+
+
+
+//////////////////
+//  USTAWIENIA  //
+//////////////////
+
+//ZMIANA HASLA
+
+function zmienHaslo($kogo) {
+    
+    if( empty($kogo) ) {
+        $kogo = $_SESSION['user']; // jezeli nie podane $kogo to pobierze login zalogowanego uzytkownika
+    }
+    
+    
+    
+
+        //formularz dodawania uzytkownika
+        //przyjmujacy podane wartosci
+        function formZmiana($errorpas, $placepas = "wpisz nowe hasło")
+        {
+            echo "<form name=\"zmienHaslo\" method=\"post\" action=\"\">";
+            echo "<div class=\"zawartosc wysrodkuj\">";
+            echo "<input type=\"password\" name=\"podajhaslo\" size=\"40\" required=\"true\" maxlength=\"40\" placeholder=\"$placepas...\" class=\"mb-10 pl-5 $errorpas\" pattern='(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$' title=\"Min. 8 znaków, wielka i mała litera oraz znak specjalny\"><br>";  
+            
+            echo "<input value=\"zmień\" type=\"submit\" class=\"zapisz animacja mt-10\">";
+            echo "</div>";
+            echo "</form>";
+        }
+        
+        $zmienhaslo = htmlspecialchars($_POST['podajhaslo']);
+        $zakodowane = md5($zmienhaslo);
+    
+    if(empty($_POST['podajhaslo']))
+        { //echo "<div class=\"flex-container\">";
+        formZmiana();
+          //echo "</div>";
+        } else {
+        
+            //sprawdzimy czy haslo to login
+            if($zmienhaslo==$_SESSION['user']){
+            formZmiana("error","hasło nie może być loginem");    
+            }else{ //jezeli nie jest to zmieniamy
+                    /* jeżeli wynik jest pozytywny, to dodajemy uzytkownika */ 
+                    $zapytanie = "UPDATE `uzytkownicy` SET `Haslo`='$zakodowane' WHERE `Login`='$kogo';";
+                    $wykonaj = mysql_query($zapytanie);
+                    echo "Zmieniłeś hasło dla <strong>".$kogo."</strong>. Teraz może się przelogować.<br>";
+                    echo "<div class=\"zawartosc wysrodkuj\">";
+                    echo "<br><p>Powodzenia!</p>";
+                    echo "</div>";
+                }
+        }  
+    }
+
+
+
+
+
+
+}//koniec warunku, ktory zabrania uruchomic funkcje jezeli nie jestesmy zalogowani
 
 ?>

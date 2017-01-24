@@ -9,6 +9,7 @@
        <a href="index.php?id=panele/dodaj/wniosek" class="addovertime">wniosek</a>
     <?php if($_SESSION['permissions']==1 OR $_SESSION['permissions']==2){
        echo "<a href=\"index.php?id=panele/admin/dodajUzytkownika\" class=\"addovertime\">uzytkownika</a>";
+       echo "<a href=\"index.php?id=panele/admin/dodajEskadre\" class=\"addovertime\">eskadre</a>";
     }
     ?>
           </div>
