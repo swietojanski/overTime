@@ -1070,11 +1070,9 @@ $godzina = str_replace(",",".",$godzina);
 $powody = $_POST['powod'];
 $liczenie=count($data); //zliczenie ilosci wystapien pola data input
 
-if(empty($_POST['data']) && empty($_POST['godzina']))//sprawdzamy czy pole data nie jest puste
+if(isset($_POST['data']) && isset($_POST['godzina']))//sprawdzamy czy pole data nie jest puste
 {
-    echo "Uzupełnij formularz";
-   
-} else {
+    
     $czyje_id = id_zolnierza();    // pobranie id zalogowanego zolnierza z konta uzytkownika
     $kto_dodal = $_SESSION['user']; //wyciagniecie z sesji nazwy uzytkownika
     echo "<div class=\"flex-container\">";
@@ -1140,11 +1138,8 @@ $iledni = $_POST['iledni'];
 $dyzur = $_POST['sluzba'];
 $liczenie=count($data); //zliczenie ilosci wystapien pola data input
 
-if(empty($_POST['data']) && empty($_POST['iledni']))//sprawdzamy czy pole data nie jest puste
+if(isset($_POST['data']) && isset($_POST['iledni']))//sprawdzamy czy pole data nie jest puste
 {
-    echo "Uzupełnij formularz";
-   
-} else {
     $czyje_id = id_zolnierza();    // pobranie id zalogowanego zolnierza z konta uzytkownika
     $kto_dodal = $_SESSION['user']; //wyciagniecie z sesji nazwy uzytkownika
     echo "<div class=\"flex-container\">";
