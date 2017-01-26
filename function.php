@@ -610,7 +610,7 @@ or die('Błąd zapytania');
 
 //wyswietlenie nadgodzin zalogowanego uzytkownika
 function mojeNadgodziny($kogo) {
-    if(isset($kogo)) {
+    if(isset($kogo)) { //&& $kogo != id_zolnierza() drugi warunek ale nie pamietam po co godalem
         $czyje_url = '&profil='.$kogo; //dopisujemy url do zalogowanego
             //zmienna pomocnicza do wyswietlania nadgodzin uzytkownika
         $czyje_id = $kogo;
@@ -619,7 +619,7 @@ function mojeNadgodziny($kogo) {
             //zmienna pomocnicza do wyswietlania nadgodzin uzytkownika
         $czyje_id = $kogo;
     }
-//jeżeli istnieje zmienna profil sprawdzamy czy mamy dostep do danego profilu     
+//jeżeli istnieje $kogo profil sprawdzamy czy mamy dostep do danego profilu     
     if( isset($kogo) && $kogo == mamDostepDo($kogo)) {
     
 
@@ -652,7 +652,15 @@ function mojeNadgodziny($kogo) {
         if(isset($idUsun)){//najpierw sprawdzamy czy zmienna istnieje
             $sprawdzenie = mysql_query("SELECT * FROM `nadgodziny` WHERE `idNadgodziny`='$idUsun'");// zapytanie sprawdzajace czy nadgodzina o danym id jest w bazie 
             if((int)mysql_num_rows($sprawdzenie) > 0) {
-                $usun = mysql_query("DELETE FROM `nadgodziny` WHERE `idNadgodziny`='$idUsun'");          
+                
+                while($check = mysql_fetch_object($sprawdzenie)) {  
+                    $zgoda = intval($check->czyje_id);
+                }
+                    if($zgoda == mamDostepDo($zgoda)){
+                        $usun = mysql_query("DELETE FROM `nadgodziny` WHERE `idNadgodziny`='$idUsun'");
+                    }else{
+                        echo "<p class='wysrodkuj'>Nie masz uprawnień.<br>Nie kombinuj.</p>"; 
+                    }              
             }else{
                 $blad_usuniecia = "Nie ma co usunąć, zrobiłeś to wcześniej"; //niewypisany, wiec go nie zobaczymy
             }
@@ -829,7 +837,7 @@ function sumaNadgodzin ($czyje_id, $rozszerz){ //pobieramy id zolnierza oraz wyb
 
 //wyswietlenie sluzb zalogowanego uzytkownika
 function mojeSluzby($kogo) {
-    if(isset($kogo) && $kogo != id_zolnierza()) {
+    if(isset($kogo)) { //&& $kogo != id_zolnierza()   to samo co w nadgodzinach
         $czyje_url = '&czyje='.$kogo; //dopisujemy url do zalogowanego
             //zmienna pomocnicza do wyswietlania nadgodzin uzytkownika
         $czyje_id = $kogo;
@@ -870,11 +878,21 @@ function mojeSluzby($kogo) {
     //USUWAMY DODANE NADGODZINY    
         if(isset($idUsun)){//najpierw sprawdzamy czy zmienna istnieje
             $sprawdzenie = mysql_query("SELECT * FROM `sluzby` WHERE `idSluzby`='$idUsun'");// zapytanie sprawdzajace czy nadgodzina o danym id jest w bazie 
+            
             if((int)mysql_num_rows($sprawdzenie) > 0) {
-                $usun = mysql_query("DELETE FROM `sluzby` WHERE `idSluzby`='$idUsun'");          
+                
+                while($check = mysql_fetch_object($sprawdzenie)) {  
+                    $zgoda = intval($check->kto_mial);
+                }
+                    if($zgoda == mamDostepDo($zgoda)){
+                    $usun = mysql_query("DELETE FROM `sluzby` WHERE `idSluzby`='$idUsun'");
+                    }else{
+                    echo "<p class='wysrodkuj'>Nie masz uprawnień.<br>Nie kombinuj.</p>"; 
+                    }
+                           
             }else{
-                $blad_usuniecia = "Nie ma co usunąć, zrobiłeś to wcześniej"; //niewypisany, wiec go nie zobaczymy
-                echo "<p class='wysrodkuj'>".$blad_usuniecia."</p";
+                $blad_usuniecia = "Już usunąłeś wybraną godzine."; //niewypisany, wiec go nie zobaczymy
+                echo "<p class='wysrodkuj'>".$blad_usuniecia."</p>";
             }
         }
 
