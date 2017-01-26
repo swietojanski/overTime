@@ -11,7 +11,7 @@
 echo "<div class=\"flex-container\">";
         echo "<div class=\"panel siedemset\">";
             echo "<div class=\"tytul\">";
-                echo "<p>wszystkie nadgodziny</p>";
+                echo "<p>wszystkie służby</p>";
             echo "</div>";
             echo "<div class=\"zawartosc\" >";
                 mojeSluzby($_GET[profil]);
