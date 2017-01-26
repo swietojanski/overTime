@@ -22,16 +22,16 @@ if(isset($_GET[edytuj])){
 
 <div class="flex-container">
     <div class="panel czterdziesci">
-       <div class="tytul zlozony-1"><p>nadgodziny</p></div>
+        <div class="tytul zlozony-1"><p>dodaj nadgodziny</p></div>
     </div>
     <div class="panel czterdziesci">
-       <div class="tytul zlozony-2"><p>służby</p></div>
+       <div class="tytul zlozony-2"><p>dodaj służby</p></div>
+    </div>
+    <div class="panel czterdziesci"><a href="index.php?id=panele/moje/nadgodziny&profil=<?php echo $_GET['profil'];?>" title="przeglądaj nadgodziny">
+       <div class="tytul zlozony-3"><p>przeglądaj nadgodziny</p></div></a>
     </div>
     <div class="panel czterdziesci">
-       <div class="tytul zlozony-3"><p>sł</p></div>
-    </div>
-    <div class="panel czterdziesci">
-       <div class="tytul zlozony-4"><p>sł</p></div>
+       <div class="tytul zlozony-4"><p>przeglądaj służby</p></div>
     </div>
     <div class="panel czterdziesci">
        <div class="tytul zlozony-1"><p>n</p></div>

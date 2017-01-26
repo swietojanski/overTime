@@ -32,10 +32,9 @@ if(isset($_GET[edytuj])){
     </div>
     <div class="panel trzysta">
        <div class="tytul"><p>służby</p></div>
-        <div class="zawartosc">
-            
-            
-przykladowa zawartosc sluzb
+        <div class="zawartosc wysrodkuj">
+        <span class="wlinii">
+        <?php sumaSluzb(id_zolnierza(), 0);?></span>
         </div>    
     </div>
 </div>

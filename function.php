@@ -827,6 +827,206 @@ function sumaNadgodzin ($czyje_id, $rozszerz){ //pobieramy id zolnierza oraz wyb
     
 }
 
+//wyswietlenie sluzb zalogowanego uzytkownika
+function mojeSluzby($kogo) {
+    if(isset($kogo) && $kogo != id_zolnierza()) {
+        $czyje_url = '&czyje='.$kogo; //dopisujemy url do zalogowanego
+            //zmienna pomocnicza do wyswietlania nadgodzin uzytkownika
+        $czyje_id = $kogo;
+    }elseif(empty ($kogo)){
+        $kogo = id_zolnierza();
+            //zmienna pomocnicza do wyswietlania nadgodzin uzytkownika
+        $czyje_id = $kogo;
+    }
+//jeżeli istnieje zmienna profil sprawdzamy czy mamy dostep do danego profilu     
+    if( isset($kogo) && $kogo == mamDostepDo($kogo)) {
+    
+
+
+    //Definiujemy zmienne pomocnicze do stronicowania
+    $ile=10; //ilosc wyswietlanych wpisow na strone
+    $strona=0; //poczatkowy numer strony, jezeli nie zostal podany
+    $idUsun = $_GET['usun'];
+    $idEdytuj = $_GET['edytuj'];
+    $idZapisz = $_POST['zapisz'];
+
+
+    //ZMIENNE DO ZAPISANIA EDYTOWANYCH NADGODZIN
+    //$data = $_POST['data'];
+    $godzina = $_POST['godzina'];
+    $godzina = str_replace(",",".",$godzina);
+    $liczenie = count($godzina); //zliczenie ilosci wystapien pola data input
+    $zaznaczone = $_POST['edytuj'];
+    $liczEdytuj = 0; //zliczenie ilosci wystapien checbox
+
+        if(isset($_GET['ile'])){
+            $ile = (int)$_GET['ile'];
+        }
+
+        if(isset($_GET['strona'])){
+            $strona = (int)$ile*$_GET['strona']; //pobieramy numer strony
+        }
+
+    //USUWAMY DODANE NADGODZINY    
+        if(isset($idUsun)){//najpierw sprawdzamy czy zmienna istnieje
+            $sprawdzenie = mysql_query("SELECT * FROM `sluzby` WHERE `idSluzby`='$idUsun'");// zapytanie sprawdzajace czy nadgodzina o danym id jest w bazie 
+            if((int)mysql_num_rows($sprawdzenie) > 0) {
+                $usun = mysql_query("DELETE FROM `sluzby` WHERE `idSluzby`='$idUsun'");          
+            }else{
+                $blad_usuniecia = "Nie ma co usunąć, zrobiłeś to wcześniej"; //niewypisany, wiec go nie zobaczymy
+            }
+        }
+
+    //ZAPISUJEMY ZMIENIONE NADGODZINY
+
+        if(isset($idZapisz)){//najpierw sprawdzamy czy zmienna istnieje
+                for($a=0;$a<$liczenie;$a++)
+            {
+
+                    $idZapisz=$zaznaczone[$a];
+                    echo $idZapisz."<br>";
+
+                //$data = '12-22-2009';
+                //$dataq = explode("-", $data[$a]);
+                //$dataq = $dataq[2]."-".$dataq[1]."-".$dataq[0];
+                $godzinaq = $godzina[$a]*480; //mnozymy podana ilosc godzin przez 60 minut i zapisujemy jako inty do bazy
+
+
+                $sprawdzenie = mysql_query("SELECT * FROM `sluzby` WHERE `idSluzby`='$idZapisz'");// zapytanie sprawdzajace czy nadgodzina o danym id jest w bazie 
+                if((int)mysql_num_rows($sprawdzenie) > 0) { 
+                    $edytuj = mysql_query("UPDATE `sluzby` SET `ile`='$godzinaq' WHERE `idSluzby`='$idZapisz'");
+                }else{
+                    $blad_edycji = "Nie ma co edytować, nadgodzina nie istnieje";
+                }
+            }
+
+            $extra = 'index.php?id=panele/moje/sluzby&ile=';
+            $extra2 = $ile;
+            $extra3 = '&strona=';
+            $extra4 = $_POST[strona];
+            header("Location: $extra$extra2$extra3$extra4$czyje_url");
+            exit;  
+
+        }
+
+     //POBIERAMY DODANE SLUZB
+    $ilewpisow = mysql_query("SELECT *, DATE_FORMAT(kiedy, '%d-%m-%Y') AS ostatnie FROM sluzby WHERE kto_mial='$czyje_id'") or die('Błąd zapytania');
+    $wpisow = (int)mysql_num_rows($ilewpisow);
+    $stron = ceil($wpisow/$ile); //ilosc stron
+    $zapytanie = mysql_query("SELECT *, DATE_FORMAT(kiedy, '%d-%m-%Y') AS ostatnie, DATE_FORMAT(DATE_ADD(DATE_ADD(kiedy, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS termin, dyzurny.Skrot AS poSkrot FROM sluzby, dyzurny WHERE sluzby.idTyp=dyzurny.idDyzurny AND kto_mial='$czyje_id' ORDER BY idSluzby DESC LIMIT $ile OFFSET $strona") 
+    or die('Błąd zapytania wypisujacego sluzby'); 
+
+
+
+    //Pętla po stronach
+        echo "<div class=\"flex-container\">";
+            echo "<div class=\"zawartosc order-2\">";
+            echo "<select id=\"selectbox\">";
+             for($i=0;$i<$stron;$i++){
+             //jeśli wyswietlona obecna strona, nie twórz linku do strony
+                if($i*$ile==$strona){
+                echo ' <option value="'.($i+1).'" SELECTED>'.($i+1).'</option>';
+                $dousuniecia=$i;
+                $poprzednia=$i-1;
+                $nastepna=$i+1;
+                }elseif($i<5){
+                    echo '<option value="index.php?id=panele/moje/sluzby'.$czyje_url.'&ile='.$ile.'&strona='.$i.'">'.($i+1).'</option>';
+                }
+             }
+             //echo '[...] <a href="index.php?id=panele/moje/sluzby&ile='.$ile.'&do='.($i-1).'">'.$i.' </a>';
+             echo "</select>";
+             echo "</div>";
+             echo "<div class=\"order-1\">";
+             //wygenerowanie linku do poprzedniej strony
+                if ($poprzednia > -1) {
+                echo '<a href="index.php?id=panele/moje/sluzby'.$czyje_url.'&ile='.$ile.'&strona='.$poprzednia.'" class="button blekitne">Poprzednia</a>';
+                }else{
+                    echo "<button class=\"button\" disabled>Poprzednia</button>";
+                }
+            echo "</div>";
+            echo "<div class=\"order-3\">";
+            //wygenerowanie linku do nastepnej strony
+            if ($nastepna < $i) {
+                echo '<a href="index.php?id=panele/moje/sluzby'.$czyje_url.'&ile='.$ile.'&strona='.$nastepna.'" class="button blekitne">Nastepna</a>';
+            } else {
+                echo "<button class=\"button\" disabled>Nastepna</button>";
+            }
+            echo "</div>";
+        echo "</div>";
+
+    /*Wypisanie danych sluzb z bazy mysql*/
+        if(mysql_num_rows($zapytanie) > 0) { //jezeli zapytanie zwrocilo wiecej zapytan od 0 to wykonaj sie
+            /* jeżeli wynik jest pozytywny, to wyświetlamy dane */    
+            echo "<table>";
+                echo "<caption>Ilosc wpisow w bazie: ".$wpisow."</caption>";
+                echo "<form class=\"nadgodzinki\" name=\"nadgodzinki\" method=\"post\" action=\"\">";
+                echo "<thead>";
+                    echo "<tr class=\"blekitne empty-cells\">";
+                        echo "<th></th>";
+                        echo "<th><input type=\"checkbox\" id=\"select-all\" disabled=\"disabled\"></th>";
+                        echo "<th>za dzień</th>";
+                        echo "<th>wolnych dn.</th>";
+                        echo "<th>ważne do</th>";
+                        echo "<th colspan=\"2\">";
+                            if ($zaznaczone[$liczEdytuj]==$r->idSluzby){
+                                echo "<input type=\"submit\" id=\"edytujgodzinki\" class=\"edytuj\" value=\"edytuj zaz.\" title=\"edytuj zaznaczone\"/></th>";
+                            }else{
+                                echo "<input type=\"submit\" name=\"aktualizuj\" class=\"aktualizuj\" value=\"zapisz zaz.\" title=\"zapisz zaznaczone\"/></th>";
+                            }
+                    echo "</tr>";
+                echo "</thead>";
+                echo "<tbody>";
+                    while($r = mysql_fetch_object($zapytanie)) {
+                        echo "<tr class=\"blekitne\">";
+                            echo "<td>";
+                                echo "<a href=\"index.php?id=panele/profil/zolnierz&profil=".id_zolnierza($r->kto_dodal)."\">";
+                                echo "<img src=\"img/avatars/";avatar($r->kto_dodal);
+                                echo "\" class=\"zaokraglij\" height=\"26px\" title=\"Dodane: ".$r->kiedy_dodal." za ".$r->poSkrot."\" align=\"absmiddle\">";
+                                echo "</a>";
+                            echo "</td>";
+
+                                if (isset($idEdytuj) && $idEdytuj==$r->idSluzby OR $zaznaczone[$liczEdytuj]==$r->idSluzby){/*jezeli istnieje zmienna edytuj i jest rowna id sluzby to wyswietl edycje*/
+                                    echo "<td>";
+                                        echo "<input type=\"checkbox\" name=\"edytuj[]\" value=\"$r->idSluzby\" checked>";
+                                    echo "</td>";
+                                    echo "<td><input type=\"text\" class=\"wysrodkuj\" name=\"data[]\" placeholder=\"$r->ostatnie\" value=\"$r->ostatnie\" pattern=\"(0[1-9]|1[0-9]|2[0-9]|3[01])-(0[1-9]|1[012])-[0-9]{4}\" required=\"true\" size=\"10\" disabled></td>"; /*wyswietlamy edycje daty*/ 
+                                    echo "<td><input type=\"text\" class=\"wysrodkuj ggodzin\" name=\"godzina[]\" placeholder=\"".(($r->ile)/480)."\" pattern='((\d{1,2}\.[5])|(\d{1,2}))' required=\"true\" size=\"4\"></td>"; /*wyswietlamy godziny*/
+                                }else{
+                                    echo "<td>";
+                                        echo "<input type=\"checkbox\" name=\"edytuj[]\" value=\"$r->idSluzby\">";
+                                    echo "</td>";
+                                    echo "<td>$r->ostatnie</td>"; /*wyswietlamy daty*/
+                                    echo "<td>".(($r->ile)/480)."</td>"; /*wyswietlamy godziny*/
+                                }
+                            echo "<td>$r->termin</td>"; /*wyswietlamy do kiedy mamy czas wykorzystać nadgodziny*/
+                                if (isset($idEdytuj) && $idEdytuj==$r->idSluzby OR $zaznaczone[$liczEdytuj]==$r->idSluzby){
+                                    echo "<input type=\"hidden\" name=\"zapisz\" value=\"$r->idSluzby\">";
+                                    echo "<input type=\"hidden\" name=\"strona\" value=\"$dousuniecia\">";
+                                    echo "<td><input type=\"submit\" class=\"aktualizuj\" name=\"dodajnadgodziny\" value=\"Zapisz\" title=\"Zapisz do bazy\"/></td>";
+                                    echo "<td><a class=\"anuluj\" href=\"index.php?id=panele/moje/sluzby$czyje_url&ile=$ile&strona=$dousuniecia\">Anuluj</a></td>";
+                                    $liczEdytuj++;
+                                }else{
+                                    echo "<td><a class=\"edytuj\" href=\"index.php?id=panele/moje/sluzby$czyje_url&ile=".$ile."&strona=".$dousuniecia."&edytuj=".$r->idSluzby."\">Edytuj</a></td>";
+                                    echo "<td><a class=\"usun\" href=\"index.php?id=panele/moje/sluzby$czyje_url&ile=".$ile."&strona=".$dousuniecia."&usun=".$r->idSluzby."\">Usuń</a></td>";
+                                }
+                        echo "</tr>";
+                    }
+                echo "</tbody>";
+                echo "</form>"; 
+            echo "</table>";   
+        }else{
+            echo "Brak nadgodzin do wyświetlenia";
+        }
+            
+    }else{
+        echo mamDostepDo($kogo); //funkcja zwraca blad
+    }
+}//koniec moich sluzb
+
+/*/////////////////////////*/
+/* wyswietlanie sumy sluzb */
+/*/////////////////////////*/
+
 function sumaSluzb ($czyje_id, $rozszerz){ //pobieramy id zolnierza oraz wybieramy opcje z dodatkowym opisem rozszerz po wpisaniu 1
     
         $zapytanie = mysql_query("SELECT Round(SUM(sluzby.ile)/60,1) AS sumagodzin, Round(SUM(sluzby.ile)/480,1) AS sumadni  FROM sluzby WHERE kto_mial='$czyje_id'") or die('Błąd zapytania');

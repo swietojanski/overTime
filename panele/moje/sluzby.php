@@ -5,8 +5,8 @@
 //$liczba = str_replace(",",".",$liczba);
 //echo $liczba; 
 ?>
-<h1> Moje nadgodziny </h1>
-<h2 class="podpowiedzi zaokraglij">Przeglądasz swoje nadgodziny.</h2>
+<h1> Moje służby </h1>
+<h2 class="podpowiedzi zaokraglij">Przeglądasz swoje służby.</h2>
 <?php
 echo "<div class=\"flex-container\">";
         echo "<div class=\"panel siedemset\">";
@@ -14,7 +14,7 @@ echo "<div class=\"flex-container\">";
                 echo "<p>wszystkie nadgodziny</p>";
             echo "</div>";
             echo "<div class=\"zawartosc\" >";
-                mojeNadgodziny($_GET[profil]);
+                mojeSluzby($_GET[profil]);
             echo "</div>";   
         echo "</div>";
 echo "</div>";
