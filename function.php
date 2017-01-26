@@ -610,8 +610,8 @@ or die('Błąd zapytania');
 
 //wyswietlenie nadgodzin zalogowanego uzytkownika
 function mojeNadgodziny($kogo) {
-    if(isset($kogo) && $kogo != id_zolnierza()) {
-        $czyje_url = '&czyje='.$kogo; //dopisujemy url do zalogowanego
+    if(isset($kogo)) {
+        $czyje_url = '&profil='.$kogo; //dopisujemy url do zalogowanego
             //zmienna pomocnicza do wyswietlania nadgodzin uzytkownika
         $czyje_id = $kogo;
     }elseif(empty ($kogo)){
@@ -874,6 +874,7 @@ function mojeSluzby($kogo) {
                 $usun = mysql_query("DELETE FROM `sluzby` WHERE `idSluzby`='$idUsun'");          
             }else{
                 $blad_usuniecia = "Nie ma co usunąć, zrobiłeś to wcześniej"; //niewypisany, wiec go nie zobaczymy
+                echo "<p class='wysrodkuj'>".$blad_usuniecia."</p";
             }
         }
 
