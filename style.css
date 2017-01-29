@@ -95,6 +95,12 @@ body  {
     -webkit-box-sizing:content-box; 
      box-sizing:content-box;
 }
+
+.overTime input.stopro, select.stopro {
+
+    width: 100%;
+
+}
 .overTime input.error, select.error {
     border: solid #f00 1px;
 }

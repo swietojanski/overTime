@@ -463,6 +463,21 @@ or die('Błąd zapytania');
     }
 }
 
+function stopnie() {
+$stopnie = mysql_query("SELECT stopnie.idStopien, stopnie.Skrot  FROM stopnie") 
+or die('Błąd zapytania'); 
+if(mysql_num_rows($stopnie) > 0) { 
+    /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
+    echo "<select name=\"stopnie\" style=\"width: 344px\">"; 
+    while($r = mysql_fetch_object($stopnie)) {  
+         
+        echo "<option value=\"$r->idStopien\" class=\"stopro\">".$r->Skrot."</option>";
+
+    } 
+    echo "</select>"; 
+}
+}
+
 
 //wyswietlenie rozwijanej listy zolnierzy
 function lista_zolnierzy() {
