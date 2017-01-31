@@ -76,10 +76,7 @@ echo "        <div class=\"zawartosc wysrodkuj\">";
     
     }
     
-    if(isset ($_POST[dodaj])){
-        echo "przeszlo<br>";
-        echo intval($_POST['stopien']), $_POST['imie'], $_POST['nazwisko'], intval($_POST['eskadra']), intval($_POST['klucz']);
-        
+    if(isset ($_POST[dodaj])){   
         $progres=+100;
         dodajZolnierza(intval($_POST['stopien']), $_POST['imie'], $_POST['nazwisko'], intval($_POST['eskadra']), intval($_POST['klucz']));
     }

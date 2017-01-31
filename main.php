@@ -30,8 +30,8 @@
 ?>
       </div>
        <div id="headright">
-           <a href="index.php?id=profil" class="profil"><img src="img/avatars/<?php avatar($_SESSION['user']);?>" width="30" align="absmiddle" height="30" alt="Avatar" class="avatar"><span class="displaynone"> <?php imie();?></span></a>
-          <a href="index.php?id=ustawienia" class="ustawienia"></a>
+           <a href="index.php?id=profil" class="profil" title="Wyświetl profil"><img src="img/avatars/<?php avatar($_SESSION['user']);?>" width="30" align="absmiddle" height="30" alt="Avatar" class="avatar"><span class="displaynone"> <?php imie();?></span></a>
+           <a href="index.php?id=ustawienia" class="ustawienia" title="Ustawienia"></a>
           <a href="login.php?logout" class="wyloguj">wyloguj</a>
        </div>
    </div>

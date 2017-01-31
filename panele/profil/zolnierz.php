@@ -34,23 +34,23 @@ if(isset($_GET[edytuj])){
        <div class="tytul zlozony-4"><p>przeglądaj służby</p></div>
     </div>
     <div class="panel czterdziesci">
-       <div class="tytul zlozony-1"><p>n</p></div>
+       <div class="tytul dopelniajacy-1"><p>n</p></div>
     </div>
     <div class="panel czterdziesci">
-       <div class="tytul zlozony-2"><p>sł</p></div>
+       <div class="tytul dopelniajacy-2"><p>sł</p></div>
     </div>
     <div class="panel czterdziesci">
-       <div class="tytul zlozony-3"><p>sł</p></div>
+       <div class="tytul dopelniajacy-3"><p>sł</p></div>
     </div>
     <div class="panel czterdziesci">
-       <div class="tytul zlozony-4"><p>sł</p></div>
+       <div class="tytul dopelniajacy-4"><p>sł</p></div>
     </div>
     
     <div class="panel czterdziesci">
-       <div class="tytul zlozony-1"><p>n</p></div>
+       <div class="tytul triada-1"><p>n</p></div>
     </div>
     <div class="panel czterdziesci">
-       <div class="tytul zlozony-2"><p>sł</p></div>
+       <div class="tytul triada-2"><p>sł</p></div>
     </div>
 
     

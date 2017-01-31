@@ -3,7 +3,7 @@
 <h2 class="podpowiedzi zaokraglij">Lista eskadr, które możesz usunąc lub edytować</h2>
 
 <div class="flex-container">
-    <div class="panel siedemset">
+    <div class="panel osiemset">
         <div class="tytul">
             <p>wszystkie eskadry</p>
         </div>

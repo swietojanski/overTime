@@ -560,7 +560,7 @@ function dodajZolnierza($stopien, $imie, $nazwisko, $eskadra, $klucz){
                     $zapytanie = "INSERT INTO `zolnierze` (`idStopien`, `Imie`, `Nazwisko`, `idEskadry`, `idKlucza`) VALUES('$stopien','$imie','$nazwisko','$eskadra','$klucz')";
                     $wykonaj = mysql_query($zapytanie);
                     echo "Dodałeś żołnierza do bazy danych. Teraz utwórz mu konto.<br>";
-                    echo "<br><p>Powodzenia!</p><br><hr><a href=\"index.php?id=panele/admin/dodajUzytkownika\" ><input value=\"dodaj\" type=\"button\" class=\"zapisz animacja\"></a>";
+                    echo "<br><p>Powodzenia!</p><br><hr><a href=\"index.php?id=panele/admin/dodajUzytkownika\" ><input value=\"konto\" type=\"button\" class=\"zapisz animacja\" title=\"dodaj użytkownika\"></a>";
             
     }else{
         echo "Nie podałeś wszystkich danych";
@@ -1042,7 +1042,7 @@ function mojeSluzby($kogo) {
                                         echo "<input type=\"checkbox\" name=\"edytuj[]\" value=\"$r->idSluzby\" checked>";
                                     echo "</td>";
                                     echo "<td><input type=\"text\" class=\"wysrodkuj\" name=\"data[]\" placeholder=\"$r->ostatnie\" value=\"$r->ostatnie\" pattern=\"(0[1-9]|1[0-9]|2[0-9]|3[01])-(0[1-9]|1[012])-[0-9]{4}\" required=\"true\" size=\"10\" disabled></td>"; /*wyswietlamy edycje daty*/ 
-                                    echo "<td><input type=\"text\" class=\"wysrodkuj ggodzin\" name=\"godzina[]\" placeholder=\"".(($r->ile)/480)."\" pattern='((\d{1,2}\.[5])|(\d{1,2}))' required=\"true\" size=\"4\"></td>"; /*wyswietlamy godziny*/
+                                    echo "<td><input type=\"radio\" value=\"1\" name=\"godzina[] $r->idSluzby\" class=\"iledni\" placeholder=\"1\" required=\"true\" id=\"dni1-$r->idSluzby\"><label for=\"dni1-$r->idSluzby\">1</label><input type=\"radio\" value=\"2\" name=\"godzina[] $r->idSluzby\" class=\"iledni\" placeholder=\"1\" required=\"true\" id=\"dni2-$r->idSluzby\"><label for=\"dni2-$r->idSluzby\">2</label></td>"; /*wyswietlamy godziny <input type=\"text\" class=\"wysrodkuj ggodzin\" name=\"godzina[]\" placeholder=\"".(($r->ile)/480)."\" pattern='((\d{1,2}\.[5])|(\d{1,2}))' required=\"true\" size=\"4\">*/
                                 }else{
                                     echo "<td>";
                                         echo "<input type=\"checkbox\" name=\"edytuj[]\" value=\"$r->idSluzby\">";
@@ -1338,7 +1338,7 @@ function dodajEskadre($skrot_eskadry, $nazwa_eskadry) {
     }
 }
 
-function dodaneEkadry($skrot_eskadry, $nazwa_eskadry, $dowodca, $szef){
+function dodaneEkadry(){
     $eskadry = mysql_query("SELECT * FROM eskadry") 
 or die('Błąd zapytania'); 
     if(mysql_num_rows($eskadry) > 0) { 
@@ -1356,18 +1356,26 @@ or die('Błąd zapytania');
             echo "<tbody>";
             while($r = mysql_fetch_object($eskadry)) {
                 echo "<tr class=\"blekitne\">";
-                        echo "<td class=\"left\">$r->Skrot</td>";   /*wyswietlamy daty*/ 
+                        echo "<td class=\"left\"><p class=\"nowrap\">$r->Skrot</p></td>";   /*wyswietlamy daty*/ 
                         echo "<td class=\"left\">$r->Nazwa</td>"; /*wyswietlamy godziny*/
                         echo "<td>";
+                        if(isset($r->DcaEskadry)){
                             echo "<a href=\"index.php?id=panele/profil/zolnierz&profil=$r->DcaEskadry\">";
                             echo "<img src=\"img/avatars/";avatar($r->DcaEskadry);
-                            echo "\" class=\"zaokraglij\" height=\"26px\" title=\"Dodane: ".$r->DcaEskadry."\" align=\"absmiddle\">";
+                            echo "\" class=\"zaokraglij\" height=\"26px\" title=\"Przejdź do profilu\" align=\"absmiddle\">";
                             echo "</a>";
+                        }else{
+                            //tutaj dodamy button przypisywania dowodcy do eskadry
+                        }
                         echo "</td>";
                         echo "<td class=\"right\">";
+                        if(isset($r->SzefEskadry)){
                             echo "<a href=\"index.php?id=panele/profil/zolnierz&profil=".id_zolnierza($r->SzefEskadry)."\">";
                             echo "<img src=\"img/avatars/";avatar($r->SzefEskadry);
-                            echo "\" class=\"zaokraglij\" height=\"26px\" title=\"Dodane: ".$r->kiedy_dodal."\" align=\"absmiddle\">";
+                            echo "\" class=\"zaokraglij\" height=\"26px\" title=\"Przejdź do profilu\" align=\"absmiddle\">";
+                        }  else {
+                           //tutaj dodamy button przypisywania szefa do eskadry 
+                        }
                             echo "</a>";
                         echo "</td>";
                     echo "</tr>";
@@ -1375,7 +1383,7 @@ or die('Błąd zapytania');
             echo "</tbody>";
         echo "</table>";   
     }else{
-        echo"Nie dodałeś jeszcze eskadr, zrobić lub kliknij <a href=\"index.php?id=panele/dodaj/dodajEskadre\">tutaj</a>";
+        echo"Nie dodałeś jeszcze eskadr, zrobić lub kliknij <a href=\"index.php?id=panele/admin/dodajEskadre\">tutaj</a>";
     }
 }
 

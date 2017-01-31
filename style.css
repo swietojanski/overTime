@@ -173,6 +173,10 @@ div.upload input {
     white-space:nowrap;
 }
 
+.overTime .nowrap {
+    white-space:nowrap;
+}
+
 .overTime .tytul > p.right {
   flex-basis:100%;
   display: -webkit-box;
@@ -438,6 +442,7 @@ img.avatar {
     flex-wrap: nowrap;
     -webkit-flex-wrap: nowrap;
 }
+
 /*zdjecie wyswietlane w profilu zolnierza*/
 .panel.zdjecie {
     flex-basis:222px;
@@ -491,6 +496,9 @@ input.pl-5{
 }
 
 /*szerokosci paneli do flexboksu*/
+.panel.osiemset {
+    width: 810px;
+}
 .panel.siedemset {
     width: 700px;
 }
@@ -834,7 +842,18 @@ input.aktualizuj {
 	background-color:#667F7F;
 }
 
-	  
+/*flex-box do panelu admina ma wymiar nxn*/
+.flex-box {
+  width: 150px;
+  height: 150px;
+  color: white;
+  font: 1em "Arial", Gadget, sans-serif;
+  text-align: center;
+  cursor:pointer;
+}
+
+
+
 /*----rozne dziwadla----*/
 /*IKONY IKONY IKONY Ikony wykorzystane w gornym panelu menu*/
 /*zegarek*/
@@ -1125,7 +1144,7 @@ input[type=radio]:checked + label {
 .dopelniajacy-4{background-color: #664633;}
 
 /*triada*/
-.dopelniajacy-1{background-color: #47B2B2;}
-.dopelniajacy-2{background-color: #6BB2B2;}
-.dopelniajacy-3{background-color: #B26436;}
-.dopelniajacy-4{background-color: #664633;}
+.triada-1{background-color: #47B2B2;}
+.triada-2{background-color: #6BB2B2;}
+.triada-3{background-color: #B26436;}
+.triada-4{background-color: #664633;}
