@@ -85,9 +85,9 @@ body  {
 
 .overTime input, select {
     border: solid #336666 1px;
-    padding-left: 0px;
+    padding: 0px;
     height: 26px;
-    font-family: sans-serif;
+    font-family: 100% Verdana, Arial, Helvetica, sans-serif;
     font-size:1em;
     outline:none;
     -ms-box-sizing:content-box;
@@ -96,11 +96,11 @@ body  {
      box-sizing:content-box;
 }
 
-.overTime input.stopro, select.stopro {
-
-    width: 100%;
-
+.overTime input.fod, select.fod {
+    padding: 0px 0px 0px 5px;
+     width: 344px;
 }
+
 .overTime input.error, select.error {
     border: solid #f00 1px;
 }

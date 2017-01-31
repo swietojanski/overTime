@@ -468,10 +468,10 @@ $stopnie = mysql_query("SELECT stopnie.idStopien, stopnie.Skrot  FROM stopnie")
 or die('Błąd zapytania'); 
 if(mysql_num_rows($stopnie) > 0) { 
     /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
-    echo "<select name=\"stopnie\" style=\"width: 344px\">"; 
+    echo "<select name=\"stopien\" class=\"fod\">"; 
     while($r = mysql_fetch_object($stopnie)) {  
          
-        echo "<option value=\"$r->idStopien\" class=\"stopro\">".$r->Skrot."</option>";
+        echo "<option value=\"$r->idStopien\">".$r->Skrot."</option>";
 
     } 
     echo "</select>"; 
@@ -530,7 +530,7 @@ function dodajUzytkownika(){
             if($dodajlogin==$dodajhaslo){
             formDodaj("error","error","hasło nie może być loginem","wpisz login");    
             }else{
-            $istnieje = mysql_query("SELECT * FROM overtime.uzytkownicy where Login='$dodajlogin'") 
+            $istnieje = mysql_query("SELECT * FROM uzytkownicy where Login='$dodajlogin'") 
             or die('Błąd zapytania'); 
                 if(mysql_num_rows($istnieje) == 0) { //jezeli nie istnieje to dodajemy
                     /* jeżeli wynik jest pozytywny, to dodajemy uzytkownika */ 
@@ -546,6 +546,24 @@ function dodajUzytkownika(){
 
                 }
         }  
+    }
+}
+
+//Dodawanie uzytkownikow w panelu administratora
+function dodajZolnierza($stopien, $imie, $nazwisko, $eskadra, $klucz){
+
+    if(!empty($stopien)&&!empty($imie)&&!empty($nazwisko)&&!empty($eskadra)&&!empty($klucz)) {
+        
+            //sprawdzimy czy podany login juz istnieje
+            
+                    /* jeżeli wynik jest pozytywny, to dodajemy uzytkownika */ 
+                    $zapytanie = "INSERT INTO `zolnierze` (`idStopien`, `Imie`, `Nazwisko`, `idEskadry`, `idKlucza`) VALUES('$stopien','$imie','$nazwisko','$eskadra','$klucz')";
+                    $wykonaj = mysql_query($zapytanie);
+                    echo "Dodałeś żołnierza do bazy danych. Teraz utwórz mu konto.<br>";
+                    echo "<br><p>Powodzenia!</p><br><hr><a href=\"index.php?id=panele/admin/dodajUzytkownika\" ><input value=\"dodaj\" type=\"button\" class=\"zapisz animacja\"></a>";
+            
+    }else{
+        echo "Nie podałeś wszystkich danych";
     }
 }
 
@@ -845,7 +863,7 @@ function sumaNadgodzin ($czyje_id, $rozszerz){ //pobieramy id zolnierza oraz wyb
             echo "<h1>".round(($r->sumagodzin),0)."</h1>";
             echo "godz.: ".$r->sumagodzin." | dni: ".$r->sumadni;     
         } else {
-          echo "<h1>".round(($r->sumagodzin),0)."/".$wykorzystane."/".((round(($r->sumagodzin),0))-$wykorzystane)."</h1>";  
+          echo "<h1><abbr title=\"uzbierane nadgodziny\">".round(($r->sumagodzin),0)."</abbr>/<abbr title=\"wykorzystane nadgodziny\">".$wykorzystane."</abbr>/<abbr title=\"do wykorzystania\">".((round(($r->sumagodzin),0))-$wykorzystane)."</abbr></h1>";  
         }
     
 }
@@ -853,7 +871,7 @@ function sumaNadgodzin ($czyje_id, $rozszerz){ //pobieramy id zolnierza oraz wyb
 //wyswietlenie sluzb zalogowanego uzytkownika
 function mojeSluzby($kogo) {
     if(isset($kogo)) { //&& $kogo != id_zolnierza()   to samo co w nadgodzinach
-        $czyje_url = '&czyje='.$kogo; //dopisujemy url do zalogowanego
+        $czyje_url = '&profil='.$kogo; //dopisujemy url do zalogowanego
             //zmienna pomocnicza do wyswietlania nadgodzin uzytkownika
         $czyje_id = $kogo;
     }elseif(empty ($kogo)){
@@ -1072,7 +1090,7 @@ function sumaSluzb ($czyje_id, $rozszerz){ //pobieramy id zolnierza oraz wybiera
             echo "<h1>".round(($r->sumadni),0)."</h1>";
             echo "godz.: ".$r->sumagodzin." | dni: ".$r->sumadni;     
         } else {
-          echo "<h1>".round(($r->sumadni),0)."/".$wykorzystane."/".((round(($r->sumadni),0))-$wykorzystane)."</h1>";  
+          echo "<h1><abbr title=\"uzbierane dni za służby\">".round(($r->sumadni),0)."</abbr>/<abbr title=\"wykorzystane\">".$wykorzystane."</abbr>/<abbr title=\"do wykorzystania\">".((round(($r->sumadni),0))-$wykorzystane)."</abbr></h1>";  
         }
     
 }
@@ -1227,6 +1245,39 @@ or die('Błąd zapytania');
         while($r = mysql_fetch_object($dyzur)) {  
 
             echo "<option value=\"$r->idDyzurny\">".$r->Skrot."</option>";
+
+        } 
+        echo "</select>"; 
+    }
+}
+
+//WYŚWIETLENIE LISTY ESKADR DLA PRZYPISANIA ŻOŁNIERZA
+function listaEskadr() {
+$esk = mysql_query("SELECT *  FROM eskadry") 
+or die('Błąd zapytania'); 
+    if(mysql_num_rows($esk) > 0) { 
+        /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
+        echo "<select name=\"eskadra\" required class=\"fod\">"; 
+        echo "<option value=\"\" selected disabled>Wybierz eskadrę</option>";
+        while($r = mysql_fetch_object($esk)) {  
+
+            echo "<option value=\"$r->idEskadry\">".$r->Nazwa."</option>";
+
+        } 
+        echo "</select>"; 
+    }
+}
+//WYŚWIETLENIE LISTY ESKADR DLA PRZYPISANIA ŻOŁNIERZA
+function listaKluczy($idEskadry) {
+$kl = mysql_query("SELECT *  FROM klucze WHERE idEskadry='".$idEskadry."'") 
+or die('Błąd zapytania'); 
+    if(mysql_num_rows($kl) > 0) { 
+        /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
+        echo "<select name=\"klucz\" required class=\"fod\">"; 
+        echo "<option value=\"\" selected disabled>Wybierz klucz</option>";
+        while($r = mysql_fetch_object($kl)) {  
+
+            echo "<option value=\"$r->idKlucza\">".$r->Nazwa."</option>";
 
         } 
         echo "</select>"; 

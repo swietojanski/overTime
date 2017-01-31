@@ -39,7 +39,7 @@ echo "</div>";
 echo "<div class=\"flex-container\">";
 //pierwszy
         echo "<div class=\"panel trzysta\">";
-            echo "<div class=\"tytul\"><p>wykorzystane nadgodziny</p></div>";
+            echo "<div class=\"tytul\"><p>uzbierane nadgodziny</p></div>";
             echo "<div class=\"zawartosc wysrodkuj\">";
             sumaNadgodzin(id_zolnierza(), 1);
 
@@ -55,7 +55,7 @@ echo "<div class=\"flex-container\">";
         echo "</div>";
 //trzeci
         echo "<div class=\"panel trzysta\">";
-            echo "<div class=\"tytul\"><p>wykorzystane służby</p></div>";
+            echo "<div class=\"tytul\"><p>uzbierane służby</p></div>";
             echo "<div class=\"zawartosc wysrodkuj\">";
                 sumaSluzb(id_zolnierza(), 1);
             echo "</div>";    
