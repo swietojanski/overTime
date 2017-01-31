@@ -4,16 +4,16 @@
 
 <div class="flex-container">
         <ul class="flex-container">
-            <a href="index.php?id=panele/dodaj/nadgodziny"><li class="flex-box dopelniajacy-1 zaokraglij">dodaj użytkownika</li></a>
-            <a href="index.php?id=panele/dodaj/sluzby"><li class="flex-box dopelniajacy-2 zaokraglij">dodaj żołnierza</li></a>
-            <a href="index.php?id=panele/dodaj/sluzby"><li class="flex-box dopelniajacy-1 zaokraglij">dodaj żołnierza</li></a>
-            <a href="index.php?id=panele/dodaj/sluzby"><li class="flex-box zlozony-3 zaokraglij">dodaj żołnierza</li></a>
-            <a href="index.php?id=panele/dodaj/sluzby"><li class="flex-box triada-4 zaokraglij">dodaj żołnierza</li></a>
-            <a href="index.php?id=panele/dodaj/sluzby"><li class="flex-box dopelniajacy-2 zaokraglij">dodaj żołnierza</li></a>
-            <a href="index.php?id=panele/dodaj/sluzby"><li class="flex-box dopelniajacy-1 zaokraglij">dodaj żołnierza</li></a>
-            <a href="index.php?id=panele/dodaj/sluzby"><li class="flex-box triada-2 zaokraglij">dodaj żołnierza</li></a>
-            <a href="index.php?id=panele/dodaj/sluzby"><li class="flex-box dopelniajacy-1 zaokraglij">dodaj żołnierza</li></a>
-            <a href="index.php?id=panele/dodaj/sluzby"><li class="flex-box dopelniajacy-2 zaokraglij">dodaj żołnierza</li></a>
+            <a href="index.php?id=panele/admin/dodajUzytkownika"><li class="flex-box dopelniajacy-1">dodaj użytkownika</li></a>
+            <a href="index.php?id=panele/admin/dodajEskadry"><li class="flex-box dopelniajacy-2">dodaj eskadry</li></a>
+            <a href="index.php?id=panele/admin/eskadry"><li class="flex-box dopelniajacy-1">przeglądaj eskadry a może nie</li></a>
+            <a href="index.php?id=panele/dodaj/sluzby"><li class="flex-box zlozony-3">dodaj żołnierza</li></a>
+            <a href="index.php?id=panele/dodaj/sluzby"><li class="flex-box triada-4">dodaj żołnierza</li></a>
+            <a href="index.php?id=panele/dodaj/sluzby"><li class="flex-box dopelniajacy-2">dodaj żołnierza</li></a>
+            <a href="index.php?id=panele/dodaj/sluzby"><li class="flex-box dopelniajacy-1">dodaj żołnierza</li></a>
+            <a href="index.php?id=panele/dodaj/sluzby"><li class="flex-box triada-2">dodaj żołnierza</li></a>
+            <a href="index.php?id=panele/dodaj/sluzby"><li class="flex-box dopelniajacy-1">dodaj żołnierza</li></a>
+            <a href="index.php?id=panele/dodaj/sluzby"><li class="flex-box dopelniajacy-2">dodaj żołnierza</li></a>
         </ul>
     </div>
 </div>

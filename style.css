@@ -201,6 +201,7 @@ div.upload input {
 	padding:10px;
 	box-shadow: inset -5px -5px 5px #FAFAFA;
 }
+/*ZAPYTANIA MEDIALNE*/
 /*wyswietli gdy rozdzielczosc jest mniejsza niz 800px*/
 @media (max-width: 800px) {
     .displaynone {
@@ -245,6 +246,20 @@ div.upload input {
             font: 14px/60px "Arial", Gadget, sans-serif;
             height:60px;
     }
+}
+
+@media (max-width: 1300px) {
+    .flex-box {
+  width: 140px;
+  height: 70px;
+  color: white;
+  font: 1.2em "Arial", Gadget, sans-serif;
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  
+  cursor:pointer;
+}
 }
 
 
@@ -391,6 +406,20 @@ a.ustawienia {
 }
 
 a.ustawienia:hover {
+	background-color:#34734f;
+}
+
+a.panadmin {
+    padding:0 8px 0 8px;
+	display:block;
+	background-image:url(img/lay/admin.png);
+	background-repeat:no-repeat;
+	background-position:center;
+	width:29px;
+	height:60px;
+}
+
+a.panadmin:hover {
 	background-color:#34734f;
 }
 /*
@@ -672,7 +701,7 @@ input.zapisz:focus {
 	  
 .ladowanie {
 	  
-	  	animation-name:ladowanie;
+	animation-name:ladowanie;
         animation-duration:1s;
         -webkit-animation-name:ladowanie;
         -webkit-animation-duration:1s;
@@ -843,16 +872,14 @@ input.aktualizuj {
 }
 
 /*flex-box do panelu admina ma wymiar nxn*/
-.flex-box {
-  width: 150px;
-  height: 150px;
-  color: white;
-  font: 1em "Arial", Gadget, sans-serif;
-  text-align: center;
-  cursor:pointer;
+
+.flex-box:hover {
+  background:#6BB2B2;
 }
-
-
+.flex-box > p {
+    background: #146BCC;
+    vertical-align: bottom;
+}
 
 /*----rozne dziwadla----*/
 /*IKONY IKONY IKONY Ikony wykorzystane w gornym panelu menu*/
