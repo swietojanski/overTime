@@ -87,7 +87,7 @@ body  {
     border: solid #336666 1px;
     padding: 0px;
     height: 26px;
-    font-family: 100% Verdana, Arial, Helvetica, sans-serif;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size:1em;
     outline:none;
     -ms-box-sizing:content-box;
@@ -902,7 +902,7 @@ input.aktualizuj {
 /*flex-box do panelu admina ma wymiar nxn*/
 
 .flex-box:hover {
-  background:#6BB2B2;
+  background:#336666;
 }
 .flex-box > p {
     background: #146BCC;
