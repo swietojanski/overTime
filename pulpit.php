@@ -71,6 +71,15 @@ echo "<div class=\"flex-container\">";
         echo "</div>";      
 echo "</div>";
 
+echo "<div class=\"flex-container\">";
+//panel z ostatnio dodanymi nadgodzinami
+        echo "<div class=\"panel tysiac\">";
+            echo "<div class=\"tytul\"><p>panel dowódcy</p></div>";
+            echo "<div class=\"zawartosc\">";
+                echo "przykladowa zawartosc sluzb";
+            echo "</div>";
+        echo "</div>";
+echo "</div>";
 
 switch ($_SESSION['permissions']) {
 case '1';

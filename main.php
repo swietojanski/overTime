@@ -62,7 +62,7 @@ if(isset($_GET['id'])) {
 
 
   <div id="footer">
-    <p>OverTime 2016</p>
+    <p>OverTime 2017</p>
   <!-- koniec stopki --></div>
 <!-- koniec kontenera --></div>
 <script>

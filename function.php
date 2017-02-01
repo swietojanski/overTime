@@ -480,15 +480,22 @@ if(mysql_num_rows($stopnie) > 0) {
 
 
 //wyswietlenie rozwijanej listy zolnierzy
-function lista_zolnierzy() {
-$datalist = mysql_query("SELECT CONCAT_WS(' ',stopnie.Skrot, zolnierze.Nazwisko, zolnierze.Imie) AS Żołnierze, idZolnierza FROM zolnierze, stopnie WHERE stopnie.idStopien = zolnierze.idStopien;") 
+function lista_zolnierzy($selected) {
+$datalist = mysql_query("SELECT CONCAT_WS(' ',stopnie.Skrot, zolnierze.Nazwisko, zolnierze.Imie) AS Żołnierze, idZolnierza FROM zolnierze, stopnie WHERE stopnie.idStopien = zolnierze.idStopien ORDER BY idZolnierza DESC, Nazwisko ASC;") 
 or die('Błąd zapytania'); 
     if(mysql_num_rows($datalist) > 0) { 
         /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
-        echo "<select name=\"zolnierze\">";  
+        echo "<select name=\"zolnierze\" class=\"fod\">";
+        if (empty($selected)){
+            echo "<option value=\"\" selected disabled>Wybierz zolnierza</option>";
+        }
+        echo "<option value=\"0\">Cywil</option>";
         while($r = mysql_fetch_object($datalist)) {  
-
-            echo "<option value=\"$r->idZolnierza\">".$r->Żołnierze."</option>";
+                if ($selected==$r->idZolnierza){
+                    echo "<option selected value=\"$r->idZolnierza\">".$r->Żołnierze."</option>";
+                }  else {
+                    echo "<option value=\"$r->idZolnierza\">".$r->Żołnierze."</option>";  
+                }
 
         } 
         echo "</select>"; 
@@ -500,7 +507,7 @@ or die('Błąd zapytania');
 ////////////////////////
 
 //Dodawanie uzytkownikow w panelu administratora
-function dodajUzytkownika(){
+function dodajUzytkownika($przypisz){
     $dodajlogin = htmlspecialchars($_POST['dodajlogin']);
     $dodajhaslo = htmlspecialchars($_POST['dodajhaslo']);
     $zakodowane = md5($dodajhaslo);
@@ -511,10 +518,14 @@ function dodajUzytkownika(){
         {
             echo "<form name=\"dodajUzytkownika\" method=\"post\" action=\"index.php?id=panele/admin/dodajUzytkownika\">";
             echo "<div class=\"zawartosc wysrodkuj\">";
-            echo "<input type=\"text\" name=\"dodajlogin\"  size=\"40\" required=\"true\" maxlength=\"40\" placeholder=\"$placelog...\" class=\"mb-10 pl-5 $errorlog\" pattern='^[a-zA-Z][a-zA-Z0-9-_\.]{3,20}$' title=\"Min. 4 znaki. Format: nazwa(bez znaków specjalnych)\"><br>";
-            echo "<input type=\"password\" name=\"dodajhaslo\" size=\"40\" required=\"true\" maxlength=\"40\" placeholder=\"$placepas...\" class=\"mb-10 pl-5 $errorpas\" pattern='(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$' title=\"Min. 8 znaków, wielka i mała litera oraz znak specjalny\"><br>";  
+
+            echo "<input type=\"text\" name=\"dodajlogin\"  required=\"true\" maxlength=\"40\" placeholder=\"$placelog...\" class=\"mb-10 fod pl-5 $errorlog\" pattern='^[a-zA-Z][a-zA-Z0-9-_\.]{3,20}$' title=\"Min. 4 znaki. Format: nazwa(bez znaków specjalnych)\"><br>";
+            echo "<input type=\"password\" name=\"dodajhaslo\"  required=\"true\" maxlength=\"40\" placeholder=\"$placepas...\" class=\"mb-10 fod pl-5 $errorpas\" pattern='(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$' title=\"Min. 8 znaków, wielka i mała litera oraz znak specjalny\"><br>";  
             //Funkcja wyswietlajaca liste uprawnien
                 uprawnienia();//wywolanie
+                echo "<br>";
+                lista_zolnierzy($_GET['profil']);
+            
             echo "<br><input value=\"dodaj\" type=\"submit\" class=\"zapisz animacja mt-10\">";
             echo "</div>";
             echo "</form>";
@@ -534,11 +545,15 @@ function dodajUzytkownika(){
             or die('Błąd zapytania'); 
                 if(mysql_num_rows($istnieje) == 0) { //jezeli nie istnieje to dodajemy
                     /* jeżeli wynik jest pozytywny, to dodajemy uzytkownika */ 
-                    $zapytanie = "INSERT INTO `uzytkownicy` (`Login`, `Haslo`, `DataUtworzenia`, `idUprawnienia`) VALUES('$dodajlogin','$zakodowane', NOW(), '{$_POST['uprawnienie']}')";
+                        if($_POST['zolnierze']==0 || empty($_POST['uprawnienie'])){
+                            $zapytanie = "INSERT INTO `uzytkownicy` (`Login`, `Haslo`, `DataUtworzenia`, `idUprawnienia`) VALUES('$dodajlogin','$zakodowane', NOW(), '{$_POST['uprawnienie']}')";
+                        }else{
+                            $zapytanie = "INSERT INTO `uzytkownicy` (`Login`, `Haslo`, `DataUtworzenia`, `idUprawnienia`, `idZolnierza`) VALUES('$dodajlogin','$zakodowane', NOW(), '{$_POST['uprawnienie']}','{$_POST['zolnierze']}')";
+                        }
                     $wykonaj = mysql_query($zapytanie);
                     echo "Dodałeś użytkownika <strong>".$dodajlogin."</strong> do bazy danych. Teraz może się zalogować.<br>";
                     echo "<div class=\"zawartosc wysrodkuj\">";
-                    echo "<br><p>Powodzenia!</p><br><hr><a href=\"index.php?id=panele/admin/dodajUzytkownika\" ><input value=\"dodaj\" type=\"button\" class=\"zapisz animacja\"></a>";
+                    echo "<br><p>Powodzenia!</p><br><hr><a href=\"index.php?id=panele/admin/dodajUzytkownika\" ><input value=\"nowy\" type=\"button\" class=\"zapisz animacja\"></a>";
                     echo "</div>";
                 }else{ //jezeli istnieje to jeszcze raz wyrzucamy okienko
 

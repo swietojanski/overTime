@@ -3,7 +3,7 @@
 <h2 class="podpowiedzi zaokraglij">Po dodaniu eskadry możesz dodać do niej klucze</h2>
 
 <div class="flex-container">
-    <div class="panel piecset">
+    <div class="panel">
         <div class="tytul">
             <p>dodaj eskadrę</p>
         </div>
@@ -19,7 +19,7 @@
                             <td><input class="pl-5" type="text" name="skrot" placeholder="np. 1. EO" required="true" size="38"></td>
                         </tr>
                         <tr class="blekitne">
-                            <th class="right">pełna nazwa</th>    
+                            <th class="right nowrap">pełna nazwa</th>    
                             <td><input class="pl-5" type="text" name="nazwa" placeholder="np. Pierwsza Eskadra Obsługi" required="true" size="38"></td>
                         </tr>
                     </tbody>
