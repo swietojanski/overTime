@@ -158,9 +158,11 @@ function mamDostepDo($kogo){
         break; 
     case 3:
         //dowodca eskadry
-        $idDowodcy = id_zolnierza();
-        $wystapil = mysql_query("SELECT idZolnierza FROM zolnierze, eskadry WHERE zolnierze.idEskadry = eskadry.idEskadry AND eskadry.DcaEskadry = '$idDowodcy' AND idZolnierza='$kogo'") 
-        or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry'); 
+        //$idDowodcy = id_zolnierza();
+        //$wystapil = mysql_query("SELECT idZolnierza FROM zolnierze, eskadry WHERE zolnierze.idEskadry = eskadry.idEskadry AND eskadry.DcaEskadry = '$idDowodcy' AND idZolnierza='$kogo'") 
+        $idEskadry = id_eskadry();
+        $wystapil = mysql_query("SELECT idZolnierza FROM zolnierze WHERE zolnierze.idEskadry = '$idEskadry' AND idZolnierza='$kogo'") 
+        or die('Masz uprawnienia dowódcy eskadry, ale nie jesteś dowódcą do eskadry'); 
         break;
     case 4:
         //szef eskadry
@@ -305,7 +307,7 @@ function edytujZdjecie($profil){
                           }
 
                      // Koniec instrukcji if move...
-                          // Przenieś plik do docelowego katalogu.
+                          // Przenieś oryginalny plik do docelowego katalogu.
                         move_uploaded_file($_FILES['upload']['tmp_name'],$_SERVER['DOCUMENT_ROOT'].'/img/profiles/'.$nazwa_zdjecia); 
                         $picture = "<img src=\"/img/profiles/thumbnail/".$nazwa_zdjecia."\">";
                         //jezeli zdjecie zostaje dodane to wpisujemy nazwe zdjecia do bazy                      
@@ -391,11 +393,167 @@ function edytujZdjecie($profil){
     
 }
 
+function zrobAvatar($profil, $uzytkownik){
+    
+    if( !isset($uzytkownik) ) {
+        $uzytkownik = $_SESSION['user']; // jezeli nie podane $kogo to wyswietl id zalogowanego uzytkownika
+    }
+    
+    if (isset($_POST['wyslane'])) {
+        // Sprawdź ładowany obrazek.
+        if (isset($_FILES['upload'])) {
+
+            list($width, $height, $type, $attr) = getimagesize($_FILES['upload']['tmp_name']);
+
+                // Sprawdz typ, pownien być JPEG lub PNG gifa tez dodalem.
+                $allowed = array ('image/jpeg', 'image/pjpeg', 'image/JPG', 'image/X-PNG', 'image/PNG', 'image/png', 'image/x-png', 'image/gif', 'image/GIF');
+                if (in_array($_FILES['upload']['type'], $allowed)) {
+
+                        //adres oryginalnego, zalaczonego zdjecia
+                        $url = $_FILES['upload']['tmp_name'];
+
+                            switch($type){
+                              case '6': $zdjecie = imagecreatefromwbmp($url); break;
+                              case '1': $zdjecie = imagecreatefromgif($url); break;
+                              case '2': $zdjecie = imagecreatefromjpeg($url); break;
+                              case '3': $zdjecie = imagecreatefrompng($url); break;
+                              default : return "Nieobsługiwany typ pliku!";
+                            }
+                            // pobieramy wysokosc i szerokosc oryginalnego zdjecia, chociaz mozna to wyciagnac z  list xD
+                        $x = imagesx($zdjecie);
+                        $y = imagesy($zdjecie);
+                           // ustalamy szerokosc nowego zdjecia
+                        $final_x = 30; 
+                        $final_y = 30;
+                        
+                           // tymczasowe zmienne x y, deklaracja
+                        $tmp_x = 0;
+                        $tmp_y = 0;
+
+                        // skalowanie zdjecia z zaokragleniem ceil do gornej wartosci
+                        if($y<$x) $tmp_x = ceil(($x-$final_x*$y/$final_y)/2);
+                        elseif($x<$y) $tmp_y = ceil(($y-$final_y*$x/$final_x)/2);
+
+                        $nowe = imagecreatetruecolor($final_x, $final_y);
+
+                        //gdy plik to gif albo png przetwarzamy jego warstwe przezroczystosci
+                            if($type == 1 or $type == 3){
+                                imagecolortransparent($nowe, imagecolorallocatealpha($nowe, 0, 0, 0, 127));
+                                imagealphablending($nowe, false);
+                                imagesavealpha($nowe, true);
+                            }
+                        imagecopyresampled($nowe, $zdjecie, 0, 0, $tmp_x, $tmp_y, $final_x, $final_y, $x-2*$tmp_x, $y-2*$tmp_y);
+
+                        //tworzymy nowa nazwe dla zdjecia
+                      
+                        
+                        $temp_nazwa_zdjecia = $_FILES['upload']['name']; //pobieramy tymczasowa nazwe zdjecia
+                        $extension = pathinfo($temp_nazwa_zdjecia, PATHINFO_EXTENSION);  //wyciagamy rozszerzenie z oryginalnego pliku
+                        $nazwa_zdjecia = "avek-".$uzytkownik.".".$extension; //tworzymy nowa nazwe skladajaca sie z id zolnierza i rozszerzenia
+                        
+                        
+                        $url = $_SERVER['DOCUMENT_ROOT'].'/img/avatars/'.$nazwa_zdjecia;
+                        //wybieramy jaka bedzie metoda tworzenia
+                          switch($type){
+                            case '6': imagewbmp($nowe, $url, 100); break;
+                            case '1': imagegif($nowe, $url, 100); break;
+                            case '2': imagejpeg($nowe, $url, 100); break;
+                            case '3': imagepng($nowe, $url); break;
+                          }
+
+                     // Koniec instrukcji if move...
+                          // Przenieś plik do docelowego katalogu. ORYGINALNY PLIK NIE BEDZIE PRZENOSZONY
+                       // move_uploaded_file($_FILES['upload']['tmp_name'],$_SERVER['DOCUMENT_ROOT'].'/img/avatars/'.$nazwa_zdjecia); 
+                        $picture = "<img src=\"/img/avatars/".$nazwa_zdjecia."\">";
+                        //jezeli zdjecie zostaje dodane to wpisujemy nazwe zdjecia do bazy                      
+                        
+                        
+                        
+                        $sprawdzenie = mysql_query("SELECT * FROM `uzytkownicy` WHERE `Login`='$uzytkownik'");// zapytanie sprawdzajace zolnierz istnieje 
+                            if((int)mysql_num_rows($sprawdzenie) > 0) { 
+                                $dodajfote = mysql_query("UPDATE `uzytkownicy` SET `Avatar`='$nazwa_zdjecia' WHERE `Login`='$uzytkownik'");
+                                $status="zaladowane";
+                            }else{
+                                $blad_dodania = "Ten żołnierz nie ma konta użytkownika.";
+                                echo $blad_dodania;
+                            }
+
+                } else { // Niepoprawny typ.
+                //tutaj mozemy wyrzucic komunikat o zlym formacie pliku
+                    //echo '<p class="error">Proszę załadować plik typu JPEG lub PNG.</p>';
+                }
+        } // Koniec instrukcji if isset($_FILES['upload']).
+
+        // Wyrzuć błąd.
+
+        if ($_FILES['upload']['error'] > 0) {
+            // Wyświetl odpowiedni komunikat w zależności od błędu.
+            switch ($_FILES['upload']['error']) {
+                case 1:
+                    $blad = 'Rozmiar pliku większy niż pozwala serwer.';
+                    break;
+                case 2:
+                    $blad = 'Nieprawidłowy rozmiar lub typ pliku.';
+                    break;
+                case 3:
+                    $blad = 'Plik został częściowo załadowany.';
+                    break;
+                case 4:
+                    $blad = 'Żaden plik nie został załadowany.';
+                    break;
+                case 6:
+                    $blad = 'Katalog tymczasowy był niedostępny.';
+                    break;
+                case 7:
+                    $blad = 'Brak możliwości zapisu na dysk.';
+                    break;
+                case 8:
+                    $blad = 'Proces ładowania został wstrzymany.';
+                    break;
+                default:
+                    $blad = 'Wystąpił błąd systemu.';
+                    break;
+            } // Koniec instrukcji switch.
+
+            print '</strong></p>';
+
+        } // Koniec instukcji if błędami.
+
+        // Usuń plik jezeli jeszcze istnieje.
+        if (file_exists ($_FILES['upload']['tmp_name']) && is_file($_FILES['upload']['tmp_name']) ) {
+            unlink ($_FILES['upload']['tmp_name']);
+        }       
+    } // Koniec głównej instrukcji if.
+    
+    //formularz
+    echo "<form enctype=\"multipart/form-data\" action=\"\" method=\"post\" name=\"avatar\">";
+     echo "<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"1048576\">";
+        echo "<div class=\"upload zaokraglij\"><div class=\"index-1\">";
+         if (empty($picture) && empty($blad)){
+                          echo "Kliknij tutaj<br>";
+         }elseif(isset ($status)){
+             echo "<div class=\"index-2\">Zapisano<br></div>";
+         }
+            if(isset($blad)){
+                echo $blad;
+             }else{
+                 echo $picture;
+             }
+         echo "</div><input type=\"file\" name=\"upload\" accept=\"image/gif,image/jpeg,image/png\" pattern=\"([^\s]+(\.(?i)(jpg|png|gif|bmp))$)\" title=\"Kliknij i wybierz avatar\"/></div>";
+         if (empty($status)){
+         echo "<div class=\"wysrodkuj\"><input class=\"zapisz\" type=\"submit\" name=\"submit\" value=\"Zapisz\" /></div>";
+         }
+     echo "<input type=\"hidden\" name=\"wyslane\" value=\"TRUE\"/>";
+     echo "</form>";
+    
+    
+}
+
 //Wyswietlanie danych profiliwych zolnierza - podstrona profil
 function profil($profil) {
 //jeżeli istnieje zmienna profil sprawdzamy czy mamy dostep do danego profilu     
     if( isset($profil) && $profil == mamDostepDo($profil)) {
-        $zolnierz = mysql_query("SELECT stopnie.Pelna, zolnierze.Imie, zolnierze.Nazwisko, zolnierze.Zdjecie, eskadry.Nazwa AS Eskadra, eskadry.Skrot AS SkrotEskadra, klucze.Nazwa AS Klucz FROM stopnie INNER join zolnierze USING (idStopien) INNER join eskadry USING (idEskadry) LEFT JOIN klucze USING (idKlucza) WHERE zolnierze.idZolnierza='$profil'")
+        $zolnierz = mysql_query("SELECT stopnie.Pelna, zolnierze.Imie, zolnierze.Nazwisko, zolnierze.Zdjecie, eskadry.Nazwa AS Eskadra, eskadry.Skrot AS SkrotEskadra, klucze.Nazwa AS Klucz FROM stopnie INNER join zolnierze USING (idStopien) LEFT join eskadry USING (idEskadry) LEFT JOIN klucze USING (idKlucza) WHERE zolnierze.idZolnierza='$profil'")
         //$zolnierz = mysql_query("SELECT stopnie.Pelna, zolnierze.Imie, zolnierze.Zdjecie, zolnierze.Nazwisko,  eskadry.Nazwa AS Eskadra, klucze.Nazwa AS Klucz FROM stopnie, zolnierze, eskadry, klucze WHERE stopnie.idStopien = zolnierze.idStopien AND eskadry.idEskadry=zolnierze.idEskadry AND klucze.idKlucza=zolnierze.idKlucza OR klucze.idKlucza IS NULL AND zolnierze.idZolnierza='$profil'") 
         or die('Błąd zapytania'); 
         /* 
@@ -420,7 +578,11 @@ function profil($profil) {
                 echo "<div class=\"panel dane\">"; 
                     echo "<div class=\"zawartosc blekitne mb-10\"><h2>".mb_convert_case($r->Nazwisko, MB_CASE_UPPER, "UTF-8")." ".$r->Imie."</h2></div>";
                     echo "<div class=\"zawartosc blekitne\">Stopień: ".$r->Pelna."</div>";
-                    echo "<div class=\"zawartosc blekitne\">Eskadra: ".$r->Eskadra."</div>";
+                    if ($_SESSION['permissions']==2 && isset($profil) && $profil ==  id_zolnierza()){
+                    echo "<div class=\"zawartosc blekitne\">Dowódca Grupy</div>"; 
+                    }else{
+                    echo "<div class=\"zawartosc blekitne\">Eskadra: ".$r->Eskadra."</div>";   
+                    }
                     if (isset($r->Klucz)){
                     echo "<div class=\"zawartosc blekitne\">Klucz: ".$r->Klucz."</div>";
                     }
@@ -567,16 +729,38 @@ function dodajUzytkownika($przypisz){
 //Dodawanie uzytkownikow w panelu administratora
 function dodajZolnierza($stopien, $imie, $nazwisko, $eskadra, $klucz){
 
-    if(!empty($stopien)&&!empty($imie)&&!empty($nazwisko)&&!empty($eskadra)&&!empty($klucz)) {
+    if(!empty($stopien)&&!empty($imie)&&!empty($nazwisko)) {
         
             //sprawdzimy czy podany login juz istnieje
             
-                    /* jeżeli wynik jest pozytywny, to dodajemy uzytkownika */ 
-                    $zapytanie = "INSERT INTO `zolnierze` (`idStopien`, `Imie`, `Nazwisko`, `idEskadry`, `idKlucza`) VALUES('$stopien','$imie','$nazwisko','$eskadra','$klucz')";
-                    $wykonaj = mysql_query($zapytanie);
-                    echo "Dodałeś żołnierza do bazy danych. Teraz utwórz mu konto.<br>";
-                    echo "<br><p>Powodzenia!</p><br><hr><a href=\"index.php?id=panele/admin/dodajUzytkownika\" ><input value=\"konto\" type=\"button\" class=\"zapisz animacja\" title=\"dodaj użytkownika\"></a>";
+                    /* jeżeli wynik jest pozytywny, to dodajemy uzytkownika */
+            if(!empty ($eskadra) && empty($klucz)){
+                $zapytanie = "INSERT INTO `zolnierze` (`idStopien`, `Imie`, `Nazwisko`, `idEskadry`, `idKlucza`) VALUES('$stopien','$imie','$nazwisko','$eskadra',NULL)";
+            }elseif (empty ($eskadra) && empty ($klucz)) {
+                $zapytanie = "INSERT INTO `zolnierze` (`idStopien`, `Imie`, `Nazwisko`, `idEskadry`, `idKlucza`) VALUES('$stopien','$imie','$nazwisko',NULL,NULL)";    
+            }else{
+                $zapytanie = "INSERT INTO `zolnierze` (`idStopien`, `Imie`, `Nazwisko`, `idEskadry`, `idKlucza`) VALUES('$stopien','$imie','$nazwisko','$eskadra','$klucz')";
+            }
             
+        $wykonaj = mysql_query($zapytanie);
+        echo "Dodałeś żołnierza do bazy danych. Teraz utwórz mu konto.<br>";
+        
+        
+        $przypisz = mysql_query("SELECT * FROM zolnierze WHERE idStopien='$stopien' AND Imie='$imie' AND Nazwisko='$nazwisko'  ORDER BY idZolnierza DESC LIMIT 1;") 
+        or die('Błąd zapytania'); 
+
+        //pobieramy z bazy id ostatnio dodanego zolnierza spelniajacego kryteria z zapytania $przypisz
+            if(mysql_num_rows($przypisz) == 1) { 
+                $r = mysql_fetch_object($przypisz);   
+                $id = intval($r->idZolnierza);
+            }
+                 
+        
+        
+        
+        
+        
+        echo "<br><p>Powodzenia!</p><br><hr><a href=\"index.php?id=panele/admin/dodajUzytkownika&profil=$id\" ><input value=\"konto\" type=\"button\" class=\"zapisz animacja\" title=\"dodaj użytkownika\"></a>";
     }else{
         echo "Nie podałeś wszystkich danych";
     }
@@ -1272,8 +1456,8 @@ $esk = mysql_query("SELECT *  FROM eskadry")
 or die('Błąd zapytania'); 
     if(mysql_num_rows($esk) > 0) { 
         /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
-        echo "<select name=\"eskadra\" required class=\"fod\">"; 
-        echo "<option value=\"\" selected disabled>Wybierz eskadrę</option>";
+        echo "<select name=\"eskadra\" class=\"fod\" id=\"eskadra\">"; 
+        echo "<option value=\"\" selected disabled id=\"puste\">Wybierz eskadrę</option>";
         while($r = mysql_fetch_object($esk)) {  
 
             echo "<option value=\"$r->idEskadry\">".$r->Nazwa."</option>";
@@ -1288,7 +1472,7 @@ $kl = mysql_query("SELECT *  FROM klucze WHERE idEskadry='".$idEskadry."'")
 or die('Błąd zapytania'); 
     if(mysql_num_rows($kl) > 0) { 
         /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
-        echo "<select name=\"klucz\" required class=\"fod\">"; 
+        echo "<select name=\"klucz\" class=\"fod\" id=\"klucz\">"; 
         echo "<option value=\"\" selected disabled>Wybierz klucz</option>";
         while($r = mysql_fetch_object($kl)) {  
 
@@ -1425,7 +1609,7 @@ function zmienHaslo($kogo) {
         {
             echo "<form name=\"zmienHaslo\" method=\"post\" action=\"\">";
             echo "<div class=\"zawartosc wysrodkuj\">";
-            echo "<input type=\"password\" name=\"podajhaslo\" size=\"40\" required=\"true\" maxlength=\"40\" placeholder=\"$placepas...\" class=\"mb-10 pl-5 $errorpas\" pattern='(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$' title=\"Min. 8 znaków, wielka i mała litera oraz znak specjalny\"><br>";  
+            echo "<input type=\"password\" name=\"podajhaslo\" size=\"40\" maxlength=\"40\" placeholder=\"$placepas...\" class=\"mb-10 pl-5 $errorpas\" pattern='(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$' title=\"Min. 8 znaków, wielka i mała litera oraz znak specjalny\"><br>";  
             
             echo "<input value=\"zmień\" type=\"submit\" class=\"zapisz animacja mt-10\">";
             echo "</div>";
