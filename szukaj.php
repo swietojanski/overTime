@@ -18,19 +18,20 @@ switch ($_SESSION['permissions']){
     case 3:
         //dowodca eskadry
         $idDowodcy = id_zolnierza();
-        $szukaj = mysql_query("SELECT *, stopnie.Skrot AS StSkrot  FROM zolnierze, stopnie, eskadry WHERE stopnie.idStopien = zolnierze.idStopien AND zolnierze.idEskadry = eskadry.idEskadry AND eskadry.DcaEskadry = '$idDowodcy' AND CONCAT_WS(' ',stopnie.Skrot, zolnierze.Nazwisko, zolnierze.Imie) LIKE '%$wyrazenia%' ORDER BY Nazwisko") 
+        $idEskadry = id_eskadry();
+        $szukaj = mysql_query("SELECT *, stopnie.Skrot AS StSkrot  FROM stopnie left join zolnierze USING (idStopien) left join eskadry USING (idEskadry) WHERE zolnierze.idEskadry = '$idEskadry' AND CONCAT_WS(' ',stopnie.Skrot, zolnierze.Nazwisko, zolnierze.Imie) LIKE '%$wyrazenia%' ORDER BY Nazwisko") 
         or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry'); 
         break;
     case 4:
         //szef eskadry
         $idEskadry = id_eskadry();
-        $szukaj = mysql_query("SELECT *, stopnie.Skrot AS StSkrot  FROM zolnierze, stopnie, eskadry WHERE stopnie.idStopien = zolnierze.idStopien AND zolnierze.idEskadry = eskadry.idEskadry AND eskadry.idEskadry = '$idEskadry' AND CONCAT_WS(' ',stopnie.Skrot, zolnierze.Nazwisko, zolnierze.Imie) LIKE '%$wyrazenia%' ORDER BY Nazwisko") 
+        $szukaj = mysql_query("SELECT *, stopnie.Skrot AS StSkrot  FROM stopnie left join zolnierze USING (idStopien) left join eskadry USING (idEskadry) WHERE zolnierze.idEskadry = '$idEskadry' AND CONCAT_WS(' ',stopnie.Skrot, zolnierze.Nazwisko, zolnierze.Imie) LIKE '%$wyrazenia%' ORDER BY Nazwisko") 
         or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry'); 
         break;
     case 5:
         //dowodca klucza
         $idKlucza = id_klucza();
-        $szukaj = mysql_query("SELECT *, stopnie.Skrot AS StSkrot FROM zolnierze, stopnie, klucze WHERE stopnie.idStopien = zolnierze.idStopien AND zolnierze.idKlucza = klucze.idKlucza AND klucze.idKlucza = '$idKlucza' AND CONCAT_WS(' ',stopnie.Skrot, zolnierze.Nazwisko, zolnierze.Imie) LIKE '%$wyrazenia%' ORDER BY Nazwisko") 
+        $szukaj = mysql_query("SELECT *, stopnie.Skrot AS StSkrot  FROM stopnie left join zolnierze USING (idStopien) left join eskadry USING (idEskadry) WHERE zolnierze.idKlucza = '$idKlucza' AND CONCAT_WS(' ',stopnie.Skrot, zolnierze.Nazwisko, zolnierze.Imie) LIKE '%$wyrazenia%' ORDER BY Nazwisko") 
         or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry'); 
         break;
     case 6:

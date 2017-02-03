@@ -5,8 +5,8 @@
 //$liczba = str_replace(",",".",$liczba);
 //echo $liczba; 
 ?>
-<h1> Moje służby </h1>
-<h2 class="podpowiedzi zaokraglij">Przeglądasz swoje służby.</h2>
+<h1> Służby </h1>
+<h2 class="podpowiedzi zaokraglij">Przeglądasz służby żołnierza.</h2>
 <?php
 echo "<div class=\"flex-container\">";
         echo "<div class=\"panel siedemset\">";
@@ -48,5 +48,23 @@ $('#select-all').click(function(event) {
           this.checked = false;
       });
   }
+});
+$('#edytujgodzinki').prop("disabled", true);
+$(':checkbox').click(function() {
+    
+        if(this.checked) {
+        // Iterate each checkbox
+        $(':checkbox').each(function() {
+            $('#edytujgodzinki').prop("disabled", false)
+            this.checked = true;    
+        });
+    }else {
+    $(':checkbox').each(function() {
+        $('#edytujgodzinki').prop("disabled", true)
+          this.checked = false;
+      });
+  }
+    
+    //$( "select#eskadra option:checked" ).text("Wybierz eskadrę").attr('disabled',!this.checked);
 });
 </script>

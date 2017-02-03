@@ -423,8 +423,8 @@ function zrobAvatar($profil, $uzytkownik){
                         $x = imagesx($zdjecie);
                         $y = imagesy($zdjecie);
                            // ustalamy szerokosc nowego zdjecia
-                        $final_x = 30; 
-                        $final_y = 30;
+                        $final_x = 60; 
+                        $final_y = 60;
                         
                            // tymczasowe zmienne x y, deklaracja
                         $tmp_x = 0;
@@ -526,24 +526,33 @@ function zrobAvatar($profil, $uzytkownik){
     } // Koniec głównej instrukcji if.
     
     //formularz
-    echo "<form enctype=\"multipart/form-data\" action=\"\" method=\"post\" name=\"avatar\">";
-     echo "<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"1048576\">";
-        echo "<div class=\"upload zaokraglij\"><div class=\"index-1\">";
-         if (empty($picture) && empty($blad)){
-                          echo "Kliknij tutaj<br>";
-         }elseif(isset ($status)){
-             echo "<div class=\"index-2\">Zapisano<br></div>";
-         }
-            if(isset($blad)){
-                echo $blad;
-             }else{
-                 echo $picture;
-             }
-         echo "</div><input type=\"file\" name=\"upload\" accept=\"image/gif,image/jpeg,image/png\" pattern=\"([^\s]+(\.(?i)(jpg|png|gif|bmp))$)\" title=\"Kliknij i wybierz avatar\"/></div>";
-         if (empty($status)){
-         echo "<div class=\"wysrodkuj\"><input class=\"zapisz\" type=\"submit\" name=\"submit\" value=\"Zapisz\" /></div>";
-         }
+    
+    echo "<form enctype=\"multipart/form-data\" action=\"\" method=\"post\" name=\"avatar\" id=\"avatar\">";
+        echo "<div class=\"flex-container\"> ";
+            echo "<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"1048576\">";
+                echo "<div class=\"avatar zaokraglij\">";
+                    echo "<div class=\"index-1\">";
+                        if (empty($picture) && empty($blad)){
+                                         echo "Kliknij tutaj<br>";
+                        }elseif(isset ($status)){
+                            echo "<div class=\"index-2\">Zapisano<br></div>";
+                        }
+                        if(!isset($blad)){
+                            echo $picture;
+                        }
+                    echo "</div>";
+                    echo "<input type=\"file\" name=\"upload\" accept=\"image/gif,image/jpeg,image/png\" pattern=\"([^\s]+(\.(?i)(jpg|png|gif|bmp))$)\" title=\"Kliknij i wybierz avatar\"/>";
+                echo "</div>"; 
+        echo "</div>";
+        
+        echo "<input class=\"zapisz\" type=\"submit\" name=\"submit\" value=\"Zapisz\" />";
+
+
      echo "<input type=\"hidden\" name=\"wyslane\" value=\"TRUE\"/>";
+        if(isset($blad)){
+            echo"<br>";
+             echo "$blad";
+        }
      echo "</form>";
     
     
@@ -1603,8 +1612,7 @@ function zmienHaslo($kogo) {
     
     
 
-        //formularz dodawania uzytkownika
-        //przyjmujacy podane wartosci
+        //formularz zmiany hasla
         function formZmiana($errorpas, $placepas = "wpisz nowe hasło")
         {
             echo "<form name=\"zmienHaslo\" method=\"post\" action=\"\">";
@@ -1615,30 +1623,44 @@ function zmienHaslo($kogo) {
             echo "</div>";
             echo "</form>";
         }
-        
         $zmienhaslo = htmlspecialchars($_POST['podajhaslo']);
+        $uppercase = preg_match('@[A-Z]@', $zmienhaslo);
+        $lowercase = preg_match('@[a-z]@', $zmienhaslo);
+        $number    = preg_match('@[0-9]@', $zmienhaslo);
+        
         $zakodowane = md5($zmienhaslo);
     
-    if(empty($_POST['podajhaslo']))
+    if(!isset($_POST['podajhaslo']))
         { //echo "<div class=\"flex-container\">";
-        formZmiana();
+        
+
+                formZmiana();
+        
           //echo "</div>";
         } else {
-        
-            //sprawdzimy czy haslo to login
-            if($zmienhaslo==$_SESSION['user']){
-            formZmiana("error","hasło nie może być loginem");    
-            }else{ //jezeli nie jest to zmieniamy
-                    /* jeżeli wynik jest pozytywny, to dodajemy uzytkownika */ 
-                    $zapytanie = "UPDATE `uzytkownicy` SET `Haslo`='$zakodowane' WHERE `Login`='$kogo';";
-                    $wykonaj = mysql_query($zapytanie);
-                    echo "Zmieniłeś hasło dla <strong>".$kogo."</strong>. Teraz może się przelogować.<br>";
-                    echo "<div class=\"zawartosc wysrodkuj\">";
-                    echo "<br><p>Powodzenia!</p>";
-                    echo "</div>";
-                }
+            
+
+                //sprawdzimy czy haslo to login
+                if($zmienhaslo==$_SESSION['user']){
+                    formZmiana("error","hasło nie może być loginem");    
+                }elseif(empty ($_POST['podajhaslo']) && !$uppercase || !$lowercase || !$number || strlen($zmienhaslo) < 7) {
+                    formZmiana("error","nie wysyłaj pustego formularza");
+                    echo "Podaleś złe hasło";
+                }else{ //jezeli nie jest to zmieniamy
+                        /* jeżeli wynik jest pozytywny, to dodajemy uzytkownika */ 
+                        $zapytanie = "UPDATE `uzytkownicy` SET `Haslo`='$zakodowane' WHERE `Login`='$kogo';";
+                        $wykonaj = mysql_query($zapytanie);
+                        echo "Zmieniłeś hasło dla <strong>".$kogo."</strong>. Teraz może się przelogować.<br>";
+                        echo "<div class=\"zawartosc wysrodkuj\">";
+                        echo "<br><p>Powodzenia!</p>";
+                        echo "</div>";
+                    }
+            
         }  
     }
+
+
+
 
 
 

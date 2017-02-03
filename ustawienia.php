@@ -11,13 +11,12 @@ echo "<div class=\"flex-container\">";
         zmienHaslo();
         echo "</div>";
     echo "</div>";
-echo "</div>";
-echo "<div class=\"flex-container\">";
+
     echo "<div class=\"panel\">";
         echo "<div class=\"tytul\">";
-            echo "<p>dodaj avatar</p>";
+            echo "<p class=\"mr-10\">dodaj avatar</p>";
         echo "</div>";
-        echo "<div class=\"zawartosc\" >";
+        echo "<div class=\"zawartosc wysrodkuj\" >";
         zrobAvatar();
         echo "</div>";
     echo "</div>";
