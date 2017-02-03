@@ -545,7 +545,7 @@ function zrobAvatar($profil, $uzytkownik){
                 echo "</div>"; 
         echo "</div>";
         
-        echo "<input class=\"zapisz\" type=\"submit\" name=\"submit\" value=\"Zapisz\" />";
+        echo "<input class=\"zapisz small\" type=\"submit\" name=\"submit\" value=\"ok\" />";
 
 
      echo "<input type=\"hidden\" name=\"wyslane\" value=\"TRUE\"/>";
@@ -1617,7 +1617,7 @@ function zmienHaslo($kogo) {
         {
             echo "<form name=\"zmienHaslo\" method=\"post\" action=\"\">";
             echo "<div class=\"zawartosc wysrodkuj\">";
-            echo "<input type=\"password\" name=\"podajhaslo\" size=\"40\" maxlength=\"40\" placeholder=\"$placepas...\" class=\"mb-10 pl-5 $errorpas\" pattern='(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$' title=\"Min. 8 znaków, wielka i mała litera oraz znak specjalny\"><br>";  
+            echo "<input type=\"password\" name=\"podajhaslo\" maxlength=\"40\" placeholder=\"$placepas...\" class=\"mb-10 pl-5 zh $errorpas\" pattern='(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$' title=\"Min. 8 znaków, wielka i mała litera oraz znak specjalny\"><br>";  
             
             echo "<input value=\"zmień\" type=\"submit\" class=\"zapisz animacja mt-10\">";
             echo "</div>";
@@ -1645,7 +1645,6 @@ function zmienHaslo($kogo) {
                     formZmiana("error","hasło nie może być loginem");    
                 }elseif(empty ($_POST['podajhaslo']) && !$uppercase || !$lowercase || !$number || strlen($zmienhaslo) < 7) {
                     formZmiana("error","nie wysyłaj pustego formularza");
-                    echo "Podaleś złe hasło";
                 }else{ //jezeli nie jest to zmieniamy
                         /* jeżeli wynik jest pozytywny, to dodajemy uzytkownika */ 
                         $zapytanie = "UPDATE `uzytkownicy` SET `Haslo`='$zakodowane' WHERE `Login`='$kogo';";
