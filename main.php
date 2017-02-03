@@ -7,7 +7,7 @@
        <a href="index.php?id=panele/dodaj/nadgodziny" class="addovertime">nadgodziny</a>
        <a href="index.php?id=panele/dodaj/sluzby" class="addovertime">służby</a>
        <a href="index.php?id=panele/dodaj/wniosek" class="addovertime">wniosek</a>
-    <?php if($_SESSION['permissions']==1 OR $_SESSION['permissions']==2){
+    <?php if($_SESSION['permissions']==1){
        echo "<a href=\"index.php?id=panele/admin/dodajUzytkownika\" class=\"addovertime\">uzytkownika</a>";
        echo "<a href=\"index.php?id=panele/admin/dodajEskadre\" class=\"addovertime\">eskadre</a>";
        echo "<a href=\"index.php?id=panele/admin/dodajZolnierza\" class=\"addovertime\">żołnierza</a>";
@@ -31,7 +31,7 @@
       </div>
        <div id="headright">
            <a href="index.php?id=profil" class="profil" title="Wyświetl profil"><img src="img/avatars/<?php avatar($_SESSION['user']);?>" width="30" align="absmiddle" height="30" alt="Avatar" class="avatar"><span class="displaynone"> <?php imie();?></span></a>
-           <?php if($_SESSION['permissions']==1 OR $_SESSION['permissions']==2){
+           <?php if($_SESSION['permissions']==1){
            echo "<a href=\"index.php?id=panele/admin\" class=\"panadmin\" title=\"Panel administratora\"></a>";
                    }
     ?>
