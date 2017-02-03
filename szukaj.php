@@ -12,7 +12,8 @@ switch ($_SESSION['permissions']){
         break;
     case 2:
         //dowodca grupy
-        echo "i equals 2";
+        $szukaj = mysql_query("SELECT *, stopnie.Skrot AS StSkrot FROM zolnierze, stopnie WHERE stopnie.idStopien = zolnierze.idStopien AND CONCAT_WS(' ',stopnie.Skrot, zolnierze.Nazwisko, zolnierze.Imie) LIKE '%".$wyrazenia."%' ORDER BY Nazwisko") 
+        or die('Błąd zapytania');
         break; 
     case 3:
         //dowodca eskadry
