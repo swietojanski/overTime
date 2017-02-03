@@ -74,9 +74,9 @@ echo "</div>";
 echo "<div class=\"flex-container\">";
 //panel z ostatnio dodanymi nadgodzinami
         echo "<div class=\"panel tysiac\">";
-            echo "<div class=\"tytul\"><p>panel dowódcy</p></div>";
+            echo "<div class=\"tytul\"><p>złożone wnioski</p></div>";
             echo "<div class=\"zawartosc\">";
-                echo "przykladowa zawartosc sluzb";
+                echo "tutaj wyświetlimy wszystkie wnioski";
             echo "</div>";
         echo "</div>";
 echo "</div>";
