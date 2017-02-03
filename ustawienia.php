@@ -12,6 +12,16 @@ echo "<div class=\"flex-container\">";
         echo "</div>";
     echo "</div>";
 echo "</div>";
+echo "<div class=\"flex-container\">";
+    echo "<div class=\"panel\">";
+        echo "<div class=\"tytul\">";
+            echo "<p>dodaj avatar</p>";
+        echo "</div>";
+        echo "<div class=\"zawartosc\" >";
+        zrobAvatar();
+        echo "</div>";
+    echo "</div>";
+echo "</div>";
 }  else {
     echo "Czego tutaj szukasz? Nie masz wystarczających uprawnień!";
 }
