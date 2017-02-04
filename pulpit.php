@@ -1,3 +1,19 @@
+<?php
+$akceptacja=$_SESSION['user']."-cookieaccept";
+if(isset($_GET['ciasteczko']) && $$_GET['ciasteczko']='zgoda'){
+    setcookie($akceptacja, 'zgoda', time() + 2 * 356 * 86400);
+}elseif(empty($_COOKIE[$akceptacja]) && !isset($_GET['ciasteczko'])){
+   echo "<div class=\"flex-container\">";
+//panel z ostatnio dodanymi nadgodzinami
+        echo "<div class=\"panel tysiac zaokraglij\">";
+        echo "<div class=\"tytul\"><p>uwaga: ta strona wykorzystuje pliki cookie!!!</p><p class=\"right\"><a href=\"index.php?ciasteczko=zgoda\" class=\"pl-10 pr-10 usun valing40\" title=\"akceptuj i zamknij\">zamknij</a></p></div>";
+            echo "<div class=\"zawartosc justuj akapit\" >";
+                echo "Używamy informacji zapisanych za pomocą plików cookies w celu zapewnienia maksymalnej wygody w korzystaniu z aplikacji. Korzystając z witryny wyrażasz zgodę na zapisywanie informacji zawartej w cookies. Jeśli nie wyrażasz zgody, ustawienia dotyczące plików cookies możesz zmienić w swojej przeglądarce.";
+            echo "</div>";
+        echo "</div>";
+    echo "</div>";
+}
+?>
 <h1> Witaj, to Twój pulpit </h1>
 
 <ul class="flex-container">
@@ -13,7 +29,10 @@
 
 /*echo "<h1> Szybki przegląd </h1>";
 echo "<h2 class=\"podpowiedzi zaokraglij\">Twoje ostatnio dodane nadgodziny, służby oraz statystyki wykorzystania.</h2>";*/
-
+$ostdod=$_SESSION['user']."-ostdod";
+if (isset($_COOKIE[$ostdod]) && $_COOKIE[$ostdod]=='ukryj'){
+    //tutaj treaz jezeli panele ostatnio dodane sa ukryte
+}else{
 echo "<div class=\"flex-container\">";
 //panel z ostatnio dodanymi nadgodzinami
         echo "<div class=\"panel szescset\">";
@@ -38,6 +57,7 @@ echo "<div class=\"flex-container\">";
             echo "</div>";  
         echo "</div>";
 echo "</div>";
+}
 //panele ze statystykami nadgodzin
 echo "<div class=\"flex-container\">";
 //pierwszy

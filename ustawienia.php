@@ -73,8 +73,8 @@ echo $_POST['ukryj'];
                         <tr class="blekitne">
                             <td class="left">Ukryć panel ostatnio dodane?</td>
                             <td>
-                                <input type="radio" value="1" name="ukryj" title="Ukrywaj" class="iledni" id="tak" <?php if(isset($_COOKIE[$ostco]) && $_COOKIE[$ostco]=='1'){echo "checked";} elseif(isset ($_POST['ukryj']) && $_POST['ukryj']=='1') {echo "checked";} ?>><label for="tak">T</label>
-                                <input type="radio" value="2" name="ukryj" title="Pokazuj" class="iledni" id="nie" <?php if(isset($_COOKIE[$ostco]) && $_COOKIE[$ostco]=='2'){echo "checked";} elseif(isset ($_POST['ukryj']) && $_POST['ukryj']=='2') {echo "checked";} ?>><label for="nie">N</label>
+                                <input type="radio" value="ukryj" name="ukryj" title="Ukrywaj" class="iledni" id="tak" <?php if(isset($_COOKIE[$ostco]) && $_COOKIE[$ostco]=='ukryj'){echo "checked";} elseif(isset ($_POST['ukryj']) && $_POST['ukryj']=='ukryj') {echo "checked";} ?>><label for="tak">T</label>
+                                <input type="radio" value="1" name="ukryj" title="Pokazuj" class="iledni" id="nie" <?php if(isset($_COOKIE[$ostco]) && $_COOKIE[$ostco]=='1'){echo "checked";} elseif(isset ($_POST['ukryj']) && $_POST['ukryj']=='1') {echo "checked";} ?>><label for="nie">N</label>
                             </td>
                         </tr>
                     </tbody>

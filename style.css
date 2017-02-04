@@ -44,7 +44,7 @@ body  {
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font: 16px/28px "Arial", Gadget, sans-serif;
+    font: 16px/26px "Arial", Gadget, sans-serif;
     margin: 10px 0px;
     padding: 0px 5px;
     cursor: pointer;
@@ -214,12 +214,13 @@ div.avatar input {
 .overTime #dialog {
     display:none;
 }
-.overTime .tytul > p {
-    margin-left: 10px;
+
+.overTime .nowrap {
     white-space:nowrap;
 }
 
-.overTime .nowrap {
+.overTime .tytul > p {
+    margin-left: 10px;
     white-space:nowrap;
 }
 
@@ -241,6 +242,14 @@ div.avatar input {
     margin-left: 10px;
     padding-top: 5px;
     padding-bottom: 5px;
+}
+
+.justuj {
+    text-align: justify;
+}
+
+.akapit {
+    text-indent: 1in;
 }
 .podpowiedzi {
 	background-color:#F8F8F8;
@@ -624,6 +633,9 @@ p {
 .pl-10{
     padding-left: 10px;
 }
+.pr-10{
+    padding-right: 10px;
+}
 .plr-5{
     padding: 0px 5px;
 }
@@ -933,6 +945,9 @@ input.aktualizuj {
     display: block;
     text-align: center;
     font: 12px/2rem "Arial", Gadget, sans-serif;
+}
+.usun.valing40 {
+    font: 12px/40px "Arial", Gadget, sans-serif;
 }
 
 
