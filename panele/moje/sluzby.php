@@ -56,12 +56,10 @@ $(':checkbox').click(function() {
         // Iterate each checkbox
         $(':checkbox').each(function() {
             $('#edytujgodzinki').prop("disabled", false)
-            this.checked = true;    
         });
     }else {
     $(':checkbox').each(function() {
         $('#edytujgodzinki').prop("disabled", true)
-          this.checked = false;
       });
   }
     

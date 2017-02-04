@@ -1,18 +1,21 @@
 <?php
 $akceptacja=$_SESSION['user']."-cookieaccept";
-if(isset($_GET['ciasteczko']) && $$_GET['ciasteczko']='zgoda'){
-    setcookie($akceptacja, 'zgoda', time() + 2 * 356 * 86400);
-}elseif(empty($_COOKIE[$akceptacja]) && !isset($_GET['ciasteczko'])){
-   echo "<div class=\"flex-container\">";
-//panel z ostatnio dodanymi nadgodzinami
-        echo "<div class=\"panel tysiac zaokraglij\">";
-        echo "<div class=\"tytul\"><p>uwaga: ta strona wykorzystuje pliki cookie!!!</p><p class=\"right\"><a href=\"index.php?ciasteczko=zgoda\" class=\"pl-10 pr-10 usun valing40\" title=\"akceptuj i zamknij\">zamknij</a></p></div>";
-            echo "<div class=\"zawartosc justuj akapit\" >";
-                echo "Używamy informacji zapisanych za pomocą plików cookies w celu zapewnienia maksymalnej wygody w korzystaniu z aplikacji. Korzystając z witryny wyrażasz zgodę na zapisywanie informacji zawartej w cookies. Jeśli nie wyrażasz zgody, ustawienia dotyczące plików cookies możesz zmienić w swojej przeglądarce.";
-            echo "</div>";
-        echo "</div>";
-    echo "</div>";
-}
+    if(isset($_GET['ciasteczko']) && $$_GET['ciasteczko']='zgoda'){
+        setcookie($akceptacja, 'zgoda', time() + 2 * 356 * 86400);
+    }elseif(empty($_COOKIE[$akceptacja]) && !isset($_GET['ciasteczko'])){
+?>
+    <form action="<?php $_SERVER['PHP_SELF'] ?>" method="post">
+        <div class="flex-container">
+             <div class="panel tysiac zaokraglij">
+             <div class="tytul"><p>uwaga: ta strona wykorzystuje pliki cookie!!!</p><p class="right"><a href="index.php?ciasteczko=zgoda" class="pl-10 pr-10 usun valing40" title="akceptuj i zamknij">zamknij</a></p></div>
+                 <div class="zawartosc justuj akapit" >
+                     Używamy informacji zapisanych za pomocą plików cookies w&nbsp;celu zapewnienia maksymalnej wygody w&nbsp;korzystaniu z&nbsp;aplikacji. Korzystając z&nbsp;witryny wyrażasz zgodę na zapisywanie informacji zawartej w&nbsp;cookies. Jeśli nie wyrażasz zgody, ustawienia dotyczące plików cookies możesz zmienić w&nbsp;swojej przeglądarce.
+                 </div>
+             </div>
+         </div>
+    </form>
+<?php
+    }
 ?>
 <h1> Witaj, to Twój pulpit </h1>
 

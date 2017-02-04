@@ -18,8 +18,6 @@ if(!empty($_POST['ukryj'])){
     setcookie($ostco, $ciastko_ostdod, time() + 2 * 356 * 86400); // jezeli czas ciastka ustawimy na zero skasuje sie z zamknieciem przegladarki
 }
 
-echo $_POST['ukryj'];
-
 ?>
 <h1> Ustawienia </h1>
 <h2 class="podpowiedzi zaokraglij">Tutaj zmienisz swoje ustawienia oraz hasło do konta.</h2>
@@ -61,20 +59,20 @@ echo $_POST['ukryj'];
                         <tr class="blekitne">
                             <td class="left">Ilość wpisów na stronie moje nadgodziny</td>
                             <td>
-                                <input size="5" type="number" min="10" max="100" step="10" name="nadgodzin" <?php if(isset($_COOKIE[$nadco]) && empty($_POST['nadgodzin'])){echo "value=\"".$_COOKIE[$nadco]."\"";} elseif(isset ($_POST['nadgodzin'])) {echo "value=\"$ciastko_godzin\"";} ?>>
+                                <input size="5" type="number" min="10" max="100" step="10" placeholder="10" name="nadgodzin" <?php if(isset($_COOKIE[$nadco]) && empty($_POST['nadgodzin'])){echo "value=\"".$_COOKIE[$nadco]."\"";} elseif(isset ($_POST['nadgodzin'])) {echo "value=\"$ciastko_godzin\"";} ?>>
                             </td>
                         </tr>
                         <tr class="blekitne">
                             <td class="left">Ilość wpisów na stronie moje służby</td>
                             <td>
-                                <input type="number" min="10" max="100" step="10" name="sluzb" <?php if(isset($_COOKIE[$sluco]) && empty($_POST['sluzb'])){echo "value=\"".$_COOKIE[$sluco]."\"";} elseif(isset ($_POST['sluzb'])) {echo "value=\"$ciastko_sluzb\"";} ?>>
+                                <input type="number" min="10" max="100" step="10" placeholder="10" name="sluzb" <?php if(isset($_COOKIE[$sluco]) && empty($_POST['sluzb'])){echo "value=\"".$_COOKIE[$sluco]."\"";} elseif(isset ($_POST['sluzb'])) {echo "value=\"$ciastko_sluzb\"";} ?>>
                             </td>
                         </tr>
                         <tr class="blekitne">
                             <td class="left">Ukryć panel ostatnio dodane?</td>
                             <td>
-                                <input type="radio" value="ukryj" name="ukryj" title="Ukrywaj" class="iledni" id="tak" <?php if(isset($_COOKIE[$ostco]) && $_COOKIE[$ostco]=='ukryj'){echo "checked";} elseif(isset ($_POST['ukryj']) && $_POST['ukryj']=='ukryj') {echo "checked";} ?>><label for="tak">T</label>
-                                <input type="radio" value="1" name="ukryj" title="Pokazuj" class="iledni" id="nie" <?php if(isset($_COOKIE[$ostco]) && $_COOKIE[$ostco]=='1'){echo "checked";} elseif(isset ($_POST['ukryj']) && $_POST['ukryj']=='1') {echo "checked";} ?>><label for="nie">N</label>
+                                <input type="radio" value="ukryj" name="ukryj" title="Ukrywaj" class="iledni" id="tak" <?php if(isset($_COOKIE[$ostco]) && $_COOKIE[$ostco]=='ukryj' && !isset ($_POST['ukryj'])){echo "checked";} elseif(isset ($_POST['ukryj']) && $_POST['ukryj']=='ukryj') {echo "checked";} ?>><label for="tak" title="Tak">T</label>
+                                <input type="radio" value="1" name="ukryj" title="Pokazuj" class="iledni" id="nie" <?php if(isset($_COOKIE[$ostco]) && $_COOKIE[$ostco]=='1' && !isset ($_POST['ukryj'])){echo "checked";} elseif(isset ($_POST['ukryj']) && $_POST['ukryj']=='1') {echo "checked";} ?>><label for="nie" title="Nie">N</label>
                             </td>
                         </tr>
                     </tbody>
@@ -86,10 +84,6 @@ echo $_POST['ukryj'];
     </div>
 </div>
 <?php
-
-echo "Ciastko godzin: ".$_COOKIE['wpisow_godzin'];
-echo "<br>Ciastko sluzb: ".$_COOKIE['wpisow_sluzb'];
-echo "<br>Post: ".$ciastko_godzin;
 }  else {
     echo "Czego tutaj szukasz? Nie masz wystarczających uprawnień!";
 }
