@@ -13,6 +13,7 @@
 
 /*echo "<h1> Szybki przegląd </h1>";
 echo "<h2 class=\"podpowiedzi zaokraglij\">Twoje ostatnio dodane nadgodziny, służby oraz statystyki wykorzystania.</h2>";*/
+
 echo "<div class=\"flex-container\">";
 //panel z ostatnio dodanymi nadgodzinami
         echo "<div class=\"panel szescset\">";

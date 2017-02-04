@@ -152,10 +152,10 @@ div.upload input {
 }
 
 div.avatar {
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
     text-align: center;
-    font: 6px/60px "Arial", Gadget, sans-serif;
+    font: 6px/70px "Arial", Gadget, sans-serif;
     overflow: hidden;
     text-align: center;
 }
@@ -164,28 +164,28 @@ div.avatar .index-1 {
     z-index: 1;
     position: absolute;
     text-align: center;
-    width: 60px !important;
-    height: 60px !important;
+    width: 70px !important;
+    height: 70px !important;
     line-height: 1em;
-    font: 10px/60px "Arial", Gadget, sans-serif;
+    font: 10px/70px "Arial", Gadget, sans-serif;
 }
 
 div.avatar .index-2 {
     z-index: 101;
     position: absolute;
     text-align: center;
-    width: 60px !important;
-    height: 60px !important;
+    width: 70px !important;
+    height: 70px !important;
     line-height: 1em;
-    font: 10px/60px "Arial", Gadget, sans-serif;
+    font: 10px/70px "Arial", Gadget, sans-serif;
 }
 
 
 div.avatar input {
     position: absolute;
     display: block !important;
-    width: 60px !important;
-    height: 60px !important;
+    width: 70px !important;
+    height: 70px !important;
     opacity: 0 !important;
     overflow: hidden !important;
     z-index: 100;
@@ -760,7 +760,7 @@ input.odstep{
 
 
 input[type="number"] {
-   width:50px;
+   width:74px;
    text-align: center;
 }
 

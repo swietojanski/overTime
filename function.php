@@ -464,7 +464,7 @@ function zrobAvatar($profil, $uzytkownik){
                      // Koniec instrukcji if move...
                           // Przenieś plik do docelowego katalogu. ORYGINALNY PLIK NIE BEDZIE PRZENOSZONY
                        // move_uploaded_file($_FILES['upload']['tmp_name'],$_SERVER['DOCUMENT_ROOT'].'/img/avatars/'.$nazwa_zdjecia); 
-                        $picture = "<img src=\"/img/avatars/".$nazwa_zdjecia."\">";
+                        $picture = "<img height=\"70px\" width=\"70px\"  src=\"/img/avatars/".$nazwa_zdjecia."\">";
                         //jezeli zdjecie zostaje dodane to wpisujemy nazwe zdjecia do bazy                      
                         
                         
@@ -866,7 +866,12 @@ function mojeNadgodziny($kogo) {
 
 
     //Definiujemy zmienne pomocnicze do stronicowania
-    $ile=10; //ilosc wyswietlanych wpisow na strone
+    $nazwa=$_SESSION['user']."-nadgodziny";
+    if(isset($_COOKIE[$nazwa]) && !empty($_COOKIE[$nazwa])){
+        $ile=$_COOKIE[$nazwa];
+    }else{    
+        $ile=10; //ilosc wyswietlanych wpisow na strone
+    }
     $strona=0; //poczatkowy numer strony, jezeli nie zostal podany
     $idUsun = $_GET['usun'];
     $idEdytuj = $_GET['edytuj'];
@@ -1093,7 +1098,12 @@ function mojeSluzby($kogo) {
 
 
     //Definiujemy zmienne pomocnicze do stronicowania
-    $ile=10; //ilosc wyswietlanych wpisow na strone
+    $nazwa=$_SESSION['user']."-sluzby";
+    if(isset($_COOKIE[$nazwa]) && !empty($_COOKIE[$nazwa])){
+        $ile=$_COOKIE[$nazwa];
+    }else{    
+        $ile=10; //ilosc wyswietlanych wpisow na strone
+    }
     $strona=0; //poczatkowy numer strony, jezeli nie zostal podany
     $idUsun = $_GET['usun'];
     $idEdytuj = $_GET['edytuj'];
