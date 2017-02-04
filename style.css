@@ -8,6 +8,12 @@ body  {
 	color: #000000;
         min-width:440px;
 }
+h1 {
+    font-size: 20pt;
+}
+h2 {
+    font-size: 14pt;
+}
 .overTime #container { 
 	width: 100%;  /* szerokość kontenera będzie stanowić 100% szerokości okna przeglądarki */
         min-width:440px;
