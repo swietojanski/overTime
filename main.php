@@ -30,13 +30,14 @@
 ?>
       </div>
        <div id="headright">
-           <a href="index.php?id=profil" class="profil" title="Wyświetl profil"><img src="img/avatars/<?php avatar($_SESSION['user']);?>" width="30" align="absmiddle" height="30" alt="Avatar" class="avatar"><span class="displaynone"> <?php imie();?></span></a>
+           <a href="index.php?id=profil" class="profil"><img src="img/avatars/<?php avatar($_SESSION['user']);?>" width="30" align="absmiddle" height="30" alt="Avatar" class="avatar"><span class="displaynone"> <?php imie();?></span></a>
            <?php if($_SESSION['permissions']==1){
-           echo "<a href=\"index.php?id=panele/admin\" class=\"panadmin\" title=\"Panel administratora\"></a>";
+           echo "<a href=\"index.php?id=panele/admin\" class=\"panadmin\" id=\"pa\"></a>";
                    }
     ?>
            <a href="index.php?id=ustawienia" class="ustawienia" title="Ustawienia"></a>
           <a href="login.php?logout" class="wyloguj">wyloguj</a>
+          <div id="paneladmina" class="pl-10 pb-10"><?php include 'panele/admin.php'; ?></div>
        </div>
    </div>
   <br class="clearfloat" />
@@ -169,7 +170,20 @@ $(document).ready(function() {
                     function(){
                 $("#menu").css("display", "none");
             });
-
+            $("#pa").hover(
+                    function(){
+                $("#paneladmina").css("display", "block");
+            });
+            $("#paneladmina").mouseleave(
+                    function(){
+                $("#paneladmina").css("display", "none");
+            });
+              $("#container").click(
+                    function(){
+                $("#paneladmina").css("display", "none");
+            });
+            
+            
 
 
 </script>

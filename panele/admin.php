@@ -1,6 +1,6 @@
 <?php if($_SESSION['permissions']==1){ //wpusc jezeli ma prawa admina?>
 <h1> Panel administracyjny </h1>
-<h2 class="podpowiedzi zaokraglij">Zarządzaj, dodawaj, edytuj, usuwaj...</h2>
+<!--<h2 class="podpowiedzi zaokraglij">Zarządzaj, dodawaj, edytuj, usuwaj...</h2>-->
 
 <div class="flex-container">
         <ul class="flex-container">
@@ -16,7 +16,6 @@
             <a href="index.php?id=panele/dodaj/sluzby"><li class="flex-box dopelniajacy-2"></li></a>
         </ul>
     </div>
-</div>
 <?php
 
 

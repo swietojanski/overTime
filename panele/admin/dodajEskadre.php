@@ -16,11 +16,11 @@
                     <tbody>
                         <tr class="blekitne">
                             <th class="right">skrót</th>
-                            <td><input class="pl-5" type="text" name="skrot" placeholder="np. 1. EO" required="true" size="38"></td>
+                            <td><input class="pl-5" type="text" name="skrot" placeholder="np. 1. EO" required="true" size="35"></td>
                         </tr>
                         <tr class="blekitne">
                             <th class="right nowrap">pełna nazwa</th>    
-                            <td><input class="pl-5" type="text" name="nazwa" placeholder="np. Pierwsza Eskadra Obsługi" required="true" size="38"></td>
+                            <td><input class="pl-5" type="text" name="nazwa" placeholder="np. Pierwsza Eskadra Obsługi" required="true" size="35"></td>
                         </tr>
                     </tbody>
                 </table>
