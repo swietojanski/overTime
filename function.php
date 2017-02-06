@@ -40,7 +40,7 @@ or die('Błąd zapytania');
 wyświetlamy wyniki, sprawdzamy, 
 czy zapytanie zwróciło wartość większą od 0 w sumie to rowna 1
 */ 
-    if(mysql_num_rows($zapytanie) === 1) { 
+    if(mysql_num_rows($zapytanie) == 1) { 
             /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
             while($r = mysql_fetch_object($zapytanie)) {  
                 return intval($r->idEskadry);
@@ -48,6 +48,31 @@ czy zapytanie zwróciło wartość większą od 0 w sumie to rowna 1
         }
 }
 
+//SPRAWDZAMY CZY PODANY ID JEST Dowodca Grupy 
+//po podaniu id lub zaciagnieciu go z sesji zalogowanego uzytkownika sprawdzamy
+//czy jest przypisany jako dowodca grupy
+//jezeli tak zwracamy jego ID a w warunku mozemy wypisac to co chcemy
+function czyDowodcaGrupy($kto) {
+    if( isset($kto) ) {
+            $uzytkownik = $kto;
+    }else{
+        $uzytkownik = id_zolnierza($_SESSION['user']); // jezeli nie podane $kogo to wyswietl id zalogowanego uzytkownika
+    }
+
+$dca = mysql_query("SELECT idGrupy FROM grupy WHERE grupy.DcaGrupy='$uzytkownik'") 
+or die('Błąd zapytania'); 
+/* 
+wyświetlamy wyniki, sprawdzamy, 
+czy zapytanie zwróciło wartość większą od 0 w sumie to ma byc rowna 1
+ * ale moze byc tak, ze jeden zolnierz jest dowodca dwoch grup ale malo prawdopodobne
+*/ 
+    if(mysql_num_rows($dca) > 0) { 
+            /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
+            while($dowodca = mysql_fetch_object($dca)) {  
+                return intval($dowodca->idGrupy);
+            } 
+        }
+}
 //SPRAWDZAMY CZY PODANY ID JEST Dowodca Eskadry 
 //po podaniu id lub zaciagnieciu go z sesji zalogowanego uzytkownika sprawdzamy
 //czy jest przypisany jako dowodca eskadry
@@ -95,6 +120,27 @@ czy zapytanie zwróciło wartość większą od 0 w sumie to rowna 1
                     return intval($szefo->idEskadry);
                 } 
             }     
+}
+
+function skrotGrupy($id){
+    if( isset($id) ) {
+            $ideskadry = $id;
+    }else{
+        $ideskadry = id_eskadry(); // jezeli nie podane $kogo to wyswietl id zalogowanego uzytkownika
+    }
+
+$zapytanie = mysql_query("SELECT grupy.Skrot, grupy.Nazwa FROM grupy WHERE grupy.idGrupy = (SELECT eskadry.idGrupy FROM eskadry where eskadry.idEskadry='$ideskadry')") 
+or die('Błąd zapytania'); 
+/* 
+wyświetlamy wyniki, sprawdzamy, 
+czy zapytanie zwróciło wartość większą od 0 w sumie to rowna 1
+*/ 
+    if(mysql_num_rows($zapytanie) == 1) { 
+            /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
+            while($r = mysql_fetch_object($zapytanie)) {  
+                return $a= "<abbr title=\"$r->Nazwa\">$r->Skrot</abbr>";
+            } 
+        }  
 }
 
 function skrotEskadry($id){
@@ -584,25 +630,31 @@ function profil($profil) {
                         echo "<div class=\"zawartosc blekitne\"><img src=\"img/profiles/thumbnail/$r->Zdjecie\" width=\"200px\" align=\"absmiddle\" alt=\"Zdjęcie profiliwe\" class=\"zaokraglij\"></div>";
                     }
                 echo "</div>";
+                
+                        $dowodca_grupy = czyDowodcaGrupy($profil);
+                        $dowodca = czyDowodca($profil);
+                        $szef = czySzef($profil);
+                        
                 echo "<div class=\"panel dane\">"; 
                     echo "<div class=\"zawartosc blekitne mb-10\"><h2>".mb_convert_case($r->Nazwisko, MB_CASE_UPPER, "UTF-8")." ".$r->Imie."</h2></div>";
                     echo "<div class=\"zawartosc blekitne\">Stopień: ".$r->Pelna."</div>";
                     if ($_SESSION['permissions']==2 && isset($profil) && $profil ==  id_zolnierza()){
-                    echo "<div class=\"zawartosc blekitne\">Dowódca Grupy</div>"; 
-                    }else{
-                    echo "<div class=\"zawartosc blekitne\">Eskadra: ".$r->Eskadra."</div>";   
+                        echo "<div class=\"zawartosc blekitne\">Uprawnienia: dowódca grupy</div>"; 
+                    }
+                    if(isset($r->Eskadra)){
+                        echo "<div class=\"zawartosc blekitne\">Eskadra: ".$r->Eskadra."</div>";   
                     }
                     if (isset($r->Klucz)){
-                    echo "<div class=\"zawartosc blekitne\">Klucz: ".$r->Klucz."</div>";
+                        echo "<div class=\"zawartosc blekitne\">Klucz: ".$r->Klucz."</div>";
                     }
-                        $dowodca = czyDowodca($profil);
-                        $szef = czySzef($profil);
-
+                    if(isset($dowodca_grupy)){
+                        echo "<div class=\"zawartosc blekitne mt-10\">Dowódca "; echo skrotGrupy($dowodca); echo "</div>";
+                    }
                     if(isset($dowodca)){
                         echo "<div class=\"zawartosc blekitne mt-10\">Dowódca "; echo skrotEskadry($dowodca); echo "</div>";
                     }
                     if (isset($szef)) {
-                        echo "<div class=\"zawartosc blekitne\">Szef "; echo skrotEskadry($szef); echo" </div>";
+                        echo "<div class=\"zawartosc blekitne mt-10\">Szef "; echo skrotEskadry($szef); echo" </div>";
                     }
                     
                 
