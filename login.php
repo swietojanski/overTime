@@ -40,7 +40,7 @@ for ($i=1; $i<21; $i++){
            ?>
            <form name="form-logowanie" action="login.php" method="post">
               <input type="text" name="login" class="zaloguj" placeholder="Login" minlength='4' maxlength='30' required='true' pattern="[A-Za-z-_0-9][A-Za-z-_0-9\\s]+" autofocus title="podaj prawidłowy login, bez polskich znaków"><br>
-              <input type="password" name="password" class="zaloguj" placeholder="Złe hasło" required='true' title="jeżeli nie pamiętasz hasła, skontaktuj się z administratorem"><br>
+              <input type="password" name="password" class="zaloguj" placeholder="Hasło" required='true' title="jeżeli nie pamiętasz hasła, skontaktuj się z administratorem"><br>
               <input type="submit" name="zaloguj" value="Zaloguj" id="zaloguj" class="animacja">
            </form>
            <?php
@@ -69,7 +69,7 @@ for ($i=1; $i<21; $i++){
                        if ($sql == 1) {
               
                         //ustawienie 
-                          $permissions = mysql_query("SELECT uprawnienia.Poziom FROM uzytkownicy, uprawnienia WHERE uprawnienia.idUprawnienia=uzytkownicy.idUprawnienia AND Login = '$login'")or die('Błąd zapytania'); 
+                          $permissions = mysql_query("SELECT uprawnienia.Poziom FROM uzytkownicy, uprawnienia WHERE uprawnienia.idUprawnienia=uzytkownicy.idUprawnienia AND Login = '$login'")or die('Błąd zapytania o uprawnienia'); 
                           $dper = mysql_fetch_object($permissions);
                           $prawa=$dper->Poziom; 
                            
@@ -90,7 +90,7 @@ for ($i=1; $i<21; $i++){
                                                    ?>                      
                         <form name="form-logowanie" action="login.php" method="post">
                             <input type="text" name="login" class="zaloguj" placeholder="Login" minlength='4' maxlength='30' required='true' pattern="[A-Za-z-_0-9][A-Za-z-_0-9\\s]+" autofocus title="podaj prawidłowy login, bez polskich znaków"><br>
-                            <input type="password" name="password" class="zaloguj error" placeholder="Hasło" required='true' title="jeżeli nie pamiętasz hasła, skontaktuj się z administratorem"><br>
+                            <input type="password" name="password" class="zaloguj error" placeholder="Złe hasło" required='true' title="jeżeli nie pamiętasz hasła, skontaktuj się z administratorem"><br>
                             <input type="submit" name="zaloguj" value="Zaloguj" id="zaloguj" class="animacja">
                         </form>
                        <?php

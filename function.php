@@ -691,7 +691,7 @@ function dodajUzytkownika($przypisz){
             echo "<div class=\"zawartosc wysrodkuj\">";
 
             echo "<input type=\"text\" name=\"dodajlogin\"  required=\"true\" maxlength=\"40\" placeholder=\"$placelog...\" class=\"mb-10 fod pl-5 $errorlog\" pattern='^[a-zA-Z][a-zA-Z0-9-_\.]{3,20}$' title=\"Min. 4 znaki. Format: nazwa(bez znaków specjalnych)\"><br>";
-            echo "<input type=\"password\" name=\"dodajhaslo\"  required=\"true\" maxlength=\"40\" placeholder=\"$placepas...\" class=\"mb-10 fod pl-5 $errorpas\" pattern='(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$' title=\"Min. 8 znaków, wielka i mała litera oraz znak specjalny\"><br>";  
+            echo "<input type=\"password\" name=\"dodajhaslo\"  required=\"true\" maxlength=\"40\" placeholder=\"$placepas...\" class=\"mb-10 fod pl-5 $errorpas\" pattern='(?=^.{4,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[a-z]).*$'title=\"Min. 4 znaki, wielka i mała litera oraz znak specjalny\"><br>";  
             //Funkcja wyswietlajaca liste uprawnien
                 uprawnienia();//wywolanie
                 echo "<br>";

@@ -55,6 +55,7 @@ h2 {
     padding: 0px 5px;
     cursor: pointer;
     outline: none;
+    text-shadow:none;
 }
 
 .overTime .button:disabled {

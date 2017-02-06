@@ -1,5 +1,5 @@
 <?php
-$str = "admin";
+$str = "wika";
 echo md5($str);
 ?>
 
