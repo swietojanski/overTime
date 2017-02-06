@@ -631,24 +631,23 @@ function profil($profil) {
                     }
                 echo "</div>";
                 
-                        $dowodca_grupy = czyDowodcaGrupy($profil);
-                        $dowodca = czyDowodca($profil);
-                        $szef = czySzef($profil);
+
                         
                 echo "<div class=\"panel dane\">"; 
                     echo "<div class=\"zawartosc blekitne mb-10\"><h2>".mb_convert_case($r->Nazwisko, MB_CASE_UPPER, "UTF-8")." ".$r->Imie."</h2></div>";
                     echo "<div class=\"zawartosc blekitne\">Stopień: ".$r->Pelna."</div>";
-                    if ($_SESSION['permissions']==2 && isset($profil) && $profil ==  id_zolnierza()){
-                        echo "<div class=\"zawartosc blekitne\">Uprawnienia: dowódca grupy</div>"; 
-                    }
+                    
                     if(isset($r->Eskadra)){
                         echo "<div class=\"zawartosc blekitne\">Eskadra: ".$r->Eskadra."</div>";   
                     }
                     if (isset($r->Klucz)){
                         echo "<div class=\"zawartosc blekitne\">Klucz: ".$r->Klucz."</div>";
                     }
+                        $dowodca_grupy = czyDowodcaGrupy($profil);
+                        $dowodca = czyDowodca($profil);
+                        $szef = czySzef($profil);
                     if(isset($dowodca_grupy)){
-                        echo "<div class=\"zawartosc blekitne mt-10\">Dowódca "; echo skrotGrupy($dowodca); echo "</div>";
+                        echo "<div class=\"zawartosc blekitne mt-10\">Dowódca "; echo skrotGrupy($dowodca_grupy); echo "</div>";
                     }
                     if(isset($dowodca)){
                         echo "<div class=\"zawartosc blekitne mt-10\">Dowódca "; echo skrotEskadry($dowodca); echo "</div>";
@@ -656,8 +655,6 @@ function profil($profil) {
                     if (isset($szef)) {
                         echo "<div class=\"zawartosc blekitne mt-10\">Szef "; echo skrotEskadry($szef); echo" </div>";
                     }
-                    
-                
                 echo "</div>";
             } 
             echo "</div>"; 
