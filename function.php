@@ -667,12 +667,19 @@ function profil($profil) {
 }
 
 //wyswietlenie listy uprawnien podczas dodawania uzytkownika pobranej z bazy
-function uprawnienia() {
+function uprawnienia($count) {
+    /*
+    if (isset($count)){
+        $count;
+    }else{
+        $count=1;
+    }
+     */
 $uprawnienia = mysql_query("SELECT *  FROM uprawnienia") 
 or die('Błąd zapytania'); 
     if(mysql_num_rows($uprawnienia) > 0) { 
         /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
-        echo "<select name=\"uprawnienie\" required class=\"mb-10\">"; 
+        echo "<select name=\"uprawnienie[]\" required class=\"mb-10\">"; 
         echo "<option value=\"\" selected disabled>Wybierz uprawnienie</option>";
         while($r = mysql_fetch_object($uprawnienia)) {  
 

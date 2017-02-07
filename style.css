@@ -741,6 +741,14 @@ input[type=search] { /* klasa do szukajki*/
 	/*background-image:url(img/lay/lupa.png);*/
 }
 
+input[type=search][name=login] { /* tę klasę należy umieścić w elemencie input typu szukającego*/
+	margin-top:0px;
+	width:500px;
+	cursor: text;
+	border:1px solid #000;
+	/*background-image:url(img/lay/lupa.png);*/
+}
+
 a.logo {
 	display:block;
 	background-image:url(img/lay/logo.png);
