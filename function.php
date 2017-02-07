@@ -1074,7 +1074,7 @@ function mojeNadgodziny($kogo) {
                                         echo "<input type=\"checkbox\" name=\"edytuj[]\" value=\"$r->idNadgodziny\" checked>";
                                     echo "</td>";
                                     echo "<td><input type=\"text\" class=\"wysrodkuj\" name=\"data[]\" placeholder=\"$r->ostatnie\" value=\"$r->ostatnie\" pattern=\"(0[1-9]|1[0-9]|2[0-9]|3[01])-(0[1-9]|1[012])-[0-9]{4}\" required=\"true\" size=\"10\" disabled></td>"; /*wyswietlamy edycje daty*/ 
-                                    echo "<td><input type=\"text\" class=\"wysrodkuj ggodzin\" name=\"godzina[]\" placeholder=\"".(($r->ile)/60)."\" pattern='((\d{1,2}\.[5])|(\d{1,2}))' required=\"true\" size=\"4\"></td>"; /*wyswietlamy godziny*/
+                                    echo "<td><input type=\"text\" class=\"wysrodkuj ggodzin\" name=\"godzina[]\" placeholder=\"".(($r->ile)/60)."\" pattern='((\d{1,2}\.[5])|(\d{1,2}))' required=\"true\" size=\"4\" id=\"$r->idNadgodziny\"></td>"; /*wyswietlamy godziny*/
                                 }else{
                                     echo "<td>";
                                         echo "<input type=\"checkbox\" name=\"edytuj[]\" value=\"$r->idNadgodziny\">";

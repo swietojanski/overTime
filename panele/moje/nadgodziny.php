@@ -51,16 +51,19 @@ $('#select-all').click(function(event) {
   }
 });
 $('#edytujgodzinki').prop("disabled", true);
+$("#edytujgodzinki").css("cursor", "no-drop");
 $(':checkbox').click(function() {
     
         if(this.checked) {
         // Iterate each checkbox
         $(':checkbox').each(function() {
-            $('#edytujgodzinki').prop("disabled", false)    
+            $('#edytujgodzinki').prop("disabled", false);
+            $("#edytujgodzinki").css("cursor", "pointer");
         });
     }else {
     $(':checkbox').each(function() {
-        $('#edytujgodzinki').prop("disabled", true)
+        $('#edytujgodzinki').prop("disabled", true);
+        $("#edytujgodzinki").css("cursor", "no-drop");
       });
   }
     

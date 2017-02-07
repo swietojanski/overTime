@@ -16,9 +16,11 @@ $akceptacja=$_SESSION['user']."-cookieaccept";
     </form>
 <?php
     }
+    
+    
 ?>
-<h1> Witaj, to Twój pulpit </h1>
 
+<br>
 <ul class="flex-container">
 <a href="index.php?id=panele/dodaj/nadgodziny"><li class="flex-item"><span>dodaj nadgodziny</span><div class="zegar"><div class="minutnik"></div><div class="godzinka"></div></div></li></a>
 <li class="flex-item"><span>wykorzystaj nadgodziny</span><div class="zegardom"><div class="mindom"></div><div class="godzdom"></div></div><div class="domek"><div class="daszek"></div><div class="sciany">Home</div></div></li>
@@ -105,28 +107,5 @@ echo "<div class=\"flex-container\">";
         echo "</div>";
 echo "</div>";
 
-switch ($_SESSION['permissions']) {
-case '1';
-echo "jestes adminem";
-break;
-case '2';
-echo "jestes dowodca grupy";
-break;
-case '3';
-echo "jestes dowodca eskadry";
-break;
-case '4';
-echo "jestes szefem eskadry";
-break;
-case '5';
-echo "jestes dowodca klucza";
-break;
-case '6';
-echo "jestes zołnierzem";
-break;
-default;
-print("skontaktuj sie z administratorem");
-break;
-}
 
 ?> 

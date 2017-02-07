@@ -1,5 +1,5 @@
 <?php if($_SESSION['permissions']==1){ //wpusc jezeli ma prawa admina?>
-<h1> Panel administracyjny </h1>
+<h1> Panel admina</h1>
 <!--<h2 class="podpowiedzi zaokraglij">Zarządzaj, dodawaj, edytuj, usuwaj...</h2>-->
 
 <div class="flex-container">

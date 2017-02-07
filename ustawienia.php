@@ -18,9 +18,33 @@ if(!empty($_POST['ukryj'])){
     setcookie($ostco, $ciastko_ostdod, time() + 2 * 356 * 86400); // jezeli czas ciastka ustawimy na zero skasuje sie z zamknieciem przegladarki
 }
 
+switch ($_SESSION['permissions']) {    
+    case '1';
+        $uprawnienie = "admin";
+    break;
+    case '2';
+        $uprawnienie = "dowódca grupy";
+    break;
+    case '3';
+        $uprawnienie = "dowódca eskadry";
+    break;
+    case '4';
+        $uprawnienie = "dowódca eskadry";
+    break;
+    case '5';
+        $uprawnienie = "dowódca klucza";
+    break;
+    case '6';
+        $uprawnienie = "żołnierz";
+    break;
+    default;
+        print("skontaktuj sie z administratorem");
+    break;
+}
+
 ?>
 <h1> Ustawienia </h1>
-<h2 class="podpowiedzi zaokraglij">Tutaj zmienisz swoje ustawienia oraz hasło do konta.</h2>
+<h2 class="podpowiedzi zaokraglij">Tutaj zmienisz swoje ustawienia oraz hasło do konta. Twój poziom uprawnienia to: <?php echo $uprawnienie ?></h2>
 <div class="flex-container">
     <div class="panel">
         <div class="tytul">
