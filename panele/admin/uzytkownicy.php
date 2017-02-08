@@ -7,32 +7,16 @@ if($_SESSION['permissions']==1){ //wpusc jezeli ma prawa admina
  * Wyswietlanie, modyfikacje, usuwanie.
  */
   
-function szukaj($user, $sortowanie) {
-$wyrazenie = mysql_real_escape_string($user);
-
-//wybieramy wyszukiwarke wg sortowania
-    switch ($sortowanie){
-        case 1:
-            //domyslne alfabetyczne
-            $szukaj = mysql_query("SELECT * FROM uzytkownicy LEFT JOIN zolnierze using (idZolnierza) order by Login ASC;") 
-            or die('Błąd zapytania'); 
-            break;
-        case 2:
-            //domyslne alfabetyczne
-            $szukaj = mysql_query("SELECT * FROM uzytkownicy LEFT JOIN zolnierze using (idZolnierza) WHERE Login LIKE '%".$wyrazenie."%'  order by Login ASC;") 
-            or die('Błąd zapytania'); 
-            break;
-    }
-
-$znalezionych = mysql_num_rows($szukaj);
-$idEdytuj=$_GET['edytuj'];
-  
-}
-    
-    
-    
-    
 function uzytkownicy() {
+    
+$url = $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING']; //generujemy aktualny adres wyswietlanej strony
+if(isset($_GET[desc])){
+        $url = explode("&desc", $url); //wyrzucamy deklaracje zmiennej get z adresu
+        $url = $url[0];
+        $adres=$url;
+}  else {
+        $adres=$url."&desc";
+}
    
 //jeżeli istnieje $kogo profil sprawdzamy czy mamy dostep do danego profilu     
 
@@ -58,6 +42,13 @@ function uzytkownicy() {
         $wyrazenie="";
         $szukany="";
     }
+    
+        if(isset($_GET['desc'])){
+            $sortowanie = 2;
+            $desc = '&desc';
+        }else {
+            $sortowanie = 1;
+        }
 
 
     //ZMIENNE DO ZAPISANIA EDYTOWANYCH UZYTKOWNIKOW
@@ -108,7 +99,7 @@ function uzytkownicy() {
             $extra = 'index.php?id=panele/admin/uzytkownicy';
             $extra3 = '&strona=';
             $extra4 = $_POST[strona];
-            header("Location: $extra$extra3$extra4$szukany");
+            header("Location: $extra$extra3$extra4$szukany$desc");
             exit;  
 
         }
@@ -132,8 +123,20 @@ function uzytkownicy() {
     $ilewpisow = mysql_query("SELECT * FROM uzytkownicy WHERE Login LIKE '%".$wyrazenie."%'") or die('Błąd zapytania');
     $wpisow = (int)mysql_num_rows($ilewpisow);
     $stron = ceil($wpisow/$ile); //ilosc stron
-    $zapytanie = mysql_query("SELECT *, CONCAT_WS(' ',stopnie.Skrot, UPPER(zolnierze.Nazwisko), zolnierze.Imie) AS Zolnierz FROM uzytkownicy LEFT JOIN zolnierze using (idZolnierza) LEFT JOIN uprawnienia using (idUprawnienia) LEFT JOIN stopnie using (idStopien) WHERE Login LIKE '%".$wyrazenie."%' order by Login ASC LIMIT $ile OFFSET $strona") 
-    or die('Błąd zapytania'); 
+    //wybieramy wyszukiwarke wg sortowania
+    switch ($sortowanie){
+        case 1:
+            //domyslne od A do Z
+            $zapytanie = mysql_query("SELECT *, CONCAT_WS(' ',stopnie.Skrot, UPPER(zolnierze.Nazwisko), zolnierze.Imie) AS Zolnierz FROM uzytkownicy LEFT JOIN zolnierze using (idZolnierza) LEFT JOIN uprawnienia using (idUprawnienia) LEFT JOIN stopnie using (idStopien) WHERE Login LIKE '%".$wyrazenie."%' order by Login ASC LIMIT $ile OFFSET $strona") 
+            or die('Błąd zapytania');
+            break;
+        case 2:
+            //posortuje od z do a
+            $zapytanie = mysql_query("SELECT *, CONCAT_WS(' ',stopnie.Skrot, UPPER(zolnierze.Nazwisko), zolnierze.Imie) AS Zolnierz FROM uzytkownicy LEFT JOIN zolnierze using (idZolnierza) LEFT JOIN uprawnienia using (idUprawnienia) LEFT JOIN stopnie using (idStopien) WHERE Login LIKE '%".$wyrazenie."%' order by Login DESC LIMIT $ile OFFSET $strona") 
+            or die('Błąd zapytania'); 
+            break;
+    }
+
 
 
 
@@ -149,7 +152,7 @@ function uzytkownicy() {
                 $poprzednia=$i-1;
                 $nastepna=$i+1;
                 }elseif($i<5){
-                    echo '<option value="index.php?id=panele/admin/uzytkownicy&strona='.$i.''.$szukany.'">'.($i+1).'</option>';
+                    echo '<option value="index.php?id=panele/admin/uzytkownicy&strona='.$i.''.$szukany.''.$desc.'">'.($i+1).'</option>';
                 }
              }
              //echo '[...] <a href="index.php?id=panele/moje/nadgodziny&ile='.$ile.'&do='.($i-1).'">'.$i.' </a>';
@@ -158,7 +161,7 @@ function uzytkownicy() {
              echo "<div class=\"order-1\">";
              //wygenerowanie linku do poprzedniej strony
                 if ($poprzednia > -1) {
-                echo '<a href="index.php?id=panele/admin/uzytkownicy&strona='.$poprzednia.''.$szukany.'" class="button blekitne">Poprzednia</a>';
+                echo '<a href="index.php?id=panele/admin/uzytkownicy&strona='.$poprzednia.''.$szukany.''.$desc.'" class="button blekitne">Poprzednia</a>';
                 }else{
                     echo "<button class=\"button\" disabled>Poprzednia</button>";
                 }
@@ -166,7 +169,7 @@ function uzytkownicy() {
             echo "<div class=\"order-3\">";
             //wygenerowanie linku do nastepnej strony
             if ($nastepna < $i) {
-                echo '<a href="index.php?id=panele/admin/uzytkownicy&strona='.$nastepna.''.$szukany.'" class="button blekitne">Nastepna</a>';
+                echo '<a href="index.php?id=panele/admin/uzytkownicy&strona='.$nastepna.''.$szukany.''.$desc.'" class="button blekitne">Nastepna</a>';
             } else {
                 echo "<button class=\"button\" disabled>Nastepna</button>";
             }
@@ -183,10 +186,10 @@ function uzytkownicy() {
                     echo "<tr class=\"blekitne empty-cells\">";
                         echo "<th></th>";
                         echo "<th><input type=\"checkbox\" id=\"select-all\" disabled=\"disabled\"></th>";
-                        echo "<th>login</th>";
+                        echo "<th><a href=\"$adres\" title=\"sortuj\">login</a></th>"; 
                         echo "<th>hasło</th>";
                         echo "<th>uprawnienie</th>";
-                        echo "<th>przypisany</th>";
+                        echo "<th class=\"left\">przypisany</th>";
                         echo "<th colspan=\"2\">";
                             if ($zaznaczone[$liczEdytuj]==$r->Login){
                                 echo "<input type=\"submit\" id=\"edytujgodzinki\" class=\"edytuj\" value=\"edytuj zaz.\" title=\"edytuj zaznaczone\"/></th>";
@@ -210,9 +213,9 @@ function uzytkownicy() {
                                         echo "<input type=\"checkbox\" name=\"edytuj[]\" value=\"$r->Login\" checked>";
                                     echo "</td>";
                                     echo "<td><input type=\"text\" class=\"wysrodkuj\" name=\"login[]\" placeholder=\"$r->Login\" value=\"$r->Login\" required=\"true\" size=\"10\" disabled></td>"; /*wyswietlamy edycje uzytkownika*/
-                                    echo "<td><a class=\"usun\" href=\"index.php?id=panele/admin/uzytkownicy&strona=$dousuniecia&zeruj=".$r->Login."$szukany\">resetuj hasło</a></td>";
+                                    echo "<td><a class=\"usun\" href=\"index.php?id=panele/admin/uzytkownicy&strona=$dousuniecia&zeruj=".$r->Login."$szukany$desc\">resetuj hasło</a></td>";
                                     echo "<td>"; uprawnienia("multi"); echo "</td>"; /*wyswietlamy uprawnienia*/
-                                    echo "<td>";
+                                    echo "<td class=\"left\">";
                                     lista_zolnierzy(id_zolnierza($r->Login), "multi");
                                     echo"</td>"; /*wyswietlamy zolnierzy*/
                                 }else{
@@ -220,20 +223,20 @@ function uzytkownicy() {
                                         echo "<input type=\"checkbox\" name=\"edytuj[]\" value=\"$r->Login\">";
                                     echo "</td>";
                                     echo "<td>$r->Login</td>"; /*wyswietlamy loginy*/
-                                    echo "<td><a class=\"usun\" href=\"index.php?id=panele/admin/uzytkownicy&strona=$dousuniecia&zeruj=".$r->Login."$szukany\">resetuj hasło</a></td>"; /*wyswietlamy do kiedy mamy czas wykorzystać nadgodziny*/                                    
+                                    echo "<td><a class=\"usun\" href=\"index.php?id=panele/admin/uzytkownicy&strona=$dousuniecia&zeruj=".$r->Login."$szukany$desc\">resetuj hasło</a></td>"; /*wyswietlamy do kiedy mamy czas wykorzystać nadgodziny*/                                    
                                     echo "<td>$r->Typ</td>"; /*wyswietlamy uprawnienia*/
-                                    echo "<td>$r->Zolnierz</td>"; /*wyswietlamy zolnierza*/
+                                    echo "<td class=\"left\">$r->Zolnierz</td>"; /*wyswietlamy zolnierza*/
                                 }
 
                                 if (isset($idEdytuj) && $idEdytuj==$r->Login OR $zaznaczone[$liczEdytuj]==$r->Login){
                                     echo "<input type=\"hidden\" name=\"zapisz\" value=\"$r->Login\">";
                                     echo "<input type=\"hidden\" name=\"strona\" value=\"$dousuniecia\">";
                                     echo "<td><input type=\"submit\" class=\"aktualizuj\" name=\"zapisz\" value=\"Zapisz\" title=\"Zapisz do bazy\"/></td>";
-                                    echo "<td><a class=\"anuluj\" href=\"index.php?id=panele/admin/uzytkownicy&strona=$dousuniecia$szukany\">Anuluj</a></td>";
+                                    echo "<td><a class=\"anuluj\" href=\"index.php?id=panele/admin/uzytkownicy&strona=$dousuniecia$szukany$desc\">Anuluj</a></td>";
                                     $liczEdytuj++;
                                 }else{
-                                    echo "<td><a class=\"edytuj\" href=\"index.php?id=panele/admin/uzytkownicy&strona=".$dousuniecia."&edytuj=".$r->Login."$szukany\">Edytuj</a></td>";
-                                    echo "<td><a class=\"usun\" href=\"index.php?id=panele/admin/uzytkownicy&strona=".$dousuniecia."&usun=".$r->Login."$szukany\">Usuń</a></td>";
+                                    echo "<td><a class=\"edytuj\" href=\"index.php?id=panele/admin/uzytkownicy&strona=".$dousuniecia."&edytuj=".$r->Login."$szukany$desc\">Edytuj</a></td>";
+                                    echo "<td><a class=\"usun\" href=\"index.php?id=panele/admin/uzytkownicy&strona=".$dousuniecia."&usun=".$r->Login."$szukany$desc\">Usuń</a></td>";
                                 }
                         echo "</tr>";
                     }
@@ -263,11 +266,13 @@ function uzytkownicy() {
     <form action="" method="get" name="uzytkownicy">
         <input type="hidden" name="id" value="panele/admin/uzytkownicy"/><label for="userek">Skorzystaj z wyszukiwarki: <input type="search" required="true" results="5" minlength="1" maxlength="50" autosave="some_unique_value" placeholder="<?php if (isset($_GET['szukaj'])){echo$_GET['szukaj'];}else{echo "login użytkownika...";}?>" name="szukaj" title="Wpisz nazwę użytkownika" class="szukajusera pl-5" id="userek"/></label><input type="submit" value="Szukaj" class="szukaj" />
     </form>
+    
 </h2>
 <div class="flex-container">
     <div class="panel tysiac">
        <div class="tytul">
           <p>znalezieni</p>
+          <p class="right"><a href="index.php?id=panele/admin/uzytkownicy" class="pl-10 pr-10 edytuj valing40" title="wyświetl wszystkich użytkowników">wszyscy</a></p>
        </div>
        <div class="zawartosc" >
             <?php uzytkownicy(); ?>

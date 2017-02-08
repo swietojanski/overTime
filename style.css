@@ -1214,7 +1214,7 @@ input.aktualizuj {
     text-align: center;
     font: 12px/2rem "Arial", Gadget, sans-serif;
 }
-.usun.valing40 {
+.usun.valing40,.anuluj.valing40,.edytuj.valing40 {
     font: 12px/40px "Arial", Gadget, sans-serif;
 }
 

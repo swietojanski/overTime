@@ -5,9 +5,11 @@ if(isset($_GET[edytuj])){
         $url = $url[0];
         $adres=$url;
         $akcja="wyjdź";
+        $class="anuluj";
 }  else {
         $adres=$url."&edytuj";
         $akcja="edytuj";
+        $class="edytuj";
 }
 ?>
 
@@ -58,7 +60,7 @@ if(isset($_GET[edytuj])){
 
 <div class="flex-container">
     <div class="panel szescset">
-        <div class="tytul"><p>dane profilowe</p><p class="right"><a href="<?php echo $adres?>" class="mr-10"><?php echo $akcja?></a></p></div>
+        <div class="tytul"><p>dane profilowe</p><p class="right"><a href="<?php echo $adres?>" class="pl-10 pr-10 <?php echo $class ?> valing40" title="<?php echo $akcja?>"><?php echo $akcja?></a></p></div>
         <div class="zawartosc">
             <?php profil($_GET['profil']);?>
         </div>    
