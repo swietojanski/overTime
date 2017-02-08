@@ -741,7 +741,7 @@ input[type=search] { /* klasa do szukajki*/
 	/*background-image:url(img/lay/lupa.png);*/
 }
 
-input[type=search][name=login] { /* tę klasę należy umieścić w elemencie input typu szukającego*/
+input[type=search][name=szukaj] { /* tę klasę należy umieścić w elemencie input typu szukającego*/
 	margin-top:0px;
 	width:500px;
 	cursor: text;

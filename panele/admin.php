@@ -8,7 +8,7 @@
             <a href="index.php?id=panele/admin/dodajEskadre"><li class="flex-box dopelniajacy-2">dodaj eskadre</li></a>
             <a href="index.php?id=panele/admin/eskadry"><li class="flex-box dopelniajacy-1">przeglądaj eskadry</li></a>
             <a href="index.php?id=panele/admin/uzytkownicy"><li class="flex-box zlozony-3">przeglądaj użytkowników</li></a>
-            <a href="index.php?id=panele/dodaj/sluzby"><li class="flex-box triada-4"></li></a>
+            <a href="index.php?id=panele/admin/dodajZolnierza"><li class="flex-box triada-4">dodaj żołnierza</li></a>
             <a href="index.php?id=panele/dodaj/sluzby"><li class="flex-box dopelniajacy-2"></li></a>
             <a href="index.php?id=panele/dodaj/sluzby"><li class="flex-box dopelniajacy-1"></li></a>
             <a href="index.php?id=panele/dodaj/sluzby"><li class="flex-box triada-2"></li></a>

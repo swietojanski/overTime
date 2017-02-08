@@ -667,27 +667,38 @@ function profil($profil) {
 }
 
 //wyswietlenie listy uprawnien podczas dodawania uzytkownika pobranej z bazy
-function uprawnienia($count) {
-    /*
-    if (isset($count)){
-        $count;
+function uprawnienia($multi) {
+    
+    if (isset($multi)){
+        $uprawnienia = mysql_query("SELECT *  FROM uprawnienia") or die('Błąd zapytania'); 
+        if(mysql_num_rows($uprawnienia) > 0) { 
+            /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
+            echo "<select name=\"uprawnienie[]\" required>"; 
+            echo "<option value=\"\" selected disabled>Wybierz uprawnienie</option>";
+            while($r = mysql_fetch_object($uprawnienia)) {  
+
+                echo "<option value=\"$r->idUprawnienia\">".$r->Typ."</option>";
+
+            } 
+            echo "</select>"; 
+        }
     }else{
-        $count=1;
-    }
-     */
-$uprawnienia = mysql_query("SELECT *  FROM uprawnienia") 
-or die('Błąd zapytania'); 
-    if(mysql_num_rows($uprawnienia) > 0) { 
-        /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
-        echo "<select name=\"uprawnienie[]\" required class=\"mb-10\">"; 
-        echo "<option value=\"\" selected disabled>Wybierz uprawnienie</option>";
-        while($r = mysql_fetch_object($uprawnienia)) {  
+        
+        $uprawnienia = mysql_query("SELECT *  FROM uprawnienia") or die('Błąd zapytania'); 
+        if(mysql_num_rows($uprawnienia) > 0) { 
+            /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
+            echo "<select name=\"uprawnienie\" required class=\"mb-10\">"; 
+            echo "<option value=\"\" selected disabled>Wybierz uprawnienie</option>";
+            while($r = mysql_fetch_object($uprawnienia)) {  
 
-            echo "<option value=\"$r->idUprawnienia\">".$r->Typ."</option>";
+                echo "<option value=\"$r->idUprawnienia\">".$r->Typ."</option>";
 
-        } 
-        echo "</select>"; 
+            } 
+            echo "</select>"; 
+        }
+        
     }
+
 }
 
 function stopnie() {
@@ -708,7 +719,7 @@ if(mysql_num_rows($stopnie) > 0) {
 
 //wyswietlenie rozwijanej listy zolnierzy
 function lista_zolnierzy($selected) {
-$datalist = mysql_query("SELECT CONCAT_WS(' ',stopnie.Skrot, zolnierze.Nazwisko, zolnierze.Imie) AS Żołnierze, idZolnierza FROM zolnierze, stopnie WHERE stopnie.idStopien = zolnierze.idStopien ORDER BY idZolnierza DESC, Nazwisko ASC;") 
+$datalist = mysql_query("SELECT CONCAT_WS(' ', UPPER(zolnierze.Nazwisko), zolnierze.Imie, stopnie.Skrot) AS Żołnierze, idZolnierza FROM zolnierze, stopnie WHERE stopnie.idStopien = zolnierze.idStopien ORDER BY Nazwisko ASC, idZolnierza DESC;") 
 or die('Błąd zapytania'); 
     if(mysql_num_rows($datalist) > 0) { 
         /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
