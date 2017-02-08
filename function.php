@@ -304,7 +304,7 @@ function edytujZdjecie($profil){
                               case '1': $zdjecie = imagecreatefromgif($url); break;
                               case '2': $zdjecie = imagecreatefromjpeg($url); break;
                               case '3': $zdjecie = imagecreatefrompng($url); break;
-                              default : return "Unsupported picture type!";
+                              default : return "Nieobsługiwany typ zdjęcia!";
                             }
                             // pobieramy wysokosc i szerokosc oryginalnego zdjecia, chociaz mozna to wyciagnac z  list xD
                         $x = imagesx($zdjecie);
@@ -718,12 +718,12 @@ if(mysql_num_rows($stopnie) > 0) {
 
 
 //wyswietlenie rozwijanej listy zolnierzy
-function lista_zolnierzy($selected) {
+function lista_zolnierzy($selected, $multi) {
 $datalist = mysql_query("SELECT CONCAT_WS(' ', UPPER(zolnierze.Nazwisko), zolnierze.Imie, stopnie.Skrot) AS Żołnierze, idZolnierza FROM zolnierze, stopnie WHERE stopnie.idStopien = zolnierze.idStopien ORDER BY Nazwisko ASC, idZolnierza DESC;") 
 or die('Błąd zapytania'); 
     if(mysql_num_rows($datalist) > 0) { 
         /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
-        echo "<select name=\"zolnierze\" class=\"fod\">";
+        echo "<select name=\"";if (isset($multi)){echo "zolnierze[]";}else{echo "zolnierze";}echo"\" class=\"fod\">";
         if (empty($selected)){
             echo "<option value=\"\" selected disabled>Wybierz zolnierza</option>";
         }
@@ -1209,7 +1209,7 @@ function mojeSluzby($kogo) {
                     }
                            
             }else{
-                $blad_usuniecia = "Już usunąłeś wybraną godzine."; //niewypisany, wiec go nie zobaczymy
+                $blad_usuniecia = "Już usunąłeś wybraną służbę."; //niewypisany, wiec go nie zobaczymy
                 echo "<p class='wysrodkuj'>".$blad_usuniecia."</p>";
             }
         }
@@ -1233,7 +1233,7 @@ function mojeSluzby($kogo) {
                 if((int)mysql_num_rows($sprawdzenie) > 0) { 
                     $edytuj = mysql_query("UPDATE `sluzby` SET `ile`='$godzinaq' WHERE `idSluzby`='$idZapisz'");
                 }else{
-                    $blad_edycji = "Nie ma co edytować, nadgodzina nie istnieje";
+                    $blad_edycji = "Nie ma co edytować, służba nie istnieje";
                 }
             }
 
@@ -1352,7 +1352,7 @@ function mojeSluzby($kogo) {
                 echo "</form>"; 
             echo "</table>";   
         }else{
-            echo "Brak nadgodzin do wyświetlenia";
+            echo "Brak służb do wyświetlenia";
         }
             
     }else{
@@ -1536,9 +1536,26 @@ or die('Błąd zapytania');
     }
 }
 
+//WYŚWIETLENIE LISTY GRUP DO PRZYPISANIA DOWODCY
+function listaGrup() {
+$esk = mysql_query("SELECT * FROM grupy") 
+or die('Błąd zapytania'); 
+    if(mysql_num_rows($esk) > 0) { 
+        /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
+        echo "<select name=\"grupa\" class=\"fod\" id=\"grupa\">"; 
+        echo "<option value=\"\" selected disabled id=\"puste\">Wybierz grupę</option>";
+        while($r = mysql_fetch_object($esk)) {  
+
+            echo "<option value=\"$r->idGrupy\">".$r->Nazwa."</option>";
+
+        } 
+        echo "</select>"; 
+    }
+}
+
 //WYŚWIETLENIE LISTY ESKADR DLA PRZYPISANIA ŻOŁNIERZA
-function listaEskadr() {
-$esk = mysql_query("SELECT *  FROM eskadry") 
+function listaEskadr($idGrupy) {
+$esk = mysql_query("SELECT *  FROM eskadry WHERE idGrupy='".$idGrupy."'") 
 or die('Błąd zapytania'); 
     if(mysql_num_rows($esk) > 0) { 
         /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
@@ -1726,10 +1743,7 @@ function zmienHaslo($kogo) {
                         /* jeżeli wynik jest pozytywny, to dodajemy uzytkownika */ 
                         $zapytanie = "UPDATE `uzytkownicy` SET `Haslo`='$zakodowane' WHERE `Login`='$kogo';";
                         $wykonaj = mysql_query($zapytanie);
-                        echo "Zmieniłeś hasło dla <strong>".$kogo."</strong>. Teraz może się przelogować.<br>";
-                        echo "<div class=\"zawartosc wysrodkuj\">";
-                        echo "<br><p>Powodzenia!</p>";
-                        echo "</div>";
+                        formZmiana("correct","hasło zostało zmienione");
                     }
             
         }  
