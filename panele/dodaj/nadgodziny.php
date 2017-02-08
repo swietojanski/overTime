@@ -9,7 +9,7 @@
 <h2 class="podpowiedzi zaokraglij">Skorzystaj z formularza i dodaj czas ponadnormatywny.</h2>
 
 <div class="flex-container">
-    <div class="panel">
+    <div class="panel szescset">
         <div class="tytul">
             <p>nadgodzinki</p>
         </div>

@@ -115,6 +115,10 @@ h2 {
 .overTime input.error, select.error {
     border: solid #f00 1px;
 }
+.overTime input.correct, select.correct {
+    border: solid #228B22 1px;
+    background-color: #006400;
+}
 /*INPUT TYPE FILE PRZESYLANIE ZDJĘCIA W FORMIE PRZYCISKU JAKO ZDJECIE*/
 div.upload {
     width: 200px;

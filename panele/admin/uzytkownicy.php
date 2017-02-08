@@ -37,7 +37,7 @@ function uzytkownicy() {
 //jeżeli istnieje $kogo profil sprawdzamy czy mamy dostep do danego profilu     
 
     //Definiujemy zmienne pomocnicze do stronicowania
-    $nazwa=$_SESSION['user']."-uzytkownikow";
+    $nazwa=$_SESSION['user']."-wpisuzy";
     if(isset($_COOKIE[$nazwa]) && !empty($_COOKIE[$nazwa])){
         $ile=$_COOKIE[$nazwa];
     }else{    
@@ -63,6 +63,7 @@ function uzytkownicy() {
     //ZMIENNE DO ZAPISANIA EDYTOWANYCH UZYTKOWNIKOW
     $login = $_POST['login'];
     $uprawnienie = $_POST['uprawnienie'];
+    $zolnierz = $_POST['zolnierze'];
     $liczenie = count($uprawnienie); //zliczenie ilosci wystapien pola data input
     $zaznaczone = $_POST['edytuj'];
     $liczEdytuj = 0; //zliczenie ilosci wystapien checkbox
@@ -88,17 +89,17 @@ function uzytkownicy() {
             }
         }
 
-    //ZAPISUJEMY ZMIENIONE NADGODZINY
+    //ZAPISUJEMY ZMIENIONE DANE
 
         if(isset($idZapisz)){//najpierw sprawdzamy czy zmienna istnieje
             for($a=0;$a<$liczenie;$a++){
                     
                     $idZapisz=$zaznaczone[$a];
                     $idUprawnienia=$uprawnienie[$a];
-
+                    $idZolnierza=$zolnierz[$a];
                 $sprawdzenie = mysql_query("SELECT * FROM `uzytkownicy` WHERE `Login`='$idZapisz'");// zapytanie sprawdzajace czy uzytkownik o danym loginie jest w bazie 
                 if((int)mysql_num_rows($sprawdzenie) > 0) { 
-                    $edytuj = mysql_query("UPDATE `uzytkownicy` SET `idUprawnienia`='$idUprawnienia' WHERE `Login`='$idZapisz'");
+                    $edytuj = mysql_query("UPDATE `uzytkownicy` SET `idUprawnienia`='$idUprawnienia', `idZolnierza`='$idZolnierza' WHERE `Login`='$idZapisz'");
                 }else{
                     $komunikat = "Nie ma co edytować, użytkownik nie istnieje";
                 }
@@ -212,7 +213,7 @@ function uzytkownicy() {
                                     echo "<td><a class=\"usun\" href=\"index.php?id=panele/admin/uzytkownicy&strona=$dousuniecia&zeruj=".$r->Login."$szukany\">resetuj hasło</a></td>";
                                     echo "<td>"; uprawnienia("multi"); echo "</td>"; /*wyswietlamy uprawnienia*/
                                     echo "<td>";
-                                    
+                                    lista_zolnierzy(id_zolnierza($r->Login), "multi");
                                     echo"</td>"; /*wyswietlamy zolnierzy*/
                                 }else{
                                     echo "<td>";

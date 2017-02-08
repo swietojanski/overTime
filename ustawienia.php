@@ -18,6 +18,18 @@ if(!empty($_POST['ukryj'])){
     setcookie($ostco, $ciastko_ostdod, time() + 2 * 356 * 86400); // jezeli czas ciastka ustawimy na zero skasuje sie z zamknieciem przegladarki
 }
 
+$wpisuzy=$_SESSION['user']."-wpisuzy";
+if(!empty($_POST['wpisuzy'])){
+    $ciastko_wpisuzy=$_POST['wpisuzy'];
+    setcookie($wpisuzy, $ciastko_wpisuzy, time() + 2 * 356 * 86400); // jezeli czas ciastka ustawimy na zero skasuje sie z zamknieciem przegladarki
+}
+
+$wpiszol=$_SESSION['user']."-wpiszol";
+if(!empty($_POST['wpiszol'])){
+    $ciastko_wpiszol=$_POST['wpiszol'];
+    setcookie($wpiszol, $ciastko_wpiszol, time() + 2 * 356 * 86400); // jezeli czas ciastka ustawimy na zero skasuje sie z zamknieciem przegladarki
+}
+
 switch ($_SESSION['permissions']) {    
     case '1';
         $uprawnienie = "admin";
@@ -101,12 +113,50 @@ switch ($_SESSION['permissions']) {
                         </tr>
                     </tbody>
                 </table>
-                    <input type="submit" name="dodajnadgodziny" class="zapisz animacja" value="zapisz" title="Zapisz do bazy"/> 
+                    <input type="submit" name="dodajnadgodziny" class="zapisz animacja" value="zapisz" title="Zapisz ustawienia"/> 
             </form>
             
         </div>
     </div>
 </div>
+<?php if($_SESSION['permissions']==1){?>
+<div class="flex-container">
+    <div class="panel szescset">
+        <div class="tytul">
+            <p>ustawienia admina</p>
+        </div>
+        <div class="zawartosc wysrodkuj" >
+
+            <form class="nadgodzinki" name="ustawienia_admina" method="post">        
+                <table id="tabela">
+                    <thead>
+                        <tr>
+                            <th>Opis</th>
+                            <th>Decyzja</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="blekitne">
+                            <td class="left">Ilość wpisów na stronie użytkownicy</td>
+                            <td>
+                                <input size="5" type="number" min="10" max="100" step="10" placeholder="10" name="wpisuzy" <?php if(isset($_COOKIE[$wpisuzy]) && empty($_POST['wpisuzy'])){echo "value=\"".$_COOKIE[$wpisuzy]."\"";} elseif(isset ($_POST['wpisuzy'])) {echo "value=\"$ciastko_wpisuzy\"";} ?>>
+                            </td>
+                        </tr>
+                        <tr class="blekitne">
+                            <td class="left">Ilość wpisów na stronie żołnierze</td>
+                            <td>
+                                <input type="number" min="10" max="100" step="10" placeholder="10" name="wpiszol" <?php if(isset($_COOKIE[$wpiszol]) && empty($_POST['wpiszol'])){echo "value=\"".$_COOKIE[$wpiszol]."\"";} elseif(isset ($_POST['wpiszol'])) {echo "value=\"$ciastko_wpiszol\"";} ?>>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                    <input type="submit" name="ustawienia_admina" class="zapisz animacja" value="zapisz" title="Zapisz do ciasteczka"/> 
+            </form>
+            
+        </div>
+    </div>
+</div>
+<?php }?>
 <?php
 }  else {
     echo "Czego tutaj szukasz? Nie masz wystarczających uprawnień!";

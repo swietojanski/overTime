@@ -5,8 +5,10 @@ $progres=0;
 $stopien = $_POST['stopien'];
 $imie = mysql_real_escape_string($_POST['imie']);
 $nazwisko = mysql_real_escape_string($_POST['nazwisko']);
+$grupa = (int)$_POST['grupa'];
 $eskadra = $_POST['eskadra'];
 $klucz = $_POST['klucz'];
+echo $grupa;
 
 
 echo "<h1> Dodaj żołnierza </h1>";
@@ -20,8 +22,29 @@ echo "            <p>dodaj żołnierza</p>";
 echo "        </div>";
 echo "        <div class=\"zawartosc wysrodkuj\">";
 
-    if (!isset($_POST[krok1]) && empty($_POST[dodaj])){
-    echo "            <form name=\"krok1\" method=\"post\">";      
+if (!isset($_POST[grupa])){
+    echo "            <form name=\"krok0\" method=\"post\">";      
+    echo "                <table>";
+    echo "                    <thead>";
+    echo "                    </thead>";
+    echo "                    <tbody>";
+    echo "                        <tr class=\"blekitne\">";
+    echo "                            <th class=\"right\">grupa</th>";
+    echo "                            <td>";
+                                            listaGrup();
+    echo "                            </td>";
+    echo "                        </tr>"; 
+ 
+    echo "                    </tbody>";
+    echo "                </table>";
+    echo "                    <input type=\"submit\" name=\"krok0\" class=\"zapisz animacja\" value=\"dalej\" title=\"Krok 1\"/>"; 
+    echo "            </form>";
+}
+
+
+    if (!isset($_POST[krok1]) && isset($_POST[krok0])){
+    echo "            <form name=\"krok1\" method=\"post\">";
+    echo "                  <input type=\"hidden\" name=\"grupa\" value=\"$grupa\">";
     echo "                <table>";
     echo "                    <thead>";
     echo "                    </thead>";
@@ -43,7 +66,7 @@ echo "        <div class=\"zawartosc wysrodkuj\">";
     echo "                        <tr class=\"blekitne\">";
     echo "                            <th class=\"right\">eskadra</th>";
     echo "                            <td>";
-                                        listaEskadr();
+                                        listaEskadr($grupa);
     echo "                            </td>";
     echo "                        </tr>";
     echo "                        <tr class=\"blekitne\">";
@@ -64,6 +87,7 @@ echo "        <div class=\"zawartosc wysrodkuj\">";
     echo "                  <input type=\"hidden\" name=\"stopien\" value=\"$stopien\">";
     echo "                  <input type=\"hidden\" name=\"imie\" value=\"$imie\">";
     echo "                  <input type=\"hidden\" name=\"nazwisko\" value=\"$nazwisko\">";
+    echo "                  <input type=\"hidden\" name=\"grupa\" value=\"$grupa\">";
     echo "                  <input type=\"hidden\" name=\"eskadra\" value=\"$eskadra\">";  
     echo "                <table>";
     echo "                    <thead>";
@@ -89,21 +113,23 @@ echo "        <div class=\"zawartosc wysrodkuj\">";
     echo "                            </td>";
     echo "                        </tr>";
                                 } else {
-                                        echo "Wybrałeś opcje <strong>dowódca grupy</strong>. Zapisz żołnierza.";
+                                        echo "Wybrałeś opcje <strong>dowódca grupy</strong>.<br>";
+                                        echo "Zapisz żołnierza i przypisz go do grupy";
                                 }
 
 
     echo "                    </tbody>";
     echo "                </table>";
-    echo "                    <input type=\"submit\" name=\"dodaj\" class=\"zapisz animacja\" value=\"zapisz\" title=\"Krok 2\"/>"; 
+    echo "                    <input type=\"submit\" name=\"dodaj\" class=\"zapisz animacja\" value=\"zapisz\" title=\"Krok 3\"/>"; 
     echo "            </form>";
     
     }
-    
+
     if(isset ($_POST[dodaj])){   
         $progres=+100;
             dodajZolnierza(intval($_POST['stopien']), $_POST['imie'], $_POST['nazwisko'], intval($_POST['eskadra']), intval($_POST['klucz']));
     }
+
 
 echo "        </div>";
 echo "    </div>";
