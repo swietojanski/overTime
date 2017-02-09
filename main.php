@@ -1,4 +1,4 @@
-<?php include ("function.php");?>
+<?php  include ("function.php"); ob_start();?>
 <div class="wrapper">
     <header class="header">
         <div id="header">
@@ -45,7 +45,7 @@
 
     <article class="main">
                 <div class="aside">  
-                   <?php echo profil(1); ?>
+                    <a class="edytuj">Pierwsza opcja</a><a class="anuluj">Druga opcja</a>
                 </div>
                 <div class="mainContent ladowanie">  
                     <?php 

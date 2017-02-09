@@ -1,5 +1,5 @@
 <?php
-ob_start();
+
 if($_SESSION['permissions']==1){ //wpusc jezeli ma prawa admina
 /* 
  * Panel do zarządzania użytkownikami dla administratora
