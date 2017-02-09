@@ -297,6 +297,7 @@ div.avatar input {
     width:50%;
     position:absolute;
     z-index: 20;
+    text-align: left;
     background-color: rgba(0,0,0,0.9); /*obsługa koloru z przezroczystoscia xD*/
     border-left:1px solid rgba(100,100,100,0.1);
     border-bottom:1px solid rgba(100,100,100,0.1);
@@ -1224,7 +1225,7 @@ td {
     text-align:center;
 }
 
-td.left, th.left {
+td.left, th.left, .left {
     text-align:left;
 }
 
