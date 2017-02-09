@@ -1,3 +1,14 @@
+<?php
+
+/* 
+ * Funkcja wykorzystujaca nadgodziny
+ * Sluzby do skladania wniosow
+ * i pozniejsza akceptacje ich.
+ */
+
+
+?>
+
 <?php 
 //Zamiana przecinka na kropke
 //
@@ -5,13 +16,13 @@
 //$liczba = str_replace(",",".",$liczba);
 //echo $liczba; 
 ?>
-<h1> Dodaj nadgodziny </h1>
-<h2 class="podpowiedzi zaokraglij">Skorzystaj z formularza i dodaj czas ponadnormatywny.</h2>
+<h1> Składanie wniosku </h1>
+<h2 class="podpowiedzi zaokraglij">Skorzystaj z formularza i wykorzystaj czas ponadnormatywny.</h2>
 
 <div class="flex-container">
     <div class="panel szescset">
         <div class="tytul">
-            <p>nadgodzinki</p>
+            <p>propozycja</p>
         </div>
         <div class="zawartosc wysrodkuj">
             <form class="nadgodzinki" name="nadgodzinki" method="post">        
@@ -20,8 +31,7 @@
                         <tr>
                             <th></th>
                             <th>Data</th>
-                            <th>Ilość godzin</th>
-                            <th>Powód</th>
+                            <th>Ile godzin</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -30,20 +40,30 @@
                             <td>1</td>
                             <td><input type="text" name="data[]" class="datanadgodzin" placeholder="20-05-2016" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])-(0[1-9]|1[012])-[0-9]{4}" required="true" size="19"></td>
                             <td><input type="text" name="godzina[]" class="ggodzin" placeholder="2.5" pattern="((\d{1,2}\.[5])|(\d{1,2}))" required="true" size="19" id="godzina-1"></td>
-                            <td>
-                                <?php listaPowodow()?> 
-                            </td>
                         </tr>
                     </tbody>
                 </table>
-                    <input type="submit" name="dodajnadgodziny" class="zapisz animacja" value="zapisz" title="Zapisz do bazy"/> 
+                    <input type="submit" name="dodajnadgodziny" class="zapisz animacja" value="złóż" title="Zapisz do bazy"/> 
                     <input type="button" id="dodajWiersz" class="zapisz animacja" value="więcej"/>  
             </form>
         </div>  
     </div>
 </div>
 <?php
-    dodajNadgodziny();
+
+    //dodajNadgodziny();
+    
+    echo "<div id=\"dialog\" title=\"Ile godzin?\">";
+
+    //wypisanie przyciskow w okienku typu dialog jquery
+    for ($i=1;$i<9;$i++){
+    
+        echo "<button>".$i."</button>";
+        
+    }
+
+echo "</div>";
+//koniec ukrytego okienka
 
 /*
 foreach($data as $idkiedy) {
@@ -85,12 +105,12 @@ $(document).ready(function() {
         var f2  = '<td><input type="text" name="godzina[] '+liczba+'" class="ggodzin" placeholder="2.5" required="true" size="19" id="godzina-'+liczba+'"></td>';
  
         //trzecia kom�rka
-        var f3  = '<td><?php listaPowodow()?></td>';
+        var f3  = '<td><a class="delete plr-5" href="#" title="Usuń wiersz">Usuń</a></td>';
         //trzecia kom�rka
         
-        var f4  = '<td><a class="delete plr-5" href="#" title="Usuń wiersz">Usuń</a></td>';
+
         //w tej zmiennej definiujemy nowy wiersz w tabeli
-        var row = '<tr class="blekitne"><td>'+liczba+'</td>'+f1+f2+f3+f4+'</tr>';
+        var row = '<tr class="blekitne"><td>'+liczba+'</td>'+f1+f2+f3+'</tr>';
  
         //dolacz nowy wiersz na koncu tabeli
         $('#tabela').find('tbody').append(row);

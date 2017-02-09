@@ -1,27 +1,87 @@
 @charset "UTF-8";
+
+html, body
+{
+    width: 100%;
+    height: 100%;
+    
+    margin: 0;
+    padding: 0;
+}
 body  {
 	font: 100% Verdana, Arial, Helvetica, sans-serif;
-	background: #e8e8e8;
-	margin: 0; /* zaleca się wyzerowanie dopełnienia i marginesu elementu body, tak aby mogły być uwzględniane różne domyślne ustawienia przeglądarki */
-	padding: 0;
+	background: #fff;
 	text-align: center; /* kontener zostaje wyśrodkowany w oknach przeglądarek IE 5*. Następnie tekst określony przez selektor #container jest wyrównywany domyślnie do lewej */
 	color: #000000;
         min-width:440px;
 }
+
+
+
+/*UKLAD ELEMENTOW STRONY*/
+.wrapper {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    
+    justify-content: flex-start; /* align items in Main Axis */
+    align-items: stretch; /* align items in Cross Axis */
+    align-content: stretch; /* Extra space in Cross Axis */
+}
+.mainContent { 
+    width: 100%;
+    text-align: left;
+    flex: 1;  
+    overflow: auto;
+} 
+.header  {}
+.footer  {}
+.main    {  flex: 1;
+            background: whitesmoke;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start; /* align items in Main Axis */
+            align-items: stretch; /* align items in Cross Axis */
+            align-content: stretch; /* Extra space in Cross Axis */ 
+         }
+         
+ 
+
+@media all and (min-width: 1480px) {
+        .aside { 
+        background: black;
+        text-align: left;
+        flex-basis: 200px; 
+        flex-shrink: 0;
+        }
+}
+@media all and (min-width: 1900px) {
+        .aside { 
+        background: black;
+        text-align: left;
+        flex-basis: 300px; 
+        flex-shrink: 0;
+        }
+}
+@media all and (max-width: 1599px) {
+    .aside {display: none;}    
+    
+}
+
+/*KONIEC UKLADU ELEMENTOW STRONY*/
+
+
 h1 {
     font-size: 20pt;
+    margin: 20px;
 }
 h2 {
     font-size: 14pt;
 }
-.overTime #container { 
-	width: 100%;  /* szerokość kontenera będzie stanowić 100% szerokości okna przeglądarki */
-        min-width:440px;
-	background: #FFFFFF;
-	margin: 0 auto; /* automatyczne marginesy (w połączeniu z szerokością) powodują wyśrodkowanie strony */
-	border: 0px solid #000000;
-	text-align: left; /* ustawienie to przesłania domyślne ustawienie wyrównania tekstu: środkowanie w elemencie body. */
-} 
 .overTime #header { 
 	background: #336666;
 	display:flex;
@@ -29,14 +89,12 @@ h2 {
 	border-bottom:#275857 solid 1px;*/
 	padding: 0;  /* takie dopełnienie jest zgodne z wielkością wyrównania do lewej tych elementów div, które leżą poniżej. Jeśli w elemencie #header użyto obrazu zamiast tekstu, można usunąć dopełnienie. */
 
-} 
+}
 .overTime #header h1 {
 	margin: 0; /* wyzerowanie marginesu w ostatnim elemencie nagłówka #header pozwoli uniknąć skrócenia marginesów – tj. dodania niepotrzebnych spacji między elementami div. Jeśli element div ma obramowanie, czynność ta jest niepotrzebna, ponieważ obramowanie również zapobiega skróceniu marginesów */
 	padding: 10px 0; /* użycie dopełnienia, a nie marginesu, pozwoli utrzymać odpowiednią odległość między elementem a krawędziami elementu div */
 }
-.overTime #mainContent { 
-	margin: 0 10px 0 10px; /* ustawienie lewego marginesu powinno odpowiadać ustawieniu nagłówka i stopki, bo to zapewnia  poprawne wyrównanie elementów. */
-} 
+
 .overTime a {
 	text-decoration:none;
         color: #fff;
@@ -72,13 +130,20 @@ h2 {
 .overTime .panel h2 {padding: 0px; margin: 0px;}
 
 .overTime #footer { 
-	padding: 0 10px; /* takie dopełnienie jest zgodne z wielkością wyrównania do lewej tych elementów div, które leżą powyżej. */
+
+	bottom:0;
+        height: 40px;
+	width:100%;
+	padding: 0px; /* takie dopełnienie jest zgodne z wielkością wyrównania do lewej tych elementów div, które leżą powyżej. */
 	background:#DDDDDD;
 	clear:both;
 } 
 .overTime #footer p {
+        font: 100% Verdana, Arial, Helvetica, sans-serif;
+        font-size: 10px;
+        text-align-last: center;
 	margin: 0; /* wyzerowanie marginesów pierwszego elementu w stopce pozwoli uniknąć ewentualnego skrócenia marginesów - tj. dodania niepotrzebnych spacji między elementami div */
-	padding: 10px 0; /* użycie dopełnienia zapewni marginesy, a jednocześnie uniemożliwi ich skrócenie */
+	padding-top: 8px; /* użycie dopełnienia zapewni marginesy, a jednocześnie uniemożliwi ich skrócenie */
 }
 .overTime #szukajka {
 	background: #336666;
@@ -285,6 +350,7 @@ text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
     text-indent: 0.5in;
 }
 .podpowiedzi {
+        margin: 30px;
 	background-color:#F8F8F8;
 	padding:10px;
 	box-shadow: inset -5px -5px 5px #FAFAFA;
@@ -295,6 +361,7 @@ text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
     .displaynone {
             display:none;
     }
+
     a.profil {
             padding:0 8px 0 8px;
             margin-right:0px;
@@ -372,6 +439,7 @@ text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
     .displaynonemax {
             display:none;
     }
+  
     a.profil {
             padding:0 8px 0 8px;
             margin-right:30px;
@@ -434,6 +502,7 @@ text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
     .displaynonemax {
             display:none;
     }
+
     a.profil {
             padding:0 8px 0 8px;
             margin-right:30px;
@@ -504,6 +573,7 @@ text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
             font: 14px/60px "Arial", Gadget, sans-serif;
             height:60px;
     }
+
     .flex-box {
       width: 110px;
       height: 60px;
@@ -567,6 +637,7 @@ text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
             font: 14px/60px "Arial", Gadget, sans-serif;
             height:60px;
     }
+
     .flex-box {
   width: 140px;
   height: 70px;
@@ -615,6 +686,10 @@ text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
     .panel.czterdziesci {
         width: 53px;
     }
+}
+
+@media (min-width: 1600px) and (max-width: 1899px) {
+ 
 }
 
 @media (min-width: 1900px) {
@@ -690,6 +765,8 @@ background-color:#34734f;
   display:flex;
   justify-content: flex-end;
 }
+
+
 
 /*koniecbpozycjonowania tych elementow*/
 
@@ -1286,251 +1363,7 @@ input.aktualizuj {
     vertical-align: bottom;
 }
 
-/*----rozne dziwadla----*/
-/*IKONY IKONY IKONY Ikony wykorzystane w gornym panelu menu*/
-/*zegarek*/
-.zegar {
-	visibility:visible;
-	margin-left:50%;
-	font: 14px/35px "Arial", Gadget, sans-serif;
-	-webkit-border-radius: 50%;	-khtml-border-radius: 50%;	-moz-border-radius: 50%;	border-radius: 50%;
-	box-shadow:#333 0.5px 0.5px;
-	position: relative;
-	left:-36px;
-	top:24px;
-	width:60px;
-	height:60px;
-	border:6px solid #fff;
-	z-index:10;
-}
-.minutnik {
-	position:relative;
-	width:48%;
-	height:4px;
-	margin-top:50%;
-	top:-2px;
-	margin-left:50%;
-	left:-2px;
-	background-color:#FFF;
-	z-index:50;
-	-webkit-border-radius: 2px 0 0 2px;	-khtml-border-radius: 2px 0 0 2px;	-moz-border-radius: 2px 0 0 2px;	border-radius: 2px 0 0 2px;
-}
-.godzinka {
-	position:relative;
-	width:35%;
-	height:4px;
-	margin-top:8%;
-	top:-2px;
-	left:-2px;
-	margin-left:35%;
-	background-color:#900;
-	-webkit-transform: rotate(94deg);
-	-moz-transform: rotate(94deg);
-	-ms-transform: rotate(94deg);
-	-o-transform: rotate(94deg);
-	transform: rotate(94deg);
-	-webkit-border-radius: 2px 0px 0px 2px;	-khtml-border-radius: 2px 0px 0px 2px;	-moz-border-radius: 2px 0px 0px 2px;	border-radius: 2px 0px 0px 2px;
-	z-index:49;
-}
-/*kalendarz*/
-.kalendarz {
-	position: relative;
-	color:#900;
-	width:60px;
-	height:43px;
-	visibility:visible;
-	margin-left:50%;
-	left:-36px;
-	top:24px;
-	border:6px solid #fff;
-	border-top-width:18px;
-	padding-top:5px;
-	-webkit-border-radius: 10% 10% 0 0;	-khtml-border-radius: 10% 10% 0 0;	-moz-border-radius: 10% 10% 0 0;	border-radius: 10% 10% 0 0;
-	box-shadow:#333 0.5px 0.5px; 
-	text-shadow:#333 0.5px 0.5px;
-}
-.kalendarz:after {
-	content:"Sobota";
-	font-size:14px;
-	color:#fff;
-	margin:0px;
-	padding:0px;
-	text-align:justify;
-	text-shadow:#333 0.5px 0.5px;
-}
-/*mini kalendarz - wykorzystaj sluzby*/
-.minkalendarz {
-	position: relative;
-	font-size:8px;
-	color:#900;
-	width:26px;
-	height:16px;
-	visibility:visible;
-	margin-left:50%;
-	left:-36px;
-	top:10px;
-	border:2px solid #fff;
-	margin-bottom:4px;
-	border-top-width:6px;
-	padding-bottom:5px;
-	-webkit-border-radius: 10% 10% 0 0;	-khtml-border-radius: 10% 10% 0 0;	-moz-border-radius: 10% 10% 0 0;	border-radius: 10% 10% 0 0;
-	box-shadow:#333 0.5px 0.5px; 
-	text-shadow:#333 0.5px 0.5px;
-}
-.minkalendarz:after {
-	content:"Sobota";
-	font-size:8px;
-	color:#fff;
-	margin:0px;
-	padding:0px;
-	text-align:justify;
-	text-shadow:#333 0.5px 0.5px;
-}
-/*domek godzin*/
-.domek {
-	position:relative;
-	top:-20px;
-	left:-1px;
-}
-.sciany {
-	top:-18px;
-	position: relative;
-	width:56px;
-	height:30px;
-	border-bottom: 5px solid #FFF;
-	border-left: 5px solid #FFF;
-	border-right: 5px solid #FFF;
-	left:-30px;
-	margin-left:50%;
-	z-index:12;
-	box-shadow:#333 0.5px 0.5px;
-	text-shadow:#333 0.5px 0.5px;
-}
-.daszek {
-	top:20px;
-	position: relative;
-	width:38px;
-	height:60px;
-	border-top: 6px solid #900;
-	border-left: 4px solid #900;
-	left:-20px;
-	margin-left:50%;
-	z-index:13;
-	-webkit-transform: rotate(60deg);
-	-moz-transform: rotate(60deg);
-	-ms-transform: rotate(60deg);
-	-o-transform: rotate(60deg);
-	transform: rotate(60deg);
-}
-.zegardom {
-	visibility:visible;
-	margin-left:50%;
-	font: 14px/35px "Arial", Gadget, sans-serif;
-	-webkit-border-radius: 50%;	-khtml-border-radius: 50%;	-moz-border-radius: 50%;	border-radius: 50%;
-	box-shadow:#333 0.5px 0.5px;
-	position: relative;
-	border:4px solid #fff;
-	width:25px;
-	height:25px;
-	top:10px;
-	left:-40px;
-	z-index:15;
-}
-.mindom {
-	position:relative;
-	width:48%;
-	height:2px;
-	margin-top:50%;
-	top:-1px;
-	margin-left:50%;
-	left:-1px;
-	background-color:#FFF;
-	z-index:50;
-	-webkit-border-radius: 2px 0 0 2px;	-khtml-border-radius: 2px 0 0 2px;	-moz-border-radius: 2px 0 0 2px;	border-radius: 2px 0 0 2px;
-}
-.godzdom {
-	position:relative;
-	width:35%;
-	height:2px;
-	margin-top:8%;
-	top:-1px;
-	left:-1px;
-	margin-left:35%;
-	background-color:#900;
-	-webkit-transform: rotate(94deg);
-	-moz-transform: rotate(94deg);
-	-ms-transform: rotate(94deg);
-	-o-transform: rotate(94deg);
-	transform: rotate(94deg);
-	-webkit-border-radius: 2px 0px 0px 2px;	-khtml-border-radius: 2px 0px 0px 2px;	-moz-border-radius: 2px 0px 0px 2px;	border-radius: 2px 0px 0px 2px;
-	z-index:49;
-}
-/*moje nadgodziny*/
-.ubranie {
-	position:relative;
-	top:0px;
-	left:0px;
-}
-.cialo {
-	top:-10px;
-	position: relative;
-	width:60px;
-	height:80px;
-	border-top: 4px solid #900;
-	border-left: 4px solid #900;
-	left:-30px;
-	margin-left:50%;
-	z-index:13;
-	-webkit-transform: rotate(45deg);
-	-moz-transform: rotate(45deg);
-	-ms-transform: rotate(45deg);
-	-o-transform: rotate(45deg);
-	transform: rotate(45deg);
-        -webkit-border-radius: 80%;	-khtml-border-radius: 80%;	-moz-border-radius: 80%;	border-radius: 80%;
-}
-.glowagodz {
-	visibility:visible;
-	margin-left:50%;
-	font: 14px/35px "Arial", Gadget, sans-serif;
-	-webkit-border-radius: 50%;	-khtml-border-radius: 50%;	-moz-border-radius: 50%;	border-radius: 50%;
-	box-shadow:#333 0.5px 0.5px;
-	position: relative;
-	border:4px solid #fff;
-	width:25px;
-	height:25px;
-	top:50px;
-	left:-12px;
-	z-index:15;
-}
-/*moje sluzby*/
-.glowakal {
-	position: relative;
-        z-index:14;
-	font-size:8px;
-	color:#900;
-	width:26px;
-	height:16px;
-	visibility:visible;
-	margin-left:50%;
-	left:-10px;
-	top:50px;
-	border:2px solid #fff;
-	margin-bottom:4px;
-	border-top-width:6px;
-	padding-bottom:5px;
-	-webkit-border-radius: 10% 10% 0 0;	-khtml-border-radius: 10% 10% 0 0;	-moz-border-radius: 10% 10% 0 0;	border-radius: 10% 10% 0 0;
-	box-shadow:#333 0.5px 0.5px; 
-	text-shadow:#333 0.5px 0.5px;
-}
-.glowakal:after {
-	content:"Sobota";
-	font-size:8px;
-	color:#fff;
-	margin:0px;
-	padding:0px;
-	text-align:justify;
-	text-shadow:#333 0.5px 0.5px;}
-/*------------Koniec glupich ikon w panelu na stronie glownej------------*/
+
 
 /*INNE UZYWANE PRZY JQUERY I JS*/
 #select-all {

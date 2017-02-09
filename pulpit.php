@@ -23,11 +23,11 @@ $akceptacja=$_SESSION['user']."-cookieaccept";
 <br>
 <ul class="flex-container">
 <a href="index.php?id=panele/dodaj/nadgodziny"><li class="flex-item"><span>dodaj nadgodziny</span><div class="zegar"><div class="minutnik"></div><div class="godzinka"></div></div></li></a>
-<li class="flex-item"><span>wykorzystaj nadgodziny</span><div class="zegardom"><div class="mindom"></div><div class="godzdom"></div></div><div class="domek"><div class="daszek"></div><div class="sciany">Home</div></div></li>
+<a href="index.php?id=panele/wykorzystaj/nadgodziny"><li class="flex-item"><span>wykorzystaj nadgodziny</span><div class="zegardom"><div class="mindom"></div><div class="godzdom"></div></div><div class="domek"><div class="daszek"></div><div class="sciany">Home</div></div></li></a>
 <a href="index.php?id=panele/moje/nadgodziny"><li class="flex-item"><span>moje nadgodziny</span><div class="glowagodz"><div class="mindom"></div><div class="godzdom"></div></div><div class="ubranie"><div class="cialo"></div></div></li></a>
 
 <a href="index.php?id=panele/dodaj/sluzby"><li class="flex-item"><span>dodaj służby</span><div class="kalendarz"><div class="dni">12</div></div></li></a>
-<li class="flex-item"><span>wykorzystaj służby</span><div class="minkalendarz"><div class="dni">12</div></div><div class="domek"><div class="daszek"></div><div class="sciany">Home</div></div></li>
+<a href="index.php?id=panele/wykorzystaj/sluzby"><li class="flex-item"><span>wykorzystaj służby</span><div class="minkalendarz"><div class="dni">12</div></div><div class="domek"><div class="daszek"></div><div class="sciany">Home</div></div></li></a>
 <a href="index.php?id=panele/moje/sluzby"><li class="flex-item"><span>moje służby</span><div class="glowakal"><div class="dni">12</div></div><div class="ubranie"><div class="cialo"></div></div></li></a>
 </ul>
 <?php

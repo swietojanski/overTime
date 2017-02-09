@@ -1,71 +1,75 @@
 <?php include ("function.php");?>
-<div id="container">
-  <div id="header">
-  	   <div id="headleft">
-       <div id="menu">
-           <a href="index.php" class="logo" title="Pulpit"></a>
-       <a href="index.php?id=panele/dodaj/nadgodziny" class="addovertime">nadgodziny</a>
-       <a href="index.php?id=panele/dodaj/sluzby" class="addovertime">służby</a>
-       <a href="index.php?id=panele/dodaj/wniosek" class="addovertime">wniosek</a>
-    <?php if($_SESSION['permissions']==1){
-       echo "<a href=\"index.php?id=panele/admin/dodajUzytkownika\" class=\"addovertime\">uzytkownika</a>";
-       echo "<a href=\"index.php?id=panele/admin/dodajEskadre\" class=\"addovertime\">eskadre</a>";
-       echo "<a href=\"index.php?id=panele/admin/dodajZolnierza\" class=\"addovertime\">żołnierza</a>";
-    }
-    ?>
-          </div>
-<!--               Gorny pasek z wyszukiwarka i reszta danych-->
-          <a href="index.php" class="logo"></a>
-         
-       </div>
-    <div id="headcenter">
-<?php
-    if($_SESSION['permissions']==6){
-       }else{
-            echo "<form action=\"index.php?id=szukaj\" class=\"displaynone\" method=\"get\">";
-            echo "<input type=\"hidden\" name=\"id\" value=\"szukaj\"/><input type=\"search\" required=\"true\" results=\"5\" minlength=\"2\" maxlength=\"50\" autosave=\"some_unique_value\" placeholder=\"Szukaj żołnierza...\" name=\"wyrazenie\" title=\"Wpisz nazwisko, imię lub stopień żołnierza\"/><input type=\"submit\" value=\"Szukaj\" class=\"szukaj\" />";
-            echo "</form>";
-            echo "<a href=\"index.html?id=szukaj\" class=\"szukajmin displaynonemax\"></a>";
-       }
-?>
-      </div>
-       <div id="headright">
-           <a href="index.php?id=profil" class="profil"><img src="img/avatars/<?php avatar($_SESSION['user']);?>" width="30" align="absmiddle" height="30" alt="Avatar" class="avatar"><span class="displaynone"> <?php imie();?></span></a>
-           <?php if($_SESSION['permissions']==1){
-           echo "<a href=\"index.php?id=panele/admin\" class=\"panadmin\" id=\"pa\"></a>";
-                   }
-    ?>
-           <a href="index.php?id=ustawienia" class="ustawienia" title="Ustawienia"></a>
-          <a href="login.php?logout" class="wyloguj">wyloguj</a>
-          <div id="paneladmina" class="pl-10 pb-10"><?php include 'panele/admin.php'; ?></div>
-       </div>
-   </div>
-  <br class="clearfloat" />
-  <div id="mainContent" class="ladowanie">
+<div class="wrapper">
+    <header class="header">
+        <div id="header">
+                 <div id="headleft">
+             <div id="menu">
+                 <a href="index.php" class="logo" title="Pulpit"></a>
+             <a href="index.php?id=panele/dodaj/nadgodziny" class="addovertime">nadgodziny</a>
+             <a href="index.php?id=panele/dodaj/sluzby" class="addovertime">służby</a>
+             <a href="index.php?id=panele/dodaj/wniosek" class="addovertime">wniosek</a>
+          <?php if($_SESSION['permissions']==1){
+             echo "<a href=\"index.php?id=panele/admin/dodajUzytkownika\" class=\"addovertime\">uzytkownika</a>";
+             echo "<a href=\"index.php?id=panele/admin/dodajEskadre\" class=\"addovertime\">eskadre</a>";
+             echo "<a href=\"index.php?id=panele/admin/dodajZolnierza\" class=\"addovertime\">żołnierza</a>";
+          }
+          ?>
+                </div>
+      <!--               Gorny pasek z wyszukiwarka i reszta danych-->
+                <a href="index.php" class="logo"></a>
 
-<?php 
-if(isset($_GET['id'])) {
-    if(file_exists($_GET['id'].'.php')) {
-        $plik=$_GET['id'].'.php';
-        include($plik);
-    } else {
-        echo "Wystąpił <b>Błąd</b>, może być on spowodowany aktualnym brakiem danego pliku lub z powodu konserwacji serwisu. Za wszystko przepraszamy w najbliższym czasie zostanie to naprawione.</b>.";
-    }
-} else {
-    include("pulpit.php");
-}
-?>
-    
-<h2>Przydatne </h2>
-<p class="ml-10">Służba piątek - 1 dzień.</p> <p class="ml-10">Służba sobota - 2 dni.</p> <p class="ml-10">Służba niedziela - 1 dzień.</p> <br>
-	<!-- koniec #mainContent --></div>
+             </div>
+          <div id="headcenter">
+      <?php
+          if($_SESSION['permissions']==6){
+             }else{
+                  echo "<form action=\"index.php?id=szukaj\" class=\"displaynone\" method=\"get\">";
+                  echo "<input type=\"hidden\" name=\"id\" value=\"szukaj\"/><input type=\"search\" required=\"true\" results=\"5\" minlength=\"2\" maxlength=\"50\" autosave=\"some_unique_value\" placeholder=\"Szukaj żołnierza...\" name=\"wyrazenie\" title=\"Wpisz nazwisko, imię lub stopień żołnierza\"/><input type=\"submit\" value=\"Szukaj\" class=\"szukaj\" />";
+                  echo "</form>";
+                  echo "<a href=\"index.html?id=szukaj\" class=\"szukajmin displaynonemax\"></a>";
+             }
+      ?>
+            </div>
+             <div id="headright">
+                 <a href="index.php?id=profil" class="profil"><img src="img/avatars/<?php avatar($_SESSION['user']);?>" width="30" align="absmiddle" height="30" alt="Avatar" class="avatar"><span class="displaynone"> <?php imie();?></span></a>
+                 <?php if($_SESSION['permissions']==1){
+                 echo "<a href=\"index.php?id=panele/admin\" class=\"panadmin\" id=\"pa\"></a>";
+                         }
+          ?>
+                 <a href="index.php?id=ustawienia" class="ustawienia" title="Ustawienia"></a>
+                <a href="login.php?logout" class="wyloguj">wyloguj</a>
+                <div id="paneladmina" class="pl-10 pb-10"><?php include 'panele/admin.php'; ?></div>
+             </div>
+         </div>
+    </header>
+
+    <article class="main">
+                <div class="aside">  
+                   <?php echo profil(1); ?>
+                </div>
+                <div class="mainContent ladowanie">  
+                    <?php 
+                        if(isset($_GET['id'])) {
+                            if(file_exists($_GET['id'].'.php')) {
+                                $plik=$_GET['id'].'.php';
+                                include($plik);
+                            } else {
+                                echo "Wystąpił <b>Błąd</b>, może być on spowodowany aktualnym brakiem danego pliku lub z powodu konserwacji serwisu. Za wszystko przepraszamy w najbliższym czasie zostanie to naprawione.</b>.";
+                            }
+                        } else {
+                            include("pulpit.php");
+                        }
+                    ?>
+                </div>
+    </article>
 
 
-
-  <div id="footer">
-    <p>OverTime 2017</p>
-  <!-- koniec stopki --></div>
-<!-- koniec kontenera --></div>
+    <footer class="footer">
+            <div id="footer">
+                <p>OverTime 2017<br>Krzysztof Świętojański</p>
+            </div><!-- koniec stopki -->
+    </footer>
+</div>
 <script>
 
  //dymki z podpowiedziami
@@ -162,26 +166,7 @@ $(document).ready(function() {
 
 
 
-            $("#headleft").hover(
-                    function(){
-                $("#menu").css("display", "block");
-            });
-            $("#headleft").mouseleave(
-                    function(){
-                $("#menu").css("display", "none");
-            });
-            $("#pa").hover(
-                    function(){
-                $("#paneladmina").css("display", "block");
-            });
-            $("#paneladmina").mouseleave(
-                    function(){
-                $("#paneladmina").css("display", "none");
-            });
-              $("#container").click(
-                    function(){
-                $("#paneladmina").css("display", "none");
-            });
+
             
             
 

@@ -1384,7 +1384,7 @@ function dodajNadgodziny (){
     //zmienne pobraane z formularza
 $data = $_POST['data'];
 $godzina = $_POST['godzina'];
-$godzina = str_replace(",",".",$godzina);
+$godzina = str_replace(",",".",$godzina); //zamiana przecinkana kropke w godzinie
 $powody = $_POST['powod'];
 $liczenie=count($data); //zliczenie ilosci wystapien pola data input
 

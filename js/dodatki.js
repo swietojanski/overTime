@@ -39,3 +39,26 @@ $(':checkbox').click(function() {
     
     //$( "select#eskadra option:checked" ).text("Wybierz eskadrę").attr('disabled',!this.checked);
 });
+
+$(document).ready(function(){
+            $("#headleft").hover(
+                    function(){
+                $("#menu").css("display", "block");
+            });
+            $("#headleft").mouseleave(
+                    function(){
+                $("#menu").css("display", "none");
+            });
+            $("#pa").hover(
+                    function(){
+                $("#paneladmina").css("display", "block");
+            });
+            $("#paneladmina").mouseleave(
+                    function(){
+                $("#paneladmina").css("display", "none");
+            });
+              $("#container").click(
+                    function(){
+                $("#paneladmina").css("display", "none");
+            });
+});
