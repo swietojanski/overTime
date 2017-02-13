@@ -8,7 +8,7 @@ $nazwisko = mysql_real_escape_string($_POST['nazwisko']);
 $grupa = (int)$_POST['grupa'];
 $eskadra = $_POST['eskadra'];
 $klucz = $_POST['klucz'];
-echo $grupa;
+
 
 
 echo "<h1> Dodaj żołnierza </h1>";

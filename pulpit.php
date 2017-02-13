@@ -77,8 +77,7 @@ echo "<div class=\"flex-container\">";
         echo "<div class=\"panel trzysta\">";
             echo "<div class=\"tytul\"><p>pozostało nadgodzin</p></div>";
             echo "<div class=\"zawartosc wysrodkuj\">";
-                echo "<h1>40</h1>";
-                echo "godz.: 40.0 | dni: 5";
+            zostaloNadgodzin(id_zolnierza(), 1);
             echo "</div>";
         echo "</div>";
 //trzeci
@@ -100,9 +99,9 @@ echo "</div>";
 echo "<div class=\"flex-container\">";
 //panel z ostatnio dodanymi nadgodzinami
         echo "<div class=\"panel tysiac\">";
-            echo "<div class=\"tytul\"><p>złożone wnioski</p></div>";
+            echo "<div class=\"tytul\" id=\"wnioski\"><p>złożone wnioski</p></div>";
             echo "<div class=\"zawartosc\">";
-                echo "tutaj wyświetlimy wszystkie wnioski";
+            dodaneWnioski(id_zolnierza(), $_GET['usun']);
             echo "</div>";
         echo "</div>";
 echo "</div>";

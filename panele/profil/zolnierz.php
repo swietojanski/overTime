@@ -71,7 +71,7 @@ if(isset($_GET[edytuj])){
        <div class="tytul"><p>nadgodziny</p></div>
         <div class="zawartosc wysrodkuj">
             <span class="wlinii">
-        <?php sumaNadgodzin($_GET['profil'], 0);?></span>
+        <?php zostaloNadgodzin($_GET['profil'], 0);?></span>
         </div>    
     </div>
     <div class="panel trzysta">

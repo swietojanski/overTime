@@ -7,12 +7,87 @@
  */
 
 
+function wykorzystaj_nadgodziny($czyje_id, $data, $godzina){
+        //zmienne pobraane z formularza
+
+
+$godzina = str_replace(",",".",$godzina); //zamiana przecinkana kropke w godzinie
+$liczenie=count($data); //zliczenie ilosci wystapien pola data input
+
+
+if(!empty($data) && !empty($godzina))//sprawdzamy czy pole data nie jest puste
+{
+    
+    $czyje_id = id_zolnierza();    // pobranie id zalogowanego zolnierza z konta uzytkownika
+    $kto_dodal = $_SESSION['user']; //wyciagniecie z sesji nazwy uzytkownika
+    echo "<div class=\"flex-container\">";
+        echo "<div class=\"panel szescset\">";
+            echo "<div class=\"tytul\">";
+                echo "<p>komunikat</p>";
+            echo "</div>";
+            
+        for($a=0;$a<$liczenie;$a++){
+            $godzinaq = $godzina[$a]*60; //mnozymy podana ilosc godzin przez 60 minut i zapisujemy jako inty do bazy w postaci minut
+            $nowy_wniosek=$nowy_wniosek+$godzinaq;
+            //sprawdzenie czy zolnierz ma wystarczajacą ilość nadgodzin zapytanie do stwrzonego widoku
+        }
+            $pozostalo = mysql_query("SELECT sum(pozostalo) as pozostalo FROM v_zestawienie_nadgodzin where idZolnierza = '$czyje_id'");
+            $r = mysql_fetch_object($pozostalo);
+            $nakoncie = $r->pozostalo;
+            $wnioski = mysql_query("SELECT sum(ile) as wnioski FROM wnioski_nadgodziny WHERE kogo='$czyje_id';");
+            $re = mysql_fetch_object($wnioski);
+            $oczekujace = $re->wnioski;
+            //$wystapien = (int)mysql_num_rows($sprawdzenie); //zliczenie ilosci wystapien zapytania, powinno dac zero jezeli daty nie ma
+            echo "Oczekujące: $oczekujace<br>";
+            (int)$zdolny=$nakoncie-$nowy_wniosek-$oczekujace;
+            echo "Do wykorzystania: ".(($nakoncie-$oczekujace)/60)."<br>";
+            
+            
+            if($zdolny>=0){
+                    for($a=0;$a<$liczenie;$a++)
+        {
+            //$data = "12-22-2009';
+            $dataq = explode("-", $data[$a]);
+            $dataq = $dataq[2]."-".$dataq[1]."-".$dataq[0];
+            $godzinaq = $godzina[$a]*60; //mnozymy podana ilosc godzin przez 60 minut i zapisujemy jako inty do bazy w postaci minut
+            
+            //sprawdzenie czy zolnierz juz ma wypisane wniosek na ta date
+            $sprawdzenie = mysql_query("SELECT * FROM wnioski_nadgodziny WHERE kogo='$czyje_id' AND wolne LIKE '".$dataq."'");
+            $wystapien = (int)mysql_num_rows($sprawdzenie); //zliczenie ilosci wystapien zapytania, powinno dac zero jezeli daty nie ma
+                        
+            if ($wystapien == 0){ //jezeli daty nie ma w bazie to ja doda
+                $zapytanie = "INSERT INTO `wnioski_nadgodziny` (`kogo`, `wolne`, `ile`,`kiedy_zlozyl`) VALUES ( '$czyje_id', '$dataq', '$godzinaq', NOW())";       
+                $wykonaj = mysql_query($zapytanie); 
+                echo "<div class=\"zawartosc blekitne\" >";
+                echo("W dniu ".$data[$a]." chcesz ".$godzina[$a]." godz. wolnego.<br>");
+                echo "</div>";  
+            }elseif ($wystapien > 0){ //jezeli data juz istnieje w bazie wyrzuci komunikat o jej istnieniu
+                $r = mysql_fetch_object($sprawdzenie);
+                echo "<div class=\"zawartosc blekitne\" >";
+                echo "<strong>Ta data już istnieje: </strong>";
+                echo("na dzień ".$data[$a]." dodałeś już wniosek w dniu: ".(($r->kiedy_zlozyl))."<br>");
+                echo "</div>";   
+            }  
+        }
+            }else{
+                echo "<div class=\"zawartosc blekitne\" >";
+                echo "Nie możesz złożyć wniosku. Brakuje Ci ".(-1*$zdolny/60)." godz.<br>Dodaj najpierw nadgodziny.";
+                echo "</div>";  
+            }
+
+    
+
+    echo "</div>";
+}
+}
+
+
 ?>
 
 <?php 
 //Zamiana przecinka na kropke
 //
-// $liczba = $_POST['godzina'];
+// $liczba = $_POST["godzina'];
 //$liczba = str_replace(",",".",$liczba);
 //echo $liczba; 
 ?>
@@ -39,7 +114,7 @@
                         <tr class="blekitne">
                             <td>1</td>
                             <td><input type="text" name="data[]" class="datanadgodzin" placeholder="20-05-2016" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])-(0[1-9]|1[012])-[0-9]{4}" required="true" size="19"></td>
-                            <td><input type="text" name="godzina[]" class="ggodzin" placeholder="2.5" pattern="((\d{1,2}\.[5])|(\d{1,2}))" required="true" size="19" id="godzina-1"></td>
+                            <td><input type="number" name="godzina[]" class="ggodzin" placeholder="2.5" pattern="((\d{1,2}\.[5])|(\d{1,2}))" required="true" size="19" id="godzina-1" min="1" max="8" step="0.5"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -50,7 +125,7 @@
     </div>
 </div>
 <?php
-
+wykorzystaj_nadgodziny(id_zolnierza(), $_POST['data'], $_POST['godzina']);
     //dodajNadgodziny();
     
     echo "<div id=\"dialog\" title=\"Ile godzin?\">";
@@ -102,10 +177,10 @@ $(document).ready(function() {
         var f1  = '<td><input type="text" name="data[]" class="datanadgodzin" placeholder="20-05-2016" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])-(0[1-9]|1[012])-[0-9]{4}" required="true" size="19"></td>';
  
         //druga kom�rka
-        var f2  = '<td><input type="text" name="godzina[] '+liczba+'" class="ggodzin" placeholder="2.5" required="true" size="19" id="godzina-'+liczba+'"></td>';
+        var f2  = '<td><input type="number" name="godzina[] '+liczba+'" class="ggodzin" placeholder="2.5" required="true" size="19" id="godzina-'+liczba+'" min="1" max="8" step="0.5"></td>';
  
         //trzecia kom�rka
-        var f3  = '<td><a class="delete plr-5" href="#" title="Usuń wiersz">Usuń</a></td>';
+        var f3  = '<td><a class="delete plr-5" href="#">Usuń</a></td>';
         //trzecia kom�rka
         
 
@@ -133,14 +208,7 @@ $(document).ready(function() {
  
             //usun dany wiersz
             $(this).remove();
- 
-            //aktualizuj numery pozostalych wierszy
-            //dzieki temu gdy usuniemy wiersz w srodku tabeli 
-            //to nie bedzie istniala dziura w numeracji wierszy
-            /*$('#tabela > tbody > tr').each(function(i) {
-                //wpisz nowy numer wewnatrz pierwszej komórki danego wiersza
-                $(this).find('td:first-child').text(i+1);
-            });*/
+
         });
     });
 });

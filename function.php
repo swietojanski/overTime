@@ -1136,7 +1136,6 @@ function sumaNadgodzin ($czyje_id, $rozszerz){ //pobieramy id zolnierza oraz wyb
     
         $zapytanie = mysql_query("SELECT Round(SUM(nadgodziny.ile)/60,1) AS sumagodzin, Round(SUM(nadgodziny.ile)/480,1) AS sumadni  FROM nadgodziny WHERE czyje_id='$czyje_id'") or die('Błąd zapytania');
         $r = mysql_fetch_object($zapytanie);
-        $wykorzystane=2;//ilosc wykorzystanych nadgodzin
         
         
         if ($rozszerz==1){//wyswietla dodatkowo stan w przeliczeniu godziny, dni
@@ -1144,6 +1143,21 @@ function sumaNadgodzin ($czyje_id, $rozszerz){ //pobieramy id zolnierza oraz wyb
             echo "godz.: ".$r->sumagodzin." | dni: ".$r->sumadni;     
         } else {
           echo "<h1><abbr title=\"uzbierane nadgodziny\">".round(($r->sumagodzin),0)."</abbr>/<abbr title=\"wykorzystane nadgodziny\">".$wykorzystane."</abbr>/<abbr title=\"do wykorzystania\">".((round(($r->sumagodzin),0))-$wykorzystane)."</abbr></h1>";  
+        }
+    
+}
+
+function zostaloNadgodzin ($czyje_id, $rozszerz){ //pobieramy id zolnierza oraz wybieramy opcje z dodatkowym opisem rozszerz po wpisaniu 1
+    
+        $zapytanie = mysql_query("SELECT Round(SUM(uzbierane)/60,1) AS sumagodzin, Round(SUM(wykorzystane)/60,1) AS wykorzystane, Round(SUM(pozostalo)/60,1) AS pozostalo, Round(SUM(pozostalo)/480,1) AS zostalo_dni FROM v_zestawienie_nadgodzin WHERE idZolnierza='$czyje_id'") or die('Zostalo nadgodzin'+mysql_error());
+        $r = mysql_fetch_object($zapytanie);
+        
+        
+        if ($rozszerz==1){//wyswietla dodatkowo stan w przeliczeniu godziny, dni
+            echo "<h1>".round(($r->pozostalo),0)."</h1>";
+            echo "godz.: ".$r->pozostalo." | dni: ".$r->zostalo_dni;     
+        } else {
+          echo "<h1><abbr title=\"uzbierane nadgodziny\">".round(($r->sumagodzin),0)."</abbr>/<abbr title=\"wykorzystane nadgodziny\">".round(($r->wykorzystane),0)."</abbr>/<abbr title=\"do wykorzystania\">".(round(($r->pozostalo),0))."</abbr></h1>";  
         }
     
 }
@@ -1689,7 +1703,61 @@ or die('Błąd zapytania');
     }
 }
 
-
+function dodaneWnioski($czyje_id, $idUsun) {
+    //USUWAMY DODANE NADGODZINY    
+        if(!empty($idUsun)){//najpierw sprawdzamy czy zmienna nie jest pusta
+            $sprawdzenie = mysql_query("SELECT * FROM `wnioski_nadgodziny` WHERE `idWniosku`='$idUsun'");// zapytanie sprawdzajace czy wniosek o danym id jest w bazie 
+            if((int)mysql_num_rows($sprawdzenie) > 0) {
+                
+                while($check = mysql_fetch_object($sprawdzenie)) {  
+                    $zgoda = intval($check->kogo);
+                }
+                    if($zgoda == mamDostepDo($zgoda)){
+                        $usun = mysql_query("DELETE FROM `wnioski_nadgodziny` WHERE `idWniosku`='$idUsun'");
+                    }else{
+                        echo "<p class='wysrodkuj'>Nie masz uprawnień.<br>Nie kombinuj.</p>"; 
+                    }              
+            }else{
+                $komunikat = "Nie ma co usunąć, zrobiłeś to wcześniej"; //niewypisany, wiec go nie zobaczymy
+            }
+        }
+        
+$czyje_id = id_zolnierza();    
+$zapytanie = mysql_query("SELECT *, DATE_FORMAT(wolne, '%d-%m-%Y') AS termin, DATE_FORMAT(kiedy_zlozyl, '%d.%m.%Y') AS zlozone, DATEDIFF(NOW(), kiedy_zlozyl) AS dni FROM wnioski_nadgodziny WHERE kogo='$czyje_id' ORDER BY wolne ASC") 
+or die('Błąd zapytania'); 
+    if(mysql_num_rows($zapytanie) > 0) { 
+        /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
+        echo "<table>";
+            echo "<thead>";
+                echo "<tr class=\" blekitne empty-cells\">";
+                    echo "<th></th>";
+                    echo "<th class=\"left\">w dniu</th>";
+                    echo "<th>godzin</th>";
+                    echo "<th>dni od złożenia</th>";
+                    echo "<th class=\"\"></th>";
+                echo "</tr>";
+            echo "</thead>";
+            echo "<tbody>";
+            while($r = mysql_fetch_object($zapytanie)) {
+                echo "<tr class=\"blekitne\">";  
+                        echo "<td class=\"left\">";
+                            echo "<a href=\"index.php?id=panele/profil/zolnierz&profil=$r->kogo\">";
+                            echo "<img src=\"img/avatars/";avatar($r->kogo);
+                            echo "\" class=\"zaokraglij\" height=\"26px\" title=\"Dodane: ".$r->kiedy_zlozyl."\" align=\"absmiddle\">";
+                            echo "</a>";
+                        echo "</td>";
+                        echo "<td class=\"left\">$r->termin</td>";   /*wyswietlamy daty*/ 
+                        echo "<td>".(($r->ile)/60)."</td>"; /*wyswietlamy godziny*/
+                        echo "<td><abbr title=\"$r->zlozone\">$r->dni</abbr></td>"; /*ilosc dni od zlozenia*/
+                        echo "<td><a class=\"usun\" href=\"index.php?id=pulpit&usun=".$r->idWniosku."#wnioski\">Usuń</a></td>";
+                    echo "</tr>";
+            }
+            echo "</tbody>";
+        echo "</table>";   
+    }else{
+        echo"Brak wniosków.";
+    }
+}
 
 //////////////////
 //  USTAWIENIA  //

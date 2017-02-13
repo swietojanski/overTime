@@ -24,19 +24,22 @@ body  {
     margin: 0;
     width: 100%;
     height: 100%;
-
     display: flex;
+    display: -webkit-flex;
     flex-direction: column;
-    
+    -webkit-flex-direction: column;
     justify-content: flex-start; /* align items in Main Axis */
     align-items: stretch; /* align items in Cross Axis */
     align-content: stretch; /* Extra space in Cross Axis */
 }
 .mainContent { 
     width: 100%;
+    height: 100%;
     text-align: left;
+    -webkit-flex: 1;
     flex: 1;  
-    overflow: auto;
+    overflow-y: auto;
+    min-height: 0px;
 } 
 .header  {}
 .footer  {}
@@ -53,15 +56,15 @@ body  {
 
 @media all and (min-width: 1480px) {
         .aside { 
-        background: black;
+        background: #363636;
         text-align: left;
-        flex-basis: 200px; 
+        flex-basis: 250px; 
         flex-shrink: 0;
         }
 }
 @media all and (min-width: 1900px) {
         .aside { 
-        background: black;
+        background: #363636;
         text-align: left;
         flex-basis: 300px; 
         flex-shrink: 0;
@@ -81,6 +84,32 @@ h1 {
 }
 h2 {
     font-size: 14pt;
+}
+
+.aside ul, li  { 
+ list-style: none;
+ margin: 0;
+ padding: 0;
+ display: block;
+
+}
+
+.aside ul  { 
+ 
+}
+
+.aside ul > li {
+     background-color: transparent;
+     color: whitesmoke;
+     height: 40px;
+     font: 16px/40px "Arial", Gadget, sans-serif;
+     padding-left: 10px;
+     cursor: pointer;
+}
+.aside ul > li:hover {
+     color: #363636;
+     background-color: whitesmoke;
+     color: black;
 }
 .overTime #header { 
 	background: #336666;
@@ -895,7 +924,19 @@ a.ustawienia {
 a.ustawienia:hover {
 	background-color:#34734f;
 }
+a.alerty {
+    padding:0 8px 0 8px;
+	display:block;
+	background-image:url(img/lay/alert.png);
+	background-repeat:no-repeat;
+	background-position:center;
+	width:29px;
+	height:60px;
+}
 
+a.alerty:hover {
+	background-color:#34734f;
+}
 a.panadmin {
     padding:0 8px 0 8px;
 	display:block;

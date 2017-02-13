@@ -29,7 +29,7 @@ if(isset($_GET[edytuj])){
        <div class="tytul"><p>nadgodziny</p></div>
         <div class="zawartosc wysrodkuj">
             <span class="wlinii">
-        <?php sumaNadgodzin(id_zolnierza(), 0);?></span>
+        <?php zostaloNadgodzin(id_zolnierza(), 0);?></span>
         </div>    
     </div>
     <div class="panel trzysta">
