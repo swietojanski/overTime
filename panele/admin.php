@@ -19,10 +19,6 @@
 <?php
 
 
-//przypisanie POST z formularza do zmiennych
-$skrot = mysql_real_escape_string($_POST[skrot]);
-$nazwa = mysql_real_escape_string($_POST[nazwa]);
-
 }  else { //jezeli to nie admin powiadom go o tym
     echo "Czego tutaj szukasz? Nie masz wystarczających uprawnień!";
 }

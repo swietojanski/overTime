@@ -215,6 +215,7 @@ h2 {
 }
 /*INPUT TYPE FILE PRZESYLANIE ZDJĘCIA W FORMIE PRZYCISKU JAKO ZDJECIE*/
 div.upload {
+    position: relative;
     width: 200px;
     height: 200px;
     text-align: center;
@@ -257,6 +258,7 @@ div.upload input {
 }
 
 div.avatar {
+    position: relative;
     width: 70px;
     height: 70px;
     text-align: center;

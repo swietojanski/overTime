@@ -48,7 +48,7 @@
                 <div class="aside">  
                     <ul>
 
-                          <li>Wnioski</li>
+                          <li>Centrum powiadomień</li>
                           <li>Moi żołnierze</li>
                           <li>Dowódcy</li>
 

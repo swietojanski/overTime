@@ -2,6 +2,7 @@
 <?php session_start();
           require_once('config.php');
 ?>
+
 <?php include("langi.php"); ?>
 <html>
 <head>
@@ -22,14 +23,27 @@ for ($i=1; $i<21; $i++){
         echo "<div class=\"pasek kolor2 poz".$i."\"></div>"; //nie ma reszty to parzyste
     } 
 }
+//data wyswietlana w kalendarzu
+$dzien = date('d');
+$dzien_tyg = date('l');
+
+$dzien_tyg_pl = array('Monday' => 'poniedziałek', 'Tuesday' => 'wtorek', 'Wednesday' => 'środa', 'Thursday' => 'czwartek', 'Friday' => 'piątek', 'Saturday' => 'sobota', 'Sunday' => 'niedziela');
+
+
+
 
 ?>
 
 <!-- koniec tła strony -->
 <!-- Początek okna logowania strony -->
 	<div class="middle">
-  		<div class="lewo">
-           <img src="img/lay/logowanie.png" width="203" height="202" alt="OverTime" title="System zarządzania wymiarem czasu pracy żołnierzy zawodowych">
+        <div class="lewo">
+            <div class="podklad">
+            </div>
+            <div class="data">
+                <?php echo "<span class=\"numerek\">".$dzien."</span>";
+                      echo "<span class=\"dzien\">".$dzien_tyg_pl[$dzien_tyg]."</span>"; ?>
+            </div>
         </div>
         <div class="prawo"> 
            <?php
@@ -81,7 +95,7 @@ for ($i=1; $i<21; $i++){
                 
                           //przekierwuję użytkownika na stronę z ukrytymi informacjami
                           echo '<meta http-equiv="refresh" content="1; URL=index.php">';
-                          echo '<p class="logowanie"><strong>'.$wait.'</strong><br>trwa logowanie i wczytywanie danych<p></p>';
+                          echo '<p class="logowanie"><strong>'.$wait.'</strong><br>trwa logowanie i wczytywanie danych</p>';
                         }
             
                         // jeżeli zapytanie nie zwróci 1, to wyświetlam komunikat o błędzie podczas logowania
@@ -110,7 +124,7 @@ for ($i=1; $i<21; $i++){
 	              // jeżeli sesja auth jest TRUE to przekieruj na ukrytą podstronę
                   elseif ($_SESSION['auth'] == TRUE && !isset($_GET['logout'])) {
                      echo '<meta http-equiv="refresh" content="1; URL=index.php">';
-                     echo '<p class="logowanie"><strong>'.$wait.'</strong><br>trwa wczytywanie danych<p></p>';
+                     echo '<p class="logowanie"><strong>'.$wait.'</strong><br>trwa wczytywanie danych</p>';
                   }
 
                   // wyloguj się
@@ -119,7 +133,7 @@ for ($i=1; $i<21; $i++){
                      $_SESSION['permissions'] = '';
                      $_SESSION['auth'] = FALSE;
                      echo '<meta http-equiv="refresh" content="1; URL=login.php">';
-                     echo '<p class="logowanie"><strong>'.$wait.'</strong><br>zostałeś wylogowany<p></p>';
+                     echo '<p class="logowanie"><strong>'.$wait.'</strong><br>zostałeś wylogowany</p>';
                   }
                ?>
         </div>

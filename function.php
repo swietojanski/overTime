@@ -48,6 +48,29 @@ czy zapytanie zwróciło wartość większą od 0 w sumie to rowna 1
         }
 }
 
+//sprawdzamy ID GRUPY po podaniu loginu lub id do jakiej eskadry nalezy zolnierz
+function id_grupy($kogo) {
+    
+    if( isset($kogo) ) {
+            $uzytkownik = $kogo;
+    }else{
+        $uzytkownik = $_SESSION['user']; // jezeli nie podane $kogo to wyswietl id zalogowanego uzytkownika
+    }
+
+$zapytanie = mysql_query("SELECT grupy.idGrupy FROM grupy left join eskadry using(idGrupy) left join zolnierze using(idEskadry) left join uzytkownicy using (idZolnierza) WHERE zolnierze.idZolnierza='$uzytkownik' or uzytkownicy.Login='$uzytkownik' limit 1") 
+or die('Błąd zapytania'); 
+/* 
+wyświetlamy wyniki, sprawdzamy, 
+czy zapytanie zwróciło wartość większą od 0 w sumie to rowna 1
+*/ 
+    if(mysql_num_rows($zapytanie) == 1) { 
+            /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
+            while($r = mysql_fetch_object($zapytanie)) {  
+                return intval($r->idGrupy);
+            } 
+        }
+}
+
 //SPRAWDZAMY CZY PODANY ID JEST Dowodca Grupy 
 //po podaniu id lub zaciagnieciu go z sesji zalogowanego uzytkownika sprawdzamy
 //czy jest przypisany jako dowodca grupy

@@ -20,32 +20,77 @@ a {
 .middle {
   width:640px;
   margin:0 auto;
+  padding: 0px;
   background-color: rgba(0,0,0,0.2);
   border:1px solid rgba(0,0,0,0.1);
   height:320px;
-  z-index:10;
   animation:logowanie 2s;
   -webkit-animation:logowanie 2s;
 }
 * html .middle {
   position:absolute;
+  padding: 0px;
   /*top:expression((x=(document.documentElement.offsetHeight-this.offsetHeight)/2)<0?0:x+'px');*/ /*to ma wyliczac pozycje od gory przy zmniejszaniu okna*/
   left:50%;
   margin-left:-320px; /* połowa szerokosci warstwy */
 }
 
 .lewo {
-	display:inline;
+        position: relative;
 	float:left;
-	margin-left:40px;
-	margin-top:59px;
+        width: 203px;
+        height: 202px;
+        left:40px;
+	top:59px;
+        padding: 0px;
+        margin: 0px;
+
+}
+.podklad {
+        position: absolute;
+	float:left;
+        width: 203px;
+        height: 202px;
+        background-image: url("img/lay/logowanie.png");
+        background-repeat: no-repeat;
+        z-index: 20;
+}
+.data {
+        position: absolute;
+        display: block;
+        left:54px;
+	top:80px;
+        width: 134px;
+        height: 107px;
+        background-color: transparent;
+        font-family: "Arial", Gadget, sans-serif;
+        color: white;
+        z-index:19;
+        
+}
+span.numerek {
+        display: block;
+        margin-top: 30px;
+        font-size: 40px;
+        font-weight: bold;
+        height: 40px;
+        color: #990000;
+        text-shadow:#333 0.5px 0.5px;
+}
+span.dzien {
+        display: block;
+        font-size: 16px;
+        height: 16px;
+        color: white;
+        text-shadow:#333 0.5px 0.5px;
 }
 .prawo {
 	display:inline;
 	float:right;
 	margin-right:40px;
-    margin-top:59px;
+        margin-top:59px;
 }
+
 p.logowanie {
 	font: 1.2em/50px "Arial", Gadget, sans-serif;
 	color:#FFF;
@@ -56,7 +101,7 @@ p.logowanie {
 /*animacja dla buttona zaloguj*/
 
 .animacja:hover {
-		animation-name:migniecie;
+	animation-name:migniecie;
         animation-duration:2s;
         animation-iteration-count:infinite;
         -webkit-animation-name:migniecie;
@@ -81,7 +126,7 @@ p.logowanie {
       }
 /*button zaloguj*/  
 #zaloguj{
-    color: #fff;
+        color: #fff;
 	display:inline-block;
 	position:relative;
 	background-color:#666;

@@ -43,6 +43,7 @@ if (!isset($_POST[grupa])){
 
 
     if (!isset($_POST[krok1]) && isset($_POST[krok0])){
+        $progres=20;
     echo "            <form name=\"krok1\" method=\"post\">";
     echo "                  <input type=\"hidden\" name=\"grupa\" value=\"$grupa\">";
     echo "                <table>";
@@ -82,7 +83,7 @@ if (!isset($_POST[grupa])){
     echo "            </form>";
     
     } elseif(isset ($_POST[krok1])) {
-    $progres=+50;    
+    $progres=70;    
     echo "            <form name=\"dodaj\" method=\"post\">";
     echo "                  <input type=\"hidden\" name=\"stopien\" value=\"$stopien\">";
     echo "                  <input type=\"hidden\" name=\"imie\" value=\"$imie\">";
@@ -126,7 +127,7 @@ if (!isset($_POST[grupa])){
     }
 
     if(isset ($_POST[dodaj])){   
-        $progres=+100;
+        $progres=100;
             dodajZolnierza(intval($_POST['stopien']), $_POST['imie'], $_POST['nazwisko'], intval($_POST['eskadra']), intval($_POST['klucz']));
     }
 
