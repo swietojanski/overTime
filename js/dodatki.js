@@ -22,6 +22,8 @@ $('#select-all').click(function(event) {
 });
 $('#edytujgodzinki').prop("disabled", true);
 $("#edytujgodzinki").css("cursor", "no-drop");
+$('#odrzuczaz').prop("disabled", true);
+$('#odrzuczaz').css("cursor", "no-drop");
 $(':checkbox').click(function() {
     
         if(this.checked) {
@@ -29,11 +31,15 @@ $(':checkbox').click(function() {
         $(':checkbox').each(function() {
             $('#edytujgodzinki').prop("disabled", false);
             $("#edytujgodzinki").css("cursor", "pointer");
+            $('#odrzuczaz').prop("disabled", false);
+            $("#odrzuczaz").css("cursor", "pointer");
         });
     }else {
     $(':checkbox').each(function() {
         $('#edytujgodzinki').prop("disabled", true);
         $("#edytujgodzinki").css("cursor", "no-drop");
+        $('#odrzuczaz').prop("disabled", true);
+        $("#odrzuczaz").css("cursor", "no-drop");
       });
   }
     

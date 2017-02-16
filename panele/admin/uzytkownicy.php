@@ -139,7 +139,7 @@ if(isset($_GET[desc])){
 
 
 
-
+if($stron > 1) {
     //Pętla po stronach
         echo "<div class=\"flex-container\">";
             echo "<div class=\"zawartosc order-2\">";
@@ -175,7 +175,7 @@ if(isset($_GET[desc])){
             }
             echo "</div>";
         echo "</div>";
-
+}
     /*Wypisanie danych nadgodzin z bazy mysql*/
         if(mysql_num_rows($zapytanie) > 0) { //jezeli zapytanie zwrocilo wiecej zapytan od 0 to wykonaj sie
             /* jeżeli wynik jest pozytywny, to wyświetlamy dane */    
@@ -248,16 +248,6 @@ if(isset($_GET[desc])){
         }
 
 }//koniec funkcji uzytkownicy    
-    
-    
-   
-    
-    
-
-
-
-
-
 
 ?>
 <h1>Użytkownicy</h1>

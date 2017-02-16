@@ -1329,6 +1329,21 @@ input.aktualizuj {
     font-size: 12px;
     cursor: pointer;
 }
+input.usunwszystkie {
+    background-color: #99443D;
+    color: white;
+    padding: 0px;
+    border: none;
+    margin: 0px;
+    outline: none;
+    display: block;
+    width: 100%;
+    height: 32px;
+    text-align: center;
+    font-family: "Arial", Gadget, sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+}
 .usun {
     background-color: #99443D;
     display: block;

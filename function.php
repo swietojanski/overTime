@@ -941,7 +941,7 @@ or die('Błąd zapytania');
 
 //wyswietlenie nadgodzin zalogowanego uzytkownika
 function mojeNadgodziny($kogo) {
-    if(isset($kogo)) { //&& $kogo != id_zolnierza() drugi warunek ale nie pamietam po co godalem
+    if(isset($kogo)) { //&& $kogo != id_zolnierza() drugi warunek ale nie pamietam po co go dalem
         $czyje_url = '&profil='.$kogo; //dopisujemy url do zalogowanego
             //zmienna pomocnicza do wyswietlania nadgodzin uzytkownika
         $czyje_id = $kogo;
@@ -1009,7 +1009,7 @@ function mojeNadgodziny($kogo) {
             {
 
                     $idZapisz=$zaznaczone[$a];
-                    echo $idZapisz."<br>";
+                   // echo $idZapisz."<br>";
 
                 //$data = '12-22-2009';
                 //$dataq = explode("-", $data[$a]);
@@ -1042,7 +1042,7 @@ function mojeNadgodziny($kogo) {
     or die('Błąd zapytania'); 
 
 
-
+if($stron > 1) {
     //Pętla po stronach
         echo "<div class=\"flex-container\">";
             echo "<div class=\"zawartosc order-2\">";
@@ -1078,7 +1078,7 @@ function mojeNadgodziny($kogo) {
             }
             echo "</div>";
         echo "</div>";
-
+}
     /*Wypisanie danych nadgodzin z bazy mysql*/
         if(mysql_num_rows($zapytanie) > 0) { //jezeli zapytanie zwrocilo wiecej zapytan od 0 to wykonaj sie
             /* jeżeli wynik jest pozytywny, to wyświetlamy dane */    
@@ -1291,7 +1291,7 @@ function mojeSluzby($kogo) {
     or die('Błąd zapytania wypisujacego sluzby'); 
 
 
-
+if($stron > 1) {
     //Pętla po stronach
         echo "<div class=\"flex-container\">";
             echo "<div class=\"zawartosc order-2\">";
@@ -1327,7 +1327,7 @@ function mojeSluzby($kogo) {
             }
             echo "</div>";
         echo "</div>";
-
+}
     /*Wypisanie danych sluzb z bazy mysql*/
         if(mysql_num_rows($zapytanie) > 0) { //jezeli zapytanie zwrocilo wiecej zapytan od 0 to wykonaj sie
             /* jeżeli wynik jest pozytywny, to wyświetlamy dane */    
