@@ -31,7 +31,9 @@
       ?>
             </div>
              <div id="headright">
-                 <a href="index.php?id=alerty" class="alerty" title="Alerty"></a>
+                 <?php if($_SESSION['permissions']<6){?>
+                 <a href="index.php?id=alerty" class="alerty" title="Alerty"><span><?php echo licz_oczekujace(); ?></span></a>
+                 <?php } ?>
                  <a href="index.php?id=profil" class="profil"><img src="img/avatars/<?php avatar($_SESSION['user']);?>" width="30" align="absmiddle" height="30" alt="Avatar" class="avatar"><span class="displaynone"> <?php imie();?></span></a>
                  <?php if($_SESSION['permissions']==1){
                  echo "<a href=\"index.php?id=panele/admin\" class=\"panadmin\" id=\"pa\"></a>";
@@ -47,9 +49,10 @@
     <article class="main">
                 <div class="aside">  
                     <ul>
-
-                          <li>Centrum powiadomień</li>
+<?php if($_SESSION['permissions']<6){?>
+                        <a href="index.php?id=alerty"><li>Centrum powiadomień <span><?php echo licz_oczekujace(); ?><span></li></a>
                           <li>Moi żołnierze</li>
+<?php } ?>
                           <li>Dowódcy</li>
 
                     <ul>

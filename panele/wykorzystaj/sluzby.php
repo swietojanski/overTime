@@ -1,13 +1,13 @@
 <?php
 
 /* 
- * Funkcja wykorzystujaca nadgodziny
- * do skladania wniosow
+ * Funkcja wykorzystujaca sluzby
+ * Sluzby do skladania wniosow
  * i pozniejsza akceptacje ich.
  */
 
 
-function wykorzystaj_nadgodziny($czyje_id, $data, $godzina){
+function wykorzystaj_sluzby($czyje_id, $data, $godzina){
         //zmienne pobraane z formularza
 
 
@@ -31,10 +31,10 @@ if(!empty($data) && !empty($godzina))//sprawdzamy czy pole data nie jest puste
             $nowy_wniosek=$nowy_wniosek+$godzinaq;
             //sprawdzenie czy zolnierz ma wystarczajacą ilość nadgodzin zapytanie do stwrzonego widoku
         }
-            $pozostalo = mysql_query("SELECT sum(pozostalo) as pozostalo FROM v_zestawienie_nadgodzin where idZolnierza = '$czyje_id'");
+            $pozostalo = mysql_query("SELECT sum(pozostalo) as pozostalo FROM v_zestawienie_sluzb where idZolnierza = '$czyje_id'");
             $r = mysql_fetch_object($pozostalo);
             $nakoncie = $r->pozostalo;
-            $wnioski = mysql_query("SELECT sum(ile) as wnioski FROM wnioski WHERE kogo='$czyje_id' and za_co='1';");
+            $wnioski = mysql_query("SELECT sum(ile) as wnioski FROM wnioski WHERE kogo='$czyje_id' and za_co='2';");
             $re = mysql_fetch_object($wnioski);
             $oczekujace = $re->wnioski;
             //$wystapien = (int)mysql_num_rows($sprawdzenie); //zliczenie ilosci wystapien zapytania, powinno dac zero jezeli daty nie ma
@@ -61,7 +61,7 @@ if(!empty($data) && !empty($godzina))//sprawdzamy czy pole data nie jest puste
             $wystapien = (int)mysql_num_rows($sprawdzenie); //zliczenie ilosci wystapien zapytania, powinno dac zero jezeli daty nie ma
                         
             if ($wystapien == 0){ //jezeli daty nie ma w bazie to ja doda
-                $zapytanie = "INSERT INTO `wnioski` (`kogo`, `wolne`, `ile`,`kiedy_zlozyl`,`za_co`) VALUES ( '$czyje_id', '$dataq', '$godzinaq', NOW(), '1')";       
+                $zapytanie = "INSERT INTO `wnioski` (`kogo`, `wolne`, `ile`,`kiedy_zlozyl`,`za_co`) VALUES ( '$czyje_id', '$dataq', '$godzinaq', NOW(), '2')";       
                 $wykonaj = mysql_query($zapytanie); 
                 echo "<div class=\"zawartosc blekitne\" >";
                 echo("W dniu ".$data[$a]." chcesz ".$godzina[$a]." godz. wolnego.<br>");
@@ -70,7 +70,7 @@ if(!empty($data) && !empty($godzina))//sprawdzamy czy pole data nie jest puste
                 $r = mysql_fetch_object($sprawdzenie);
                 echo "<div class=\"zawartosc blekitne\" >";
                 echo "<strong>Ta data już istnieje: </strong>";
-                echo("na dzień ".$data[$a]." dodałeś już wniosek<br>");
+                echo("na dzień ".$data[$a]." dodałeś już wniosek.<br>");
                 echo "</div>";   
             }  
         }
@@ -96,8 +96,8 @@ if(!empty($data) && !empty($godzina))//sprawdzamy czy pole data nie jest puste
 //$liczba = str_replace(",",".",$liczba);
 //echo $liczba; 
 ?>
-<h1> Składanie wniosku: wolne za nadgodziny </h1>
-<h2 class="podpowiedzi zaokraglij">Skorzystaj z formularza i wykorzystaj czas ponadnormatywny za przepracowane nadgodziny.</h2>
+<h1> Składanie wniosku: wolne za służby </h1>
+<h2 class="podpowiedzi zaokraglij">Skorzystaj z formularza i wykorzystaj czas ponadnormatywny za pełnione słuzby.</h2>
 
 <div class="flex-container">
     <div class="panel szescset">
@@ -130,7 +130,7 @@ if(!empty($data) && !empty($godzina))//sprawdzamy czy pole data nie jest puste
     </div>
 </div>
 <?php
-wykorzystaj_nadgodziny(id_zolnierza(), $_POST['data'], $_POST['godzina']);
+wykorzystaj_sluzby(id_zolnierza(), $_POST['data'], $_POST['godzina']);
     //dodajNadgodziny();
     
     echo "<div id=\"dialog\" title=\"Ile godzin?\">";

@@ -30,6 +30,12 @@ if(!empty($_POST['wpiszol'])){
     setcookie($wpiszol, $ciastko_wpiszol, time() + 2 * 356 * 86400); // jezeli czas ciastka ustawimy na zero skasuje sie z zamknieciem przegladarki
 }
 
+$wnioski=$_SESSION['user']."-u-wnioski";
+if(!empty($_POST['u-wnioski'])){
+    $ciastko_wnioski=$_POST['u-wnioski'];
+    setcookie($wnioski, $ciastko_wnioski, time() + 2 * 356 * 86400); // jezeli czas ciastka ustawimy na zero skasuje sie z zamknieciem przegladarki
+}
+
 switch ($_SESSION['permissions']) {    
     case '1';
         $uprawnienie = "admin";
@@ -104,6 +110,14 @@ switch ($_SESSION['permissions']) {
                                 <input type="number" min="10" max="100" step="10" placeholder="10" name="sluzb" <?php if(isset($_COOKIE[$sluco]) && empty($_POST['sluzb'])){echo "value=\"".$_COOKIE[$sluco]."\"";} elseif(isset ($_POST['sluzb'])) {echo "value=\"$ciastko_sluzb\"";} ?>>
                             </td>
                         </tr>
+                        <?php if($_SESSION['permissions']<6){?>
+                        <tr class="blekitne">
+                            <td class="left">Ilość wniosków na stronie alertów</td>
+                            <td>
+                                <input type="number" min="10" max="100" step="10" placeholder="10" name="u-wnioski" <?php if(isset($_COOKIE[$wnioski]) && empty($_POST['sluzb'])){echo "value=\"".$_COOKIE[$wnioski]."\"";} elseif(isset ($_POST['u-wnioski'])) {echo "value=\"$ciastko_wnioski\"";} ?>>
+                            </td>
+                        </tr>
+                        <?php }?>
                         <tr class="blekitne">
                             <td class="left">Ukryć panel ostatnio dodane?</td>
                             <td>

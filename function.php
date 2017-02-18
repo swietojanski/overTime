@@ -1729,14 +1729,14 @@ or die('Błąd zapytania');
 function dodaneWnioski($czyje_id, $idUsun) {
     //USUWAMY DODANE NADGODZINY    
         if(!empty($idUsun)){//najpierw sprawdzamy czy zmienna nie jest pusta
-            $sprawdzenie = mysql_query("SELECT * FROM `wnioski_nadgodziny` WHERE `idWniosku`='$idUsun'");// zapytanie sprawdzajace czy wniosek o danym id jest w bazie 
+            $sprawdzenie = mysql_query("SELECT * FROM `wnioski` WHERE `idWniosku`='$idUsun'");// zapytanie sprawdzajace czy wniosek o danym id jest w bazie 
             if((int)mysql_num_rows($sprawdzenie) > 0) {
                 
                 while($check = mysql_fetch_object($sprawdzenie)) {  
                     $zgoda = intval($check->kogo);
                 }
                     if($zgoda == mamDostepDo($zgoda)){
-                        $usun = mysql_query("DELETE FROM `wnioski_nadgodziny` WHERE `idWniosku`='$idUsun'");
+                        $usun = mysql_query("DELETE FROM `wnioski` WHERE `idWniosku`='$idUsun'");
                     }else{
                         echo "<p class='wysrodkuj'>Nie masz uprawnień.<br>Nie kombinuj.</p>"; 
                     }              
@@ -1746,7 +1746,7 @@ function dodaneWnioski($czyje_id, $idUsun) {
         }
         
 $czyje_id = id_zolnierza();    
-$zapytanie = mysql_query("SELECT *, DATE_FORMAT(wolne, '%d-%m-%Y') AS termin, DATE_FORMAT(kiedy_zlozyl, '%d.%m.%Y') AS zlozone, DATEDIFF(NOW(), kiedy_zlozyl) AS dni FROM wnioski_nadgodziny WHERE kogo='$czyje_id' ORDER BY wolne ASC") 
+$zapytanie = mysql_query("SELECT *, DATE_FORMAT(wolne, '%d-%m-%Y') AS termin, DATE_FORMAT(kiedy_zlozyl, '%d.%m.%Y') AS zlozone, DATEDIFF(NOW(), kiedy_zlozyl) AS dni FROM wnioski WHERE kogo='$czyje_id' ORDER BY wolne ASC") 
 or die('Błąd zapytania'); 
     if(mysql_num_rows($zapytanie) > 0) { 
         /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
@@ -1788,42 +1788,38 @@ function licz_oczekujace(){
     switch ($_SESSION['permissions']){
         case 1:
             //admin
-            $wnioski = mysql_query("SELECT * FROM wnioski_nadgodziny left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) union all SELECT * FROM wnioski_sluzby left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien)") 
+            $wnioski = mysql_query("SELECT * FROM wnioski left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien)") 
             or die('Błąd zapytania'); 
             break;
         case 2:
             //dowodca grupy
             $idGrupy = id_grupy();
-            $wnioski = mysql_query("SELECT * FROM wnioski_nadgodziny left join zolnierze on kogo=idZolnierza left join eskadry using(idEskadry) left join stopnie using (idStopien) where idGrupy='$idGrupy'
-                          union all SELECT * FROM wnioski_sluzby left join zolnierze on kogo=idZolnierza left join eskadry using(idEskadry) left join stopnie using (idStopien) where idGrupy='$idGrupy'") 
+            $wnioski = mysql_query("SELECT * FROM wnioski left join zolnierze on kogo=idZolnierza left join eskadry using(idEskadry) left join stopnie using (idStopien) where idGrupy='$idGrupy'") 
             or die('Błąd zapytania');
             break; 
         case 3:
             //dowodca eskadry
             $idDowodcy = id_zolnierza();
             $idEskadry = id_eskadry();
-            $wnioski = mysql_query("SELECT * FROM wnioski_nadgodziny left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) where idEskadry='$idEskadry'
-                          union all SELECT * FROM wnioski_sluzby left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) where idEskadry='$idEskadry'") 
+            $wnioski = mysql_query("SELECT * FROM wnioski left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) where idEskadry='$idEskadry'") 
             or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry'); 
             break;
         case 4:
             //szef eskadry
             $idEskadry = id_eskadry();
-            $wnioski = mysql_query("SELECT * FROM wnioski_nadgodziny left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) where idEskadry='$idEskadry'
-                          union all SELECT * FROM wnioski_sluzby left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) where idEskadry='$idEskadry'") 
+            $wnioski = mysql_query("SELECT * FROM wnioski left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) where idEskadry='$idEskadry'") 
             or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry'); 
             break;
         case 5:
             //dowodca klucza
             $idKlucza = id_klucza();
-            $wnioski = mysql_query("SELECT * FROM wnioski_nadgodziny left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) where idKlucza='$idKlucza'
-                          union all SELECT * FROM wnioski_sluzby left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) where idKlucza='$idKlucza'") 
+            $wnioski = mysql_query("SELECT * FROM wnioski left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) where idKlucza='$idKlucza'") 
             or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry'); 
             break;
         case 6:
             //zolnierz
             $czyje_id = id_zolnierza(); 
-            $wnioski = mysql_query("SELECT * FROM wnioski_nadgodziny WHERE kogo='$czyje_id' union all SELECT * FROM wnioski_sluzby WHERE kogo='$czyje_id'") 
+            $wnioski = mysql_query("SELECT * FROM wnioski WHERE kogo='$czyje_id'") 
 or die('Błąd zapytania'); 
             break;
     }
