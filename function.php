@@ -1725,7 +1725,7 @@ or die('Błąd zapytania');
         echo"Nie dodałeś jeszcze eskadr, zrobić lub kliknij <a href=\"index.php?id=panele/admin/dodajEskadre\">tutaj</a>";
     }
 }
-
+//dodane w niosku widoczne na pulpicie uzytkownika
 function dodaneWnioski($czyje_id, $idUsun) {
     //USUWAMY DODANE NADGODZINY    
         if(!empty($idUsun)){//najpierw sprawdzamy czy zmienna nie jest pusta
@@ -1781,6 +1781,56 @@ or die('Błąd zapytania');
         echo"Brak wniosków.";
     }
 }
+
+//wyswietlenie liczby oczekujacych wnioskow
+
+function licz_oczekujace(){
+    switch ($_SESSION['permissions']){
+        case 1:
+            //admin
+            $wnioski = mysql_query("SELECT * FROM wnioski_nadgodziny left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) union all SELECT * FROM wnioski_sluzby left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien)") 
+            or die('Błąd zapytania'); 
+            break;
+        case 2:
+            //dowodca grupy
+            $idGrupy = id_grupy();
+            $wnioski = mysql_query("SELECT * FROM wnioski_nadgodziny left join zolnierze on kogo=idZolnierza left join eskadry using(idEskadry) left join stopnie using (idStopien) where idGrupy='$idGrupy'
+                          union all SELECT * FROM wnioski_sluzby left join zolnierze on kogo=idZolnierza left join eskadry using(idEskadry) left join stopnie using (idStopien) where idGrupy='$idGrupy'") 
+            or die('Błąd zapytania');
+            break; 
+        case 3:
+            //dowodca eskadry
+            $idDowodcy = id_zolnierza();
+            $idEskadry = id_eskadry();
+            $wnioski = mysql_query("SELECT * FROM wnioski_nadgodziny left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) where idEskadry='$idEskadry'
+                          union all SELECT * FROM wnioski_sluzby left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) where idEskadry='$idEskadry'") 
+            or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry'); 
+            break;
+        case 4:
+            //szef eskadry
+            $idEskadry = id_eskadry();
+            $wnioski = mysql_query("SELECT * FROM wnioski_nadgodziny left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) where idEskadry='$idEskadry'
+                          union all SELECT * FROM wnioski_sluzby left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) where idEskadry='$idEskadry'") 
+            or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry'); 
+            break;
+        case 5:
+            //dowodca klucza
+            $idKlucza = id_klucza();
+            $wnioski = mysql_query("SELECT * FROM wnioski_nadgodziny left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) where idKlucza='$idKlucza'
+                          union all SELECT * FROM wnioski_sluzby left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) where idKlucza='$idKlucza'") 
+            or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry'); 
+            break;
+        case 6:
+            //zolnierz
+            $czyje_id = id_zolnierza(); 
+            $wnioski = mysql_query("SELECT * FROM wnioski_nadgodziny WHERE kogo='$czyje_id' union all SELECT * FROM wnioski_sluzby WHERE kogo='$czyje_id'") 
+or die('Błąd zapytania'); 
+            break;
+    }
+    $oczekujace = mysql_num_rows($wnioski);
+    return $oczekujace;
+}
+
 
 //////////////////
 //  USTAWIENIA  //
