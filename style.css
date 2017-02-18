@@ -1064,6 +1064,9 @@ p {
 }
 
 /*paddingi*/
+.mall-5{
+    padding: 5px;
+}
 .pb-10{
     padding-bottom: 10px;
 }
@@ -1275,6 +1278,33 @@ input.zapisz:focus {
     border-spacing:0px 2px;
 }
 
+/*TABELA KALENDARZA*/
+table.dniwolne {
+    width:100%;
+    border-spacing:0px 0px;
+    border:0px;
+}
+table.dniwolne td {
+    height: 40px;
+    border-spacing:0px 0px;
+    border:0px;
+}
+table.dniwolne th {
+    height: 40px;
+    border:0px;
+}
+table.dniwolne td > span {
+    display: block;
+    cursor: pointer;
+    height: 40px;
+    width: 100%;
+    border-spacing:0px 0px;
+    border:0px;
+    font: 16px/40px "Arial", Gadget, sans-serif;
+}
+table.dniwolne td > span:hover {
+    background-color: #397373;
+}
 /*TABELA dane tabelaryczne*/
 
 table {

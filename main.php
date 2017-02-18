@@ -50,10 +50,11 @@
                 <div class="aside">  
                     <ul>
 <?php if($_SESSION['permissions']<6){?>
-                        <a href="index.php?id=alerty"><li>Centrum powiadomień <span><?php echo licz_oczekujace(); ?><span></li></a>
+                        <a href="index.php?id=alerty"><li>Centrum powiadomień <span><?php echo licz_oczekujace(); ?></span></li></a>
                           <li>Moi żołnierze</li>
 <?php } ?>
                           <li>Dowódcy</li>
+                          <a href="index.php?id=kalendarz"><li>Twoje wolne <span>kalendarz</span></li></a>
 
                     <ul>
                 </div>
