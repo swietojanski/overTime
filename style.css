@@ -1016,6 +1016,9 @@ img.avatar {
 	text-align: left;
         margin:5px;
 }
+.panel.bez-tla{
+	background-color: transparent;
+}
 
 .flex-container.nowrap {
     flex-wrap: nowrap;
@@ -1064,8 +1067,8 @@ p {
 }
 
 /*paddingi*/
-.mall-5{
-    padding: 5px;
+.pall-10{
+    padding: 10px;
 }
 .pb-10{
     padding-bottom: 10px;
@@ -1130,6 +1133,10 @@ input.pl-5{
 
 .zawartosc {
 	padding:10px;
+	color:#FFF;
+	text-shadow:#333 0.5px 0.5px;
+}
+.white {
 	color:#FFF;
 	text-shadow:#333 0.5px 0.5px;
 }
@@ -1289,11 +1296,20 @@ table.dniwolne td {
     border-spacing:0px 0px;
     border:0px;
 }
+table.dniwolne td.triada-2:hover {
+background-color: #62a2a2;
+}
 table.dniwolne th {
     height: 40px;
     border:0px;
 }
-table.dniwolne td > span {
+table.dniwolne caption {
+    font-size: 24px;
+    margin-bottom: 20px;
+    height: 40px;
+}
+
+table.dniwolne td > a {
     display: block;
     cursor: pointer;
     height: 40px;
@@ -1302,9 +1318,28 @@ table.dniwolne td > span {
     border:0px;
     font: 16px/40px "Arial", Gadget, sans-serif;
 }
-table.dniwolne td > span:hover {
-    background-color: #397373;
+table.dniwolne td > a:hover {
+    background-color: #843e38;
 }
+
+table.dniwolne .nawikal {
+    display: inline-block;
+    text-align: center;
+    width: 50px;
+    color: rgba(255, 255, 255, 0.2);
+    font: 20px/40px "Arial", Gadget, sans-serif;
+    text-shadow: 0 0 15px #2c7474, 0 0 17px #2c7474, 0 0 20px #2c7474, 0 0 25px #ff00de, 0 0 30px #62a2a2, 0 0 35px #62a2a2, 0 0 40px #62a2a2, 0 0 45px #62a2a2;
+    font-stretch:ultra-condensed;
+}
+
+table.dniwolne .datakal {
+    text-align: center;
+    display: inline-block;
+    font: 24px/40px "Arial", Gadget, sans-serif;
+    width: 300px;
+}
+
+
 /*TABELA dane tabelaryczne*/
 
 table {

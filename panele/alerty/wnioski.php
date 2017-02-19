@@ -11,7 +11,7 @@ function pusc_na_wolne($kogo,$kiedy,$ile,$idWniosku){
             mysql_query("SET AUTOCOMMIT=0");
             mysql_query("START TRANSACTION");
             while($ile != $wpisano){
-                $sprawdzenie = mysql_query("SELECT * FROM v_zestawienie_nadgodzin WHERE idZolnierza='$kogo' and pozostalo!='0' order by termin LIMIT 1");// zapytanie sprawdzajace czy nadgodzina o danym id jest w bazie
+                $sprawdzenie = mysql_query("SELECT * FROM v_zestawienie_nadgodzin WHERE idZolnierza='$kogo' and pozostalo!='0' order by termin ASC LIMIT 1");// zapytanie sprawdzajace czy nadgodzina o danym id jest w bazie
                 if((int)mysql_num_rows($sprawdzenie) == 1) {
                         $check = mysql_fetch_object($sprawdzenie);
                         $idNadgodziny = intval($check->idNadgodziny);

@@ -52,13 +52,14 @@ if(!empty($data) && !empty($godzina))//sprawdzamy czy pole data nie jest puste
             $godzinaq = $godzina[$a]*60; //mnozymy podana ilosc godzin przez 60 minut i zapisujemy jako inty do bazy w postaci minut
             
             //sprawdzenie czy zolnierz juz ma wypisane wniosek na ta date
-            $sprawdzenie = mysql_query("
+            $spr_wykorzystanych = mysql_query("
                                         select czyje_id, kiedy from (SELECT czyje_id, wykorzystane_nadgodziny.kiedy FROM wykorzystane_nadgodziny left join nadgodziny using (idNadgodziny) left join wnioski on czyje_id=kogo
                                         union all
                                         SELECT kto_mial as czyje_id, wykorzystane_sluzby.kiedy FROM wykorzystane_sluzby left join sluzby using (idSluzby) left join wnioski on kto_mial=kogo) as sprawdzenie
                                         WHERE czyje_id='$czyje_id' AND kiedy LIKE '".$dataq."'"
                                       );
-            $wystapien = (int)mysql_num_rows($sprawdzenie); //zliczenie ilosci wystapien zapytania, powinno dac zero jezeli daty nie ma
+            $spr_wnioskow = mysql_query("SELECT * FROM wnioski where kogo='$czyje_id' and wolne like '".$dataq."'");
+            $wystapien = ((int)mysql_num_rows($spr_wykorzystanych))+((int)mysql_num_rows($spr_wnioskow)); //zliczenie ilosci wystapien zapytania, powinno dac zero jezeli daty nie ma
                         
             if ($wystapien == 0){ //jezeli daty nie ma w bazie to ja doda
                 $zapytanie = "INSERT INTO `wnioski` (`kogo`, `wolne`, `ile`,`kiedy_zlozyl`,`za_co`) VALUES ( '$czyje_id', '$dataq', '$godzinaq', NOW(), '2')";       
@@ -67,7 +68,6 @@ if(!empty($data) && !empty($godzina))//sprawdzamy czy pole data nie jest puste
                 echo("W dniu ".$data[$a]." chcesz ".$godzina[$a]." godz. wolnego.<br>");
                 echo "</div>";  
             }elseif ($wystapien > 0){ //jezeli data juz istnieje w bazie wyrzuci komunikat o jej istnieniu
-                $r = mysql_fetch_object($sprawdzenie);
                 echo "<div class=\"zawartosc blekitne\" >";
                 echo "<strong>Ta data już istnieje: </strong>";
                 echo("na dzień ".$data[$a]." dodałeś już wniosek.<br>");
