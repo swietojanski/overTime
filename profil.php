@@ -36,7 +36,7 @@ if(isset($_GET[edytuj])){
        <div class="tytul"><p>służby</p></div>
         <div class="zawartosc wysrodkuj">
         <span class="wlinii">
-        <?php sumaSluzb(id_zolnierza(), 0);?></span>
+        <?php zostaloSluzb(id_zolnierza(), 0);?></span>
         </div>    
     </div>
 </div>

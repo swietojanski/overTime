@@ -90,8 +90,8 @@ echo "<div class=\"flex-container\">";
 //czwarty
         echo "<div class=\"panel trzysta\">";
             echo "<div class=\"tytul\"><p>pozostało służb</p></div>";
-            echo "<div class=\"zawartosc\">";
-                echo "przykladowa zawartosc sluzb";
+            echo "<div class=\"zawartosc wysrodkuj\">";
+                zostaloSluzb(id_zolnierza(), 1);
             echo "</div>";
         echo "</div>";      
 echo "</div>";

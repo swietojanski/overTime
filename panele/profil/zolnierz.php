@@ -1,3 +1,4 @@
+<?php require_once 'panele/profil/kalendarzyk.php'; ?>
 <?php 
 $url = $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING']; //generujemy aktualny adres wyswietlanej strony
 if(isset($_GET[edytuj])){
@@ -76,11 +77,47 @@ if(isset($_GET[edytuj])){
     </div>
     <div class="panel trzysta">
        <div class="tytul"><p>służby</p></div>
-        <div class="zawartosc">
-przykladowa zawartosc sluzb
+        <div class="zawartosc wysrodkuj">
+            <span class="wlinii">
+        <?php zostaloSluzb($_GET['profil'], 0);?></span>
         </div>    
     </div>
 </div>
+
+<div class="flex-container">
+    <div class="panel szescset">
+       <div class="tytul">
+          <p>kalendarz</p>
+<!--          <p class="right"><a href="#index.php?id=panele/admin/uzytkownicy" class="pl-10 pr-10 edytuj valing40" title="wyświetl wszystkich użytkowników">opcja</a></p>-->
+       </div>
+       <div class="zawartosc" >
+            <?php kalendarz($_GET['profil']); ?>
+       </div>    
+    </div>
+</div>
+<?php if(isset($_GET['zobacz']) and !isset($_POST['wybrane'])){ ?>
+<div class="flex-container">
+    <div class="panel szescset">
+       <div class="tytul">
+          <p>szczegóły</p>
+<!--          <p class="right"><a href="#index.php?id=panele/admin/uzytkownicy" class="pl-10 pr-10 edytuj valing40" title="wyświetl wszystkich użytkowników">opcja</a></p>-->
+       </div>
+       <div class="zawartosc" >
+            <?php szczegoly($_GET['profil'],mysql_real_escape_string($_GET['zobacz'])); ?>
+       </div>    
+    </div>
+</div>
+<?php } ?>
+<div class="flex-container">
+    <div class="panel bez-tla szescset mt-10">
+        <div class="white">
+           <span class="zlozony-4 pall-10">dni wolne</span><span class="triada-2 pall-10 ml-10">dni w pracy</span>
+       </div>    
+    </div>
+</div>
+
+
+
 
 <?php
     }else{

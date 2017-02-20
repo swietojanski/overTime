@@ -181,7 +181,7 @@ function wnioski($kogo) {
                 
                 while($check = mysql_fetch_object($sprawdzenie)) {  
                     $zgoda = intval($check->kogo);
-                     $typek = $check->kogo;
+                     $typek = $check->kogo; // tutaj pobieramy to kogo byl wniosek, a nie kto go 
                      $dzionek = $check->wolne;
                      $nieobecnosc = $check->ile;
                      $usun_wniosek = $check->idWniosku;

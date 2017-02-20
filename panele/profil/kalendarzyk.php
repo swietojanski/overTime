@@ -7,9 +7,16 @@ function kalendarz($idZolnierza)
         $url = explode("&zobacz=", $url); //wyrzucamy deklaracje zmiennej get z adresu
         $url = $url[0];
         $adres=$url;
-}  else {
+    }  else {
         $adres=$url;
-} 
+    } 
+   if(isset($_GET[m])){
+        $url = explode("&m=", $url); //wyrzucamy deklaracje zmiennej get z adresu
+        $url = $url[0];
+        $miesiac=$url;
+    }  else {
+        $miesiac=$url;
+    } 
 
 
 //USUWAMY ZAZNACZONE WOLNE ZA NADGODZINY
@@ -70,25 +77,25 @@ function kalendarz($idZolnierza)
   if($pierwszy_dzien_miesiaca == 0) $pierwszy_dzien_miesiaca = 7;
 
   switch($numer_miesiaca){
-    case 1 : $monthName = "Styczeń";break;
-    case 2 : $monthName = "Luty";break;
-    case 3 : $monthName = "Marzec";break;
-    case 4 : $monthName = "Kwiecień";break;
-    case 5 : $monthName = "Maj";break;
-    case 6 : $monthName = "Czerwiec";break;
-    case 7 : $monthName = "Lipiec";break;
-    case 8 : $monthName = "Sierpień";break;
-    case 9 : $monthName = "Wrzesień";break;
-    case 10 : $monthName = "Październik";break;
-    case 11 : $monthName = "Listopad";break;
-    case 12 : $monthName = "Grudzień";break;
+    case 1 : $nazwa_miesiaca = "Styczeń";break;
+    case 2 : $nazwa_miesiaca = "Luty";break;
+    case 3 : $nazwa_miesiaca = "Marzec";break;
+    case 4 : $nazwa_miesiaca = "Kwiecień";break;
+    case 5 : $nazwa_miesiaca = "Maj";break;
+    case 6 : $nazwa_miesiaca = "Czerwiec";break;
+    case 7 : $nazwa_miesiaca = "Lipiec";break;
+    case 8 : $nazwa_miesiaca = "Sierpień";break;
+    case 9 : $nazwa_miesiaca = "Wrzesień";break;
+    case 10 : $nazwa_miesiaca = "Październik";break;
+    case 11 : $nazwa_miesiaca = "Listopad";break;
+    case 12 : $nazwa_miesiaca = "Grudzień";break;
   }
 
   echo("<table class=\"dniwolne\">");
   echo("<caption>");
-  echo "<a href='index.php?id=kalendarz&m=".$_m."' class=\"nawikal wlinii\"><</a>";
-  echo"<a href='index.php?id=kalendarz'><span class=\"datakal\">".$monthName." ".$wybrany_rok."</span></a>";
-  echo "<a href='index.php?id=kalendarz&m=".$m_."' class=\"nawikal wlinii\">></a>";
+  echo "<a href='$miesiac&m=".$_m."' class=\"nawikal wlinii\"><</a>";
+  echo"<a href='index.php?id=panele/moje/wolne'><span class=\"datakal\">".$nazwa_miesiaca." ".$wybrany_rok."</span></a>";
+  echo "<a href='$miesiac&m=".$m_."' class=\"nawikal wlinii\">></a>";
    if(isset($komunikat)){echo "<br>".$komunikat;}
   echo("</caption><tr class=\"blekitne empty-cells\">");
   ?>
@@ -165,7 +172,7 @@ function kalendarz($idZolnierza)
                         echo "<form name=\"usun\" method=\"post\">";      
                 while($r = mysql_fetch_object($nadgodziny)) {
                         echo "<div class=\"zawartosc blekitne\" >";
-                        echo "Za dzień $r->wolne_z_dnia godzin ".(($r->minut)/60)." godz.<br>";
+                        echo "Za dzień $r->wolne_z_dnia godzin ".(($r->minut)/60)."<br>";
                         echo "</div>"; 
                         echo "<input type=\"hidden\" name=\"wybrane[]\" value=\"$r->idWykorzystane\">"; 
                         $razem+=(($r->minut)/60);
@@ -187,7 +194,7 @@ function kalendarz($idZolnierza)
                         echo "<form name=\"usun\" method=\"post\">"; 
                 while($r = mysql_fetch_object($sluzby)) {  
                         echo "<div class=\"zawartosc blekitne\" >";
-                        echo "Za dzień $r->wolne_z_dnia godzin ".(($r->minut)/60)." godz.<br>";
+                        echo "Za dzień $r->wolne_z_dnia godzin ".(($r->minut)/60)."<br>";
                         echo "</div>";
                         echo "<input type=\"hidden\" name=\"wybrane[]\" value=\"$r->idWykorzystane\">"; 
                         $razem+=(($r->minut)/60);
@@ -201,46 +208,8 @@ function kalendarz($idZolnierza)
                         echo "</div>";
           }
   }
-  
-  
-    
+
 
 }
 
 ?>
-
-<h1>Kalendarz dni wolnych</h1>
-<h2 class="podpowiedzi zaokraglij">Sprawdzisz tutaj kiedy miałeś lub będziesz miał wolne</h2>
-<div class="flex-container">
-    <div class="panel tysiac">
-       <div class="tytul">
-          <p>kalendarz</p>
-<!--          <p class="right"><a href="#index.php?id=panele/admin/uzytkownicy" class="pl-10 pr-10 edytuj valing40" title="wyświetl wszystkich użytkowników">opcja</a></p>-->
-       </div>
-       <div class="zawartosc" >
-            <?php kalendarz(id_zolnierza()); ?>
-       </div>    
-    </div>
-</div>
-<?php if(isset($_GET['zobacz']) and !isset($_POST['wybrane'])){ ?>
-<div class="flex-container">
-    <div class="panel tysiac">
-       <div class="tytul">
-          <p>szczegóły</p>
-<!--          <p class="right"><a href="#index.php?id=panele/admin/uzytkownicy" class="pl-10 pr-10 edytuj valing40" title="wyświetl wszystkich użytkowników">opcja</a></p>-->
-       </div>
-       <div class="zawartosc" >
-            <?php szczegoly(id_zolnierza(),mysql_real_escape_string($_GET['zobacz'])); ?>
-       </div>    
-    </div>
-</div>
-<?php } ?>
-<div class="flex-container">
-    <div class="panel bez-tla tysiac mt-10">
-        <div class="white">
-           <span class="zlozony-4 pall-10">dni wolne</span><span class="triada-2 pall-10 ml-10">dni w pracy</span>
-       </div>    
-    </div>
-</div>
-<br>
-

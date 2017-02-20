@@ -1185,6 +1185,21 @@ function zostaloNadgodzin ($czyje_id, $rozszerz){ //pobieramy id zolnierza oraz 
     
 }
 
+function zostaloSluzb ($czyje_id, $rozszerz){ //pobieramy id zolnierza oraz wybieramy opcje z dodatkowym opisem rozszerz po wpisaniu 1
+    
+        $zapytanie = mysql_query("SELECT Round(SUM(uzbierane)/60,1) AS sumagodzin, Round(SUM(wykorzystane)/60,1) AS wykorzystane, Round(SUM(pozostalo)/60,1) AS pozostalo, Round(SUM(pozostalo)/480,1) AS zostalo_dni FROM v_zestawienie_sluzb WHERE idZolnierza='$czyje_id'") or die('Zostalo nadgodzin'+mysql_error());
+        $r = mysql_fetch_object($zapytanie);
+        
+        
+        if ($rozszerz==1){//wyswietla dodatkowo stan w przeliczeniu godziny, dni
+            echo "<h1>".round(($r->zostalo_dni),0)."</h1>";
+            echo "godz.: ".$r->pozostalo." | dni: ".$r->zostalo_dni;     
+        } else {
+          echo "<h1><abbr title=\"uzbierane służby\">".round(($r->sumagodzin)/8,0)."</abbr>/<abbr title=\"wykorzystane służby\">".round(($r->wykorzystane)/8,0)."</abbr>/<abbr title=\"do wykorzystania\">".(round(($r->zostalo_dni),0))."</abbr></h1>";  
+        }
+    
+}
+
 //wyswietlenie sluzb zalogowanego uzytkownika
 function mojeSluzby($kogo) {
     if(isset($kogo)) { //&& $kogo != id_zolnierza()   to samo co w nadgodzinach

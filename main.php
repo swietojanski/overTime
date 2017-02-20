@@ -24,7 +24,7 @@
           if($_SESSION['permissions']==6){
              }else{
                   echo "<form action=\"index.php?id=szukaj\" class=\"displaynone\" method=\"get\">";
-                  echo "<input type=\"hidden\" name=\"id\" value=\"szukaj\"/><input type=\"search\" required=\"true\" results=\"5\" minlength=\"2\" maxlength=\"50\" autosave=\"some_unique_value\" placeholder=\"Szukaj żołnierza...\" name=\"wyrazenie\" title=\"Wpisz nazwisko, imię lub stopień żołnierza\"/><input type=\"submit\" value=\"Szukaj\" class=\"szukaj\" />";
+                  echo "<input type=\"hidden\" name=\"id\" value=\"szukaj\"/><input type=\"search\" required=\"true\" results=\"5\" minlength=\"2\" maxlength=\"50\" autosave=\"some_unique_value\" placeholder=\"Szukaj żołnierza...\" name=\"zolnierze\" title=\"Wpisz nazwisko, imię lub stopień żołnierza\"/><input type=\"submit\" value=\"Szukaj\" class=\"szukaj\" />";
                   echo "</form>";
                   echo "<a href=\"index.html?id=szukaj\" class=\"szukajmin displaynonemax\"></a>";
              }
@@ -51,10 +51,13 @@
                     <ul>
 <?php if($_SESSION['permissions']<6){?>
                         <a href="index.php?id=alerty"><li>Centrum powiadomień <span><?php echo licz_oczekujace(); ?></span></li></a>
-                          <li>Moi żołnierze</li>
+                          <a href="index.php?id=panele/moje/moi&zolnierze"><li>Moi żołnierze</li></a>
+<?php } ?>
+<?php if($_SESSION['permissions']<4){?>
+                        <a href="index.php?id=rozkaz"><li>Rozkaz dzienny <span>punkty</span></li></a>
 <?php } ?>
                           <li>Dowódcy</li>
-                          <a href="index.php?id=kalendarz"><li>Twoje wolne <span>kalendarz</span></li></a>
+                          <a href="index.php?id=panele/moje/wolne"><li>Twoje wolne <span>kalendarz</span></li></a>
 
                     <ul>
                 </div>

@@ -78,9 +78,13 @@ czy zapytanie zwróciło wartość większą od 0
 
 
 
-
+if(!empty($_GET['zolnierze'])){
 echo "<h1>Wyszukiwanie żołnierzy</h1>";
-echo "<h2 class=\"podpowiedzi zaokraglij\">Szukana fraza: ".$_GET['wyrazenie']."</h2>";
+echo "<h2 class=\"podpowiedzi zaokraglij\">Szukana fraza: ".$_GET['zolnierze']."</h2>";
+}else{
+echo "<h1>Twoi żołnierze</h1>";
+echo "<h2 class=\"podpowiedzi zaokraglij\">Aby przefiltorwać wyniki skorzystaj z wyszukiwarki</h2>";    
+}
 ?>
 
 <div class="panel">
@@ -88,6 +92,6 @@ echo "<h2 class=\"podpowiedzi zaokraglij\">Szukana fraza: ".$_GET['wyrazenie']."
       <p>znalezieni</p>
    </div>
    <div class="zawartosc" >
-       <?php if (isset($_GET['wyrazenie'])){szukaj($_GET['wyrazenie']);}else{header('Location: index.php');}?>
+       <?php if (isset($_GET['zolnierze'])){szukaj($_GET['zolnierze']);}else{header('Location: index.php');}?>
    </div>    
 </div>
