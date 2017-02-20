@@ -4,7 +4,7 @@
  * Wyswietlamy alerty i powiadomienia zolnierzy, dowodcow
  */
 
-function pusc_na_wolne($kogo,$kiedy,$ile,$idWniosku){
+function pusc_na_wolne($kogo,$kiedy,$ile,$idWniosku, $akceptowal){
             (int)$ile;
             (int)$wpisano=0;
             (int)$dowpisania=0;
@@ -23,11 +23,11 @@ function pusc_na_wolne($kogo,$kiedy,$ile,$idWniosku){
                 //
                 //jezeli ilosc minut do wpisania jest wieksza niz minuty pobrane z bazy to wpisujemy cale pobrane
                 if($dowpisania>=$pozostalo){
-                    $wpisz = mysql_query("INSERT INTO `wykorzystane_nadgodziny` (`idNadgodziny`, `ile`, `kiedy`, `kto_dodal`, `kiedy_dodal`) VALUES ('$idNadgodziny', '$pozostalo', '$kiedy', '$kogo', NOW());") or die(mysql_error());
+                    $wpisz = mysql_query("INSERT INTO `wykorzystane_nadgodziny` (`idNadgodziny`, `ile`, `kiedy`, `kto_dodal`, `kiedy_dodal`) VALUES ('$idNadgodziny', '$pozostalo', '$kiedy', '$akceptowal', NOW());") or die(mysql_error());
                 $wpisano=$wpisano+$pozostalo;
                 }else{
                     //jezeli ilosc minut potrzebnych do wpisania jest mniejsza niz te pobrane z bazy danych to bierzemy ilosc 
-                    $wpisz = mysql_query("INSERT INTO `wykorzystane_nadgodziny` (`idNadgodziny`, `ile`, `kiedy`, `kto_dodal`, `kiedy_dodal`) VALUES ('$idNadgodziny', '$dowpisania', '$kiedy', '$kogo', NOW());") or die(mysql_error());
+                    $wpisz = mysql_query("INSERT INTO `wykorzystane_nadgodziny` (`idNadgodziny`, `ile`, `kiedy`, `kto_dodal`, `kiedy_dodal`) VALUES ('$idNadgodziny', '$dowpisania', '$kiedy', '$akceptowal', NOW());") or die(mysql_error());
                     $wpisano=$wpisano+$dowpisania;
                 }
             
@@ -48,7 +48,7 @@ function pusc_na_wolne($kogo,$kiedy,$ile,$idWniosku){
             
 }
 
-function pusc_na_wolne_s($kogo,$kiedy,$ile,$idWniosku){
+function pusc_na_wolne_s($kogo,$kiedy,$ile,$idWniosku, $akceptowal){
             (int)$ile;
             (int)$wpisano=0;
             (int)$dowpisania=0;
@@ -67,11 +67,11 @@ function pusc_na_wolne_s($kogo,$kiedy,$ile,$idWniosku){
                 //
                 //jezeli ilosc minut do wpisania jest wieksza niz minuty pobrane z bazy to wpisujemy cale pobrane
                 if($dowpisania>=$pozostalo){
-                    $wpisz = mysql_query("INSERT INTO `wykorzystane_sluzby` (`idSluzby`, `ile`, `kiedy`, `kto_dodal`, `kiedy_dodal`) VALUES ('$idSluzby', '$pozostalo', '$kiedy', '$kogo', NOW());") or die(mysql_error());
+                    $wpisz = mysql_query("INSERT INTO `wykorzystane_sluzby` (`idSluzby`, `ile`, `kiedy`, `kto_dodal`, `kiedy_dodal`) VALUES ('$idSluzby', '$pozostalo', '$kiedy', '$akceptowal', NOW());") or die(mysql_error());
                 $wpisano=$wpisano+$pozostalo;
                 }else{
                     //jezeli ilosc minut potrzebnych do wpisania jest mniejsza niz te pobrane z bazy danych to bierzemy ilosc 
-                    $wpisz = mysql_query("INSERT INTO `wykorzystane_sluzby` (`idSluzby`, `ile`, `kiedy`, `kto_dodal`, `kiedy_dodal`) VALUES ('$idSluzby', '$dowpisania', '$kiedy', '$kogo', NOW());") or die(mysql_error());
+                    $wpisz = mysql_query("INSERT INTO `wykorzystane_sluzby` (`idSluzby`, `ile`, `kiedy`, `kto_dodal`, `kiedy_dodal`) VALUES ('$idSluzby', '$dowpisania', '$kiedy', '$akceptowal', NOW());") or die(mysql_error());
                     $wpisano=$wpisano+$dowpisania;
                 }
             
@@ -189,9 +189,9 @@ function wnioski($kogo) {
                 }
                     if($zgoda == mamDostepDo($zgoda)){
                         if($za_co==1){
-                            $sygnal = pusc_na_wolne($typek, $dzionek, $nieobecnosc, $usun_wniosek);
+                            $sygnal = pusc_na_wolne($typek, $dzionek, $nieobecnosc, $usun_wniosek, $_SESSION['user']);
                         }elseif($za_co==2){
-                            $sygnal = pusc_na_wolne_s($typek, $dzionek, $nieobecnosc, $usun_wniosek);    
+                            $sygnal = pusc_na_wolne_s($typek, $dzionek, $nieobecnosc, $usun_wniosek, $_SESSION['user']);    
                         }
                             switch ($sygnal){
                             case 1:
@@ -228,9 +228,9 @@ function wnioski($kogo) {
                     }
                     if($zgoda == mamDostepDo($zgoda)){
                         if($za_co==1){
-                            $sygnal = pusc_na_wolne($typek, $dzionek, $nieobecnosc, $usun_wniosek);
+                            $sygnal = pusc_na_wolne($typek, $dzionek, $nieobecnosc, $usun_wniosek, $_SESSION['user']);
                         }elseif($za_co==2){
-                            $sygnal = pusc_na_wolne_s($typek, $dzionek, $nieobecnosc, $usun_wniosek);    
+                            $sygnal = pusc_na_wolne_s($typek, $dzionek, $nieobecnosc, $usun_wniosek, $_SESSION['user']);    
                         }
                             switch ($sygnal){
                             case 1:

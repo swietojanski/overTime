@@ -169,12 +169,19 @@ function kalendarz($idZolnierza)
                         echo "</div>"; 
                         echo "<input type=\"hidden\" name=\"wybrane[]\" value=\"$r->idWykorzystane\">"; 
                         $razem+=(($r->minut)/60);
+                        $kto_dodal=$r->kto_dodal;
                 } 
+                
                         echo "<div class=\"zawartosc blekitne\" >";
                         echo "Razem $razem godz.<br>";
                         echo "</div>";
                         echo "<div class=\"zawartosc blekitne\" >";
-                        echo "Zaakceptował: <br>";
+                        echo "Zaakceptował:";
+                        echo "<a href=\"index.php?id=panele/profil/zolnierz&profil=".id_zolnierza($kto_dodal)."\">";
+                        echo "<img src=\"img/avatars/";
+                        avatar($kto_dodal);
+                        echo "\" width=\"30\" align=\"absmiddle\" height=\"30\" alt=\"Avatar\" class=\"avatar\">";
+                        echo "</a>";
                         echo "</div>";
                         echo "<div class=\"zawartosc wysrodkuj\" >";
                         echo "<input type=\"submit\" name=\"usun_za_nad\" class=\"zapisz animacja\" value=\"usuń\" title=\"Usuń wolne\"/>";  
@@ -194,10 +201,19 @@ function kalendarz($idZolnierza)
                         echo "</div>";
                         echo "<input type=\"hidden\" name=\"wybrane[]\" value=\"$r->idWykorzystane\">"; 
                         $razem+=(($r->minut)/60);
+                        $kto_dodal=$r->kto_dodal;
                 } 
                         echo "<div class=\"zawartosc blekitne\" >";
                         echo "Razem $razem godz.<br>";
-                        echo "</div>"; 
+                        echo "</div>";
+                        echo "<div class=\"zawartosc blekitne\" >";
+                        echo "Zaakceptował:";
+                        echo "<a href=\"index.php?id=panele/profil/zolnierz&profil=".id_zolnierza($kto_dodal)."\">";
+                        echo "<img src=\"img/avatars/";
+                        avatar($kto_dodal);
+                        echo "\" width=\"30\" align=\"absmiddle\" height=\"30\" alt=\"Avatar\" class=\"avatar\">";
+                        echo "</a>";
+                        echo "</div>";
                         echo "<div class=\"zawartosc wysrodkuj\" >";
                         echo "<input type=\"submit\" name=\"usun_za_slu\" class=\"zapisz animacja\" value=\"usuń\" title=\"Usuń wolne\"/>";  
                         echo "</form>";
