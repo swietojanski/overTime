@@ -289,6 +289,31 @@ czy zapytanie zwróciło wartość większą od 0
     }
 }
 
+//Wyswietlanie stopnia nazwiska imienia podanego
+function st_nazwisko_imie($kogo) {
+    
+    if( isset($kogo) ) {
+        $uzytkownik = $kogo;
+    }else{
+        $uzytkownik = $_SESSION['user'];
+    }
+    
+$snazwisko = mysql_query("SELECT *, CONCAT_WS(' ',stopnie.Skrot, UPPER(zolnierze.Nazwisko), zolnierze.Imie) as st_nazwisko_imie FROM zolnierze left join eskadry using(idEskadry) left join stopnie using (idStopien) left join uzytkownicy using(idZolnierza) where uzytkownicy.Login = '$uzytkownik'") 
+or die('Błąd zapytania'); 
+/* 
+wyświetlamy wyniki, sprawdzamy, 
+czy zapytanie zwróciło wartość większą od 0 
+*/ 
+    if(mysql_num_rows($snazwisko) > 0) { 
+        /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
+        while($imie = mysql_fetch_object($snazwisko)) { 
+            echo $imie->st_nazwisko_imie; 
+        } 
+    }  else {
+    echo $uzytkownik;    //jezeli profil nie jest przypisany to wyswietl login
+    }
+}
+
 //Wyswietlanie avatara uzytkownika po podaniu jego loginu lub id zolnierza jezeli jest przypisany profil do uzytkownika
 function avatar($uzytkownik) {
 $savatar = mysql_query("SELECT uzytkownicy.Avatar FROM uzytkownicy WHERE (uzytkownicy.Login = '$uzytkownik' OR uzytkownicy.idZolnierza='$uzytkownik') limit 1") 

@@ -115,6 +115,7 @@ if(isset($_GET[edytuj])){
        </div>    
     </div>
 </div>
+<br>
 
 
 

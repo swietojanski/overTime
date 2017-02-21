@@ -157,7 +157,7 @@ function kalendarz($idZolnierza)
         
         
         if(!empty($nadgodzina)){
-            $nadgodziny = mysql_query("SELECT *, DATE_FORMAT(nadgodziny.kiedy, '%d-%m-%Y') as wolne_z_dnia, v_dni_wolne.ile AS minut FROM v_dni_wolne left join nadgodziny using(idNadgodziny) where idZolnierza='$idZolnierza' and v_dni_wolne.kiedy = '$like_data' order by nadgodziny.kiedy") 
+            $nadgodziny = mysql_query("SELECT *, v_dni_wolne.kto_dodal as zaakceptowal, DATE_FORMAT(nadgodziny.kiedy, '%d-%m-%Y') as wolne_z_dnia, v_dni_wolne.ile AS minut FROM v_dni_wolne left join nadgodziny using(idNadgodziny) where idZolnierza='$idZolnierza' and v_dni_wolne.kiedy = '$like_data' order by nadgodziny.kiedy") 
             or die('Błąd zapytania');
                         echo "<div class=\"zawartosc blekitne\" >";
                         echo "Wolne za nadgodziny:<br>";
@@ -169,18 +169,19 @@ function kalendarz($idZolnierza)
                         echo "</div>"; 
                         echo "<input type=\"hidden\" name=\"wybrane[]\" value=\"$r->idWykorzystane\">"; 
                         $razem+=(($r->minut)/60);
-                        $kto_dodal=$r->kto_dodal;
+                        $kto_dodal=$r->zaakceptowal;
                 } 
                 
                         echo "<div class=\"zawartosc blekitne\" >";
                         echo "Razem $razem godz.<br>";
                         echo "</div>";
                         echo "<div class=\"zawartosc blekitne\" >";
-                        echo "Zaakceptował:";
+                        echo "Zaakceptował:<br>";
                         echo "<a href=\"index.php?id=panele/profil/zolnierz&profil=".id_zolnierza($kto_dodal)."\">";
                         echo "<img src=\"img/avatars/";
                         avatar($kto_dodal);
-                        echo "\" width=\"30\" align=\"absmiddle\" height=\"30\" alt=\"Avatar\" class=\"avatar\">";
+                        echo "\" width=\"30\" align=\"absmiddle\" height=\"30\" alt=\"Avatar\" class=\"avatar\"> ";
+                        st_nazwisko_imie($kto_dodal);
                         echo "</a>";
                         echo "</div>";
                         echo "<div class=\"zawartosc wysrodkuj\" >";
@@ -189,7 +190,7 @@ function kalendarz($idZolnierza)
                         echo "</div>";
           }
           if(!empty($sluzba)){
-            $sluzby = mysql_query("SELECT *, DATE_FORMAT(sluzby.kiedy, '%d-%m-%Y') as wolne_z_dnia, v_dni_wolne.ile AS minut FROM v_dni_wolne left join sluzby using(idSluzby) where idZolnierza='$idZolnierza' and v_dni_wolne.kiedy = '$like_data' order by sluzby.kiedy") 
+            $sluzby = mysql_query("SELECT *, v_dni_wolne.kto_dodal as zaakceptowal, DATE_FORMAT(sluzby.kiedy, '%d-%m-%Y') as wolne_z_dnia, v_dni_wolne.ile AS minut FROM v_dni_wolne left join sluzby using(idSluzby) where idZolnierza='$idZolnierza' and v_dni_wolne.kiedy = '$like_data' order by sluzby.kiedy") 
             or die('Błąd zapytania');
                         echo "<div class=\"zawartosc blekitne\" >";
                         echo "Wolne za służby:<br>";
@@ -201,17 +202,18 @@ function kalendarz($idZolnierza)
                         echo "</div>";
                         echo "<input type=\"hidden\" name=\"wybrane[]\" value=\"$r->idWykorzystane\">"; 
                         $razem+=(($r->minut)/60);
-                        $kto_dodal=$r->kto_dodal;
+                        $kto_dodal=$r->zaakceptowal;
                 } 
                         echo "<div class=\"zawartosc blekitne\" >";
                         echo "Razem $razem godz.<br>";
                         echo "</div>";
                         echo "<div class=\"zawartosc blekitne\" >";
-                        echo "Zaakceptował:";
+                        echo "Zaakceptował:<br>";
                         echo "<a href=\"index.php?id=panele/profil/zolnierz&profil=".id_zolnierza($kto_dodal)."\">";
                         echo "<img src=\"img/avatars/";
                         avatar($kto_dodal);
-                        echo "\" width=\"30\" align=\"absmiddle\" height=\"30\" alt=\"Avatar\" class=\"avatar\">";
+                        echo "\" width=\"30\" align=\"absmiddle\" height=\"30\" alt=\"Avatar\" class=\" avatar\"> ";
+                        st_nazwisko_imie($kto_dodal);
                         echo "</a>";
                         echo "</div>";
                         echo "<div class=\"zawartosc wysrodkuj\" >";
@@ -259,5 +261,5 @@ function kalendarz($idZolnierza)
        </div>    
     </div>
 </div>
-
+<br>
 
