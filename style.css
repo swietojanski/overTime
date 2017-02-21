@@ -473,6 +473,10 @@ text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
     }
 }
 
+.w60 {
+    width: 60px;
+}
+
 /*wyswietli wszystko gdy rozdzialka wieksza niz 801*/
 @media (min-width: 801px) and (max-width: 1024px) {
     .displaynonemax {
@@ -898,6 +902,11 @@ a.addovertime {
 	color:#FFF;
 	height:60px;
 	text-decoration:none;
+
+}
+a.addovertime.noimg {
+
+	background-image: none;
 
 }
 

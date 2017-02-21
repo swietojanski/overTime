@@ -298,7 +298,7 @@ function st_nazwisko_imie($kogo) {
         $uzytkownik = $_SESSION['user'];
     }
     
-$snazwisko = mysql_query("SELECT *, CONCAT_WS(' ',stopnie.Skrot, UPPER(zolnierze.Nazwisko), zolnierze.Imie) as st_nazwisko_imie FROM zolnierze left join eskadry using(idEskadry) left join stopnie using (idStopien) left join uzytkownicy using(idZolnierza) where uzytkownicy.Login = '$uzytkownik'") 
+$snazwisko = mysql_query("SELECT *, CONCAT_WS(' ',stopnie.Skrot, UPPER(zolnierze.Nazwisko), zolnierze.Imie) as st_nazwisko_imie FROM zolnierze left join eskadry using(idEskadry) left join stopnie using (idStopien) left join uzytkownicy using(idZolnierza) where uzytkownicy.Login = '$uzytkownik' or zolnierze.idZolnierza = '$uzytkownik' limit 1") 
 or die('Błąd zapytania'); 
 /* 
 wyświetlamy wyniki, sprawdzamy, 
@@ -327,6 +327,8 @@ czy zapytanie zwróciło wartość większą od 0
         while($avatar = mysql_fetch_assoc($savatar)) { 
             echo $avatar['Avatar']; 
         } 
+    }else{
+        echo "avatar.png";
     }
 }
 
@@ -766,16 +768,16 @@ if(mysql_num_rows($stopnie) > 0) {
 
 
 //wyswietlenie rozwijanej listy zolnierzy
-function lista_zolnierzy($selected, $multi) {
+function lista_zolnierzy($selected, $multi, $width) {
 $datalist = mysql_query("SELECT CONCAT_WS(' ', UPPER(zolnierze.Nazwisko), zolnierze.Imie, stopnie.Skrot) AS Żołnierze, idZolnierza FROM zolnierze, stopnie WHERE stopnie.idStopien = zolnierze.idStopien ORDER BY Nazwisko ASC, idZolnierza DESC;") 
 or die('Błąd zapytania'); 
     if(mysql_num_rows($datalist) > 0) { 
         /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
-        echo "<select name=\"";if (isset($multi)){echo "zolnierze[]";}else{echo "zolnierze";}echo"\" class=\"fod\">";
+        echo "<select name=\"";if (isset($multi)){echo "zolnierze[]";}else{echo "zolnierze";}echo"\" ";if (isset($width)){echo "style=\"width:$width"."px\"";}else{echo "class=\"fod\"";}echo">";
         if (empty($selected)){
             echo "<option value=\"\" selected disabled>Wybierz zolnierza</option>";
         }
-        echo "<option value=\"0\">Cywil</option>";
+        echo "<option value=\"null\">Cywil</option>";
         while($r = mysql_fetch_object($datalist)) {  
                 if ($selected==$r->idZolnierza){
                     echo "<option selected value=\"$r->idZolnierza\">".$r->Żołnierze."</option>";
@@ -1614,12 +1616,12 @@ or die('Błąd zapytania');
 }
 
 //WYŚWIETLENIE LISTY GRUP DO PRZYPISANIA DOWODCY
-function listaGrup() {
+function listaGrup($required) {
 $esk = mysql_query("SELECT * FROM grupy") 
 or die('Błąd zapytania'); 
     if(mysql_num_rows($esk) > 0) { 
         /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
-        echo "<select name=\"grupa\" class=\"fod\" id=\"grupa\">"; 
+        echo "<select name=\"grupa\" class=\"fod\" id=\"grupa\"";if($required==true){echo" required";}echo">"; 
         echo "<option value=\"\" selected disabled id=\"puste\">Wybierz grupę</option>";
         while($r = mysql_fetch_object($esk)) {  
 
@@ -1671,19 +1673,67 @@ function przypiszZolnierza(){
     $lista = mysql_query($query);
 }
 
+//DODAWANIE GRUPY/BATALIONU
 
+function dodajGrupe($skrot_eskadry, $nazwa_eskadry) {
+    //sprawdzamy czy ktos cos wyslal
+    if( !empty( $_POST ) ) {
+        //sprawdzamy czy cos wyslanego to nasz submit dodajEskadre
+        if( array_key_exists( 'dodaj_grupe', $_POST ) ){
+            $dodaj = "INSERT INTO `grupy` (`Skrot`, `Nazwa`) VALUES ('$skrot_eskadry', '$nazwa_eskadry');";
+            $wykonaj = mysql_query($dodaj);
+                //wyswietlamy informacje 
+                echo "<div class=\"flex-container\">";
+                    echo "<div class=\"panel piecset\">";
+                        echo "<div class=\"tytul\">";
+                            echo "<p>dodano grupę</p>";
+                        echo "</div>";
+                        echo "<div class=\"zawartosc\" >";
+                            echo "Dodano Grupę: <acronym title=\"$nazwa_eskadry\">$skrot_eskadry</acronym> $nazwa_eskadry";
+                        echo "</div>";    
+                    echo "</div>";
+                echo "</div>";
+        }
+        
+    }
+}
 //////////////////
 //OBSŁUGA ESKADR//
 //////////////////
 
+//DODAWANIE KLUCZA
+
+function dodajKlucz($skrot_klucza, $nazwa_klucza, $id_eskadry) {
+    //sprawdzamy czy ktos cos wyslal
+    if( !empty( $_POST ) ) {
+        //sprawdzamy czy cos wyslanego to nasz submit dodajEskadre
+        if( array_key_exists( 'dodajKlucz', $_POST ) ){
+            $dodaj = "INSERT INTO `klucze` (`Skrot`, `Nazwa`, `idEskadry`) VALUES ('$skrot_klucza', '$nazwa_klucza', '$id_eskadry');";
+            $wykonaj = mysql_query($dodaj);
+                //wyswietlamy informacje 
+                echo "<div class=\"flex-container\">";
+                    echo "<div class=\"panel piecset\">";
+                        echo "<div class=\"tytul\">";
+                            echo "<p>dodano klucz</p>";
+                        echo "</div>";
+                        echo "<div class=\"zawartosc\" >";
+                            echo "Dodano Klucz: <acronym title=\"$nazwa_klucza\">$skrot_klucza</acronym> $nazwa_klucza";
+                        echo "</div>";    
+                    echo "</div>";
+                echo "</div>";
+        }
+        
+    }
+}
+
 //DODAWANIE ESKADRY
 
-function dodajEskadre($skrot_eskadry, $nazwa_eskadry) {
+function dodajEskadre($skrot_eskadry, $nazwa_eskadry, $id_grupy) {
     //sprawdzamy czy ktos cos wyslal
     if( !empty( $_POST ) ) {
         //sprawdzamy czy cos wyslanego to nasz submit dodajEskadre
         if( array_key_exists( 'dodajEskadre', $_POST ) ){
-            $dodaj = "INSERT INTO `eskadry` (`Skrot`, `Nazwa`) VALUES ('$skrot_eskadry', '$nazwa_eskadry');";
+            $dodaj = "INSERT INTO `eskadry` (`Skrot`, `Nazwa`, `idGrupy`) VALUES ('$skrot_eskadry', '$nazwa_eskadry', '$id_grupy');";
             $wykonaj = mysql_query($dodaj);
                 //wyswietlamy informacje 
                 echo "<div class=\"flex-container\">";
@@ -1698,73 +1748,433 @@ function dodajEskadre($skrot_eskadry, $nazwa_eskadry) {
                 echo "</div>";
         }
         
-        if( array_key_exists( 'edytuj', $_GET ) ){
-            //$dodaj = "INSERT INTO `eskadry` (`Skrot`, `Nazwa`) VALUES ('$skrot_eskadry', '$nazwa_eskadry');";
-            //$wykonaj = mysql_query($dodaj);
-                //wyswietlamy informacje 
-                echo "<div class=\"flex-container\">";
-                    echo "<div class=\"panel piecset\">";
-                        echo "<div class=\"tytul\">";
-                            echo "<p>dodano eskadrę</p>";
-                        echo "</div>";
-                        echo "<div class=\"zawartosc\" >";
-                            echo "Edytujemy eskadrę: <acronym title=\"$nazwa_eskadry\">$skrot_eskadry</acronym> $nazwa_eskadry";
-                        echo "</div>";    
-                    echo "</div>";
-                echo "</div>";
+    }
+}
+
+function dodaneGrupy($idGrupy, $idEdytuj){
+   $url = $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];
+   if(isset($_GET[grupa])){
+        $url = explode("&grupa=", $url); //wyrzucamy deklaracje zmiennej get z adresu
+        $url = $url[0];
+        $adres=$url;
+    }  else {
+        $adres=$url;
+    } 
+    if(isset($_GET[edytuj_g])){
+        $url = explode("&edytuj_g=", $url); //wyrzucamy deklaracje zmiennej get z adresu
+        $url = $url[0];
+        $edytuj_g=$url;
+    }  else {
+        $edytuj_g=$url;
+    } 
+    
+    if(isset($_GET[usun_g])){
+        $url = explode("&usun_g=", $url); //wyrzucamy deklaracje zmiennej get z adresu
+        $url = $url[0];
+        $usun_g=$url;
+    }  else {
+        $usun_g=$url;
+    } 
+    
+//ZAPISUJEMY ZMIENIONE DANE W GRUPIE
+    $idZapisz_g = $_POST['zapisz_g'];
+        if(isset($idZapisz_g) && !empty($idZapisz_g)){//najpierw sprawdzamy czy zmienna istnieje
+                    $dowodca = $_POST['zolnierze'];
+                    $up_id_grupy = $_POST['grupa'];
+                    $skrot = mysql_real_escape_string($_POST['skrot']);
+                    $nazwa = mysql_real_escape_string($_POST['nazwa']);
+                    
+                    
+                $sprawdzenie = mysql_query("SELECT * FROM `grupy` WHERE `idGrupy`='$up_id_grupy'");// zapytanie sprawdzajace czy uzytkownik o danym loginie jest w bazie 
+                if((int)mysql_num_rows($sprawdzenie) > 0) {
+                    if(empty($dowodca)){
+                      $edytuj = mysql_query("UPDATE `grupy` SET `Skrot`='$skrot', `Nazwa`='$nazwa' WHERE `idGrupy`='$up_id_grupy';");  
+                    }else{
+                      $edytuj = mysql_query("UPDATE `grupy` SET `Skrot`='$skrot', `Nazwa`='$nazwa', `DcaGrupy`='$dowodca' WHERE `idGrupy`='$up_id_grupy';");  
+                    }
+                    
+                }else{
+                    $komunikat = "Nie ma co edytować, grupa nie istnieje";
+                }
+            
+            header("Location: $edytuj_g");
+            exit;  
+        }
+    
+    
+    
+     //USUWAMY GRUPE
+$idUsun_g = mysql_real_escape_string($_GET['usun_g']);
+        if(isset($idUsun_g) && !empty($idUsun_g)){//najpierw sprawdzamy czy zmienna istnieje
+            $sprawdzenie = mysql_query("SELECT * FROM `grupy` WHERE `idGrupy`='$idUsun_g'");// zapytanie sprawdzajace czy nadgodzina o danym id jest w bazie 
+            if((int)mysql_num_rows($sprawdzenie) > 0) {
+                
+                while($check = mysql_fetch_object($sprawdzenie)) {  
+                    $zgoda = $check->Skrot;
+                }
+                        $usun = mysql_query("DELETE FROM `grupy` WHERE `idGrupy`='$idUsun_g'");
+                                    
+            header("Location: $usun_g");
+            exit;
+                        $komunikat = "Usunięto eskadrę: $zgoda";
+                     
+            }else{
+                $komunikat = "Nie można usunąć, lub nie istnieje."; //niewypisany, wiec go nie zobaczymy
+            }
+
+        }
+    
+    
+    
+    $eskadry = mysql_query("SELECT * FROM grupy") or die('Błąd zapytania'); 
+       
+        if(mysql_num_rows($eskadry) > 0) { //jezeli zapytanie zwrocilo wiecej zapytan od 0 to wykonaj sie
+            /* jeżeli wynik jest pozytywny, to wyświetlamy dane */    
+            echo "<table>";
+                echo "<caption class=\"mb-10\">Dodanych grup: ".mysql_num_rows($eskadry)."<br>$komunikat</caption>";
+                echo "<form class=\"nadgodzinki\" name=\"edytuj_g\" method=\"post\" action=\"\">";
+                echo "<thead>";
+                    echo "<tr class=\"blekitne empty-cells\">";
+                        echo "<th class=\"left\">skrót</th>"; 
+                        echo "<th class=\"left\">pełna nazwa</th>";
+                        echo "<th class=\"left\">dowódca</th>";
+                        echo "<th colspan=\"2\"></th>";
+                    echo "</tr>";
+                echo "</thead>";
+                echo "<tbody>";
+                    while($r = mysql_fetch_object($eskadry)) {
+                        echo "<tr ";if(isset($_GET['grupa']) &&  $_GET['grupa']==$r->idGrupy){echo'class="triada-1"';}else{echo "class=\"blekitne\"";}echo" >";
+
+                                if (isset($idEdytuj) && $idEdytuj==$r->idGrupy){/*jezeli istnieje zmienna edytuj i jest rowna id nadgodziny to wyswietl edycje*/
+                                    echo "<td><input type=\"text\" class=\"wysrodkuj\" name=\"skrot\" placeholder=\"$r->Skrot\" value=\"$r->Skrot\" required=\"true\" size=\"10\"></td>";
+                                    echo "<td><input type=\"text\" class=\"wysrodkuj\" name=\"nazwa\" placeholder=\"$r->Nazwa\" value=\"$r->Nazwa\" required=\"true\" size=\"30\"></td>";
+                                    echo "<td class=\"left\">";
+                                    lista_zolnierzy($r->DcaGrupy, null);
+                                    echo"</td>"; /*wyswietlamy zolnierzy*/
+                                }else{
+                                    echo "<td class=\"left\"><p class=\"nowrap\">$r->Skrot</p></td>";   /*wyswietlamy daty*/ 
+                                    echo "<td class=\"left\"><a href=\"$adres&grupa=$r->idGrupy\">$r->Nazwa</a></td>"; /*wyswietlamy godziny*/
+                                    echo "<td class=\"left\">";
+                                    if(isset($r->DcaGrupy)){
+                                    echo "<a href=\"index.php?id=panele/profil/zolnierz&profil=$r->DcaGrupy\">";
+                                    echo "<img src=\"img/avatars/";avatar($r->DcaGrupy);
+                                    echo "\" class=\"zaokraglij mr-10\" height=\"48px\" title=\"Profil\" align=\"absmiddle\">";
+                                    st_nazwisko_imie($r->DcaGrupy);
+                                    echo "</a>";
+                                    }
+                                    echo "</td>";
+                                }
+
+                                if (isset($idEdytuj) && $idEdytuj==$r->idGrupy){
+                                    echo "<input type=\"hidden\" name=\"grupa\" value=\"$r->idGrupy\">";
+                                    echo "<td class=\"w60\"><input type=\"submit\" class=\"aktualizuj\" name=\"zapisz_g\" value=\"Zapisz\" title=\"Zapisz do bazy\"/></td>";
+                                    echo "<td class=\"w60\"><a class=\"anuluj\" href=\"$edytuj_g\">Anuluj</a></td>";
+       
+                                }else{
+                                    echo "<td class=\"w60\"><a class=\"edytuj\" href=\"$adres&edytuj_g=".$r->idGrupy."\">Edytuj</a></td>";
+                                    echo "<td class=\"w60\"><a class=\"usun\" href=\"$adres&usun_g=".$r->idGrupy."\">Usuń</a></td>";
+                                }
+                        echo "</tr>";
+                    }
+                echo "</tbody>";
+                echo "</form>"; 
+            echo "</table>";   
+        }else{
+            echo"Nie dodałeś jeszcze grup, skorzystaj z PA, aby to zrobić lub kliknij <a href=\"index.php?id=panele/admin/dodajGrupe\">tutaj</a>";
+        }
+    
+    
+    
+}
+
+function dodaneEkadry($idGrupy, $idEdytuj){
+    
+   $url = $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];
+   if(isset($_GET[eskadra])){
+        $url = explode("&eskadra=", $url); //wyrzucamy deklaracje zmiennej get z adresu
+        $url = $url[0];
+        $adres=$url;
+    }  else {
+        $adres=$url;
+    } 
+    
+    if(isset($_GET[edytuj_e])){
+        $url = explode("&edytuj_e=", $url); //wyrzucamy deklaracje zmiennej get z adresu
+        $url = $url[0];
+        $edytuj_e=$url;
+    }  else {
+        $edytuj_e=$url;
+    } 
+    
+    if(isset($_GET[usun_e])){
+        $url = explode("&usun_e=", $url); //wyrzucamy deklaracje zmiennej get z adresu
+        $url = $url[0];
+        $usun_e=$url;
+    }  else {
+        $usun_e=$url;
+    } 
+    
+
+//ZAPISUJEMY ZMIENIONE DANE
+    $idZapisz_e = $_POST['zapisz_e'];
+        if(isset($idZapisz_e) && !empty($idZapisz_e)){//najpierw sprawdzamy czy zmienna istnieje
+                    $zolnierze = $_POST['zolnierze'];
+                    echo $dowodca=$zolnierze[0];
+                    echo $szef=$zolnierze[1];
+                    $up_id_eskadry = $_POST['eskadra'];
+                    $skrot = mysql_real_escape_string($_POST['skrot']);
+                    $nazwa = mysql_real_escape_string($_POST['nazwa']);
+                    
+                    
+                $sprawdzenie = mysql_query("SELECT * FROM `eskadry` WHERE `idEskadry`='$up_id_eskadry'");// zapytanie sprawdzajace czy uzytkownik o danym loginie jest w bazie 
+                if((int)mysql_num_rows($sprawdzenie) > 0) {
+                    if(empty($dowodca) && !empty($szef)){
+                      $edytuj = mysql_query("UPDATE `eskadry` SET `Skrot`='$skrot', `Nazwa`='$nazwa', `SzefEskadry`='$szef' WHERE `idEskadry`='$up_id_eskadry';");  
+                    }
+                    if(empty($szef) && !empty($dowodca)){
+                      $edytuj = mysql_query("UPDATE `eskadry` SET `Skrot`='$skrot', `Nazwa`='$nazwa', `DcaEskadry`='$dowodca' WHERE `idEskadry`='$up_id_eskadry';");  
+                    }
+                    if(empty($dowodca) && empty($szef)){
+                      $edytuj = mysql_query("UPDATE `eskadry` SET `Skrot`='$skrot', `Nazwa`='$nazwa' WHERE `idEskadry`='$up_id_eskadry';");  
+                    }
+                    if(!empty($dowodca) && !empty($szef)){
+                      $edytuj = mysql_query("UPDATE `eskadry` SET `Skrot`='$skrot', `Nazwa`='$nazwa', `DcaEskadry`='$dowodca', `SzefEskadry`='$szef' WHERE `idEskadry`='$up_id_eskadry';");  
+                    }
+                    
+                }else{
+                    $komunikat = "Nie ma co edytować, eskadra nie istnieje";
+                }
+            
+            header("Location: $edytuj_e");
+            exit;  
         }
         
-    }
-}
-
-function dodaneEkadry(){
-    $eskadry = mysql_query("SELECT * FROM eskadry") 
-or die('Błąd zapytania'); 
-    if(mysql_num_rows($eskadry) > 0) { 
-        /* jeżeli wynik jest pozytywny, to wyświetlamy dane */
-
-            echo "<table>";
-            echo "<thead>";
-                echo "<tr class=\"empty-cells\">";
-                    echo "<th class=\"left\">skrót</th>";
-                    echo "<th>pełna nazwa</th>";
-                    echo "<th>dowódca</th>";
-                    echo "<th class=\"right\">szef</th>";
-                echo "</tr>";
-            echo "</thead>";
-            echo "<tbody>";
-            while($r = mysql_fetch_object($eskadry)) {
-                echo "<tr class=\"blekitne\">";
-                        echo "<td class=\"left\"><p class=\"nowrap\">$r->Skrot</p></td>";   /*wyswietlamy daty*/ 
-                        echo "<td class=\"left\">$r->Nazwa</td>"; /*wyswietlamy godziny*/
-                        echo "<td>";
-                        if(isset($r->DcaEskadry)){
-                            echo "<a href=\"index.php?id=panele/profil/zolnierz&profil=$r->DcaEskadry\">";
-                            echo "<img src=\"img/avatars/";avatar($r->DcaEskadry);
-                            echo "\" class=\"zaokraglij\" height=\"26px\" title=\"Przejdź do profilu\" align=\"absmiddle\">";
-                            echo "</a>";
-                        }else{
-                            //tutaj dodamy button przypisywania dowodcy do eskadry
-                        }
-                        echo "</td>";
-                        echo "<td class=\"right\">";
-                        if(isset($r->SzefEskadry)){
-                            echo "<a href=\"index.php?id=panele/profil/zolnierz&profil=".id_zolnierza($r->SzefEskadry)."\">";
-                            echo "<img src=\"img/avatars/";avatar($r->SzefEskadry);
-                            echo "\" class=\"zaokraglij\" height=\"26px\" title=\"Przejdź do profilu\" align=\"absmiddle\">";
-                        }  else {
-                           //tutaj dodamy button przypisywania szefa do eskadry 
-                        }
-                            echo "</a>";
-                        echo "</td>";
-                    echo "</tr>";
+ //USUWAMY ESKADRE
+$idUsun_e = mysql_real_escape_string($_GET['usun_e']);
+        if(isset($idUsun_e) && !empty($idUsun_e)){//najpierw sprawdzamy czy zmienna istnieje
+            $sprawdzenie = mysql_query("SELECT * FROM `eskadry` WHERE `idEskadry`='$idUsun_e'");// zapytanie sprawdzajace czy nadgodzina o danym id jest w bazie 
+            if((int)mysql_num_rows($sprawdzenie) > 0) {
+                
+                while($check = mysql_fetch_object($sprawdzenie)) {  
+                    $zgoda = $check->Skrot;
+                }
+                        $usun = mysql_query("DELETE FROM `eskadry` WHERE `idEskadry`='$idUsun_e'");
+                                    
+            header("Location: $usun_e");
+            exit;
+                        $komunikat = "Usunięto eskadrę: $zgoda";
+                     
+            }else{
+                $komunikat = "Nie można usunąć, lub nie istnieje."; //niewypisany, wiec go nie zobaczymy
             }
-            echo "</tbody>";
-        echo "</table>";   
-    }else{
-        echo"Nie dodałeś jeszcze eskadr, zrobić lub kliknij <a href=\"index.php?id=panele/admin/dodajEskadre\">tutaj</a>";
-    }
+
+        }
+        
+    
+    $eskadry = mysql_query("SELECT * FROM eskadry where idGrupy LIKE '$idGrupy'") 
+or die('Błąd zapytania'); 
+    
+    if(mysql_num_rows($eskadry) > 0) { //jezeli zapytanie zwrocilo wiecej zapytan od 0 to wykonaj sie
+            /* jeżeli wynik jest pozytywny, to wyświetlamy dane */    
+            echo "<table>";
+                echo "<caption class=\"mb-10\">Dodanych eskadr: ".mysql_num_rows($eskadry)."<br>$komunikat</caption>";
+                echo "<form class=\"nadgodzinki\" name=\"edytuj_e\" method=\"post\" action=\"\">";
+                echo "<thead>";
+                    echo "<tr class=\"blekitne empty-cells\">";
+                        echo "<th class=\"left\">skrót</th>"; 
+                        echo "<th class=\"left\">pełna nazwa</th>";
+                        echo "<th>dowódca</th>";
+                        echo "<th>szef</th>";
+                        echo "<th colspan=\"2\"></th>";
+                    echo "</tr>";
+                echo "</thead>";
+                echo "<tbody>";
+                    while($r = mysql_fetch_object($eskadry)) {
+                        echo "<tr ";if(isset($_GET['eskadra']) &&  $_GET['eskadra']==$r->idEskadry){echo'class="triada-1"';}else{echo "class=\"blekitne\"";}echo" >";
+                            
+
+                                if (isset($idEdytuj) && $idEdytuj==$r->idEskadry){/*jezeli istnieje zmienna edytuj i jest rowna id nadgodziny to wyswietl edycje*/
+                                    echo "<td class=\"left\"><input type=\"text\" class=\"wysrodkuj\" name=\"skrot\" placeholder=\"$r->Skrot\" value=\"$r->Skrot\" required=\"true\" size=\"10\"></td>";
+                                    echo "<td class=\"left\"><input type=\"text\" class=\"wysrodkuj\" name=\"nazwa\" placeholder=\"$r->Nazwa\" value=\"$r->Nazwa\" required=\"true\" size=\"30\"></td>";
+                                    echo "<td class=\"left\">";
+                                    lista_zolnierzy($r->DcaEskadry, "multi", 200);
+                                    echo"</td>"; /*wyswietlamy zolnierzy*/
+                                    echo "<td class=\"left\">";
+                                    lista_zolnierzy($r->SzefEskadry, "multi", 200);
+                                    echo"</td>"; /*wyswietlamy zolnierzy*/
+                                }else{
+                                    echo "<td class=\"left\"><p class=\"nowrap\">$r->Skrot</p></td>";   /*wyswietlamy daty*/ 
+                                    echo "<td class=\"left\" \"><a href=\"$adres&eskadra=$r->idEskadry\">$r->Nazwa</a></td>"; /*wyswietlamy godziny*/
+                                    echo "<td>";
+                                    if(isset($r->DcaEskadry)){
+                                    echo "<a href=\"index.php?id=panele/profil/zolnierz&profil=$r->DcaEskadry\">";
+                                    echo "<img src=\"img/avatars/";avatar($r->DcaEskadry);
+                                    echo "\" class=\"zaokraglij\" height=\"48px\" title=\"";st_nazwisko_imie($r->DcaEskadry);echo"\" align=\"absmiddle\">";
+                                    echo "</a>";
+                                    }
+                                    echo "</td>";
+                                    echo "<td>";
+                                    if(isset($r->SzefEskadry)){
+                                    echo "<a href=\"index.php?id=panele/profil/zolnierz&profil=$r->SzefEskadry\">";
+                                    echo "<img src=\"img/avatars/";avatar($r->SzefEskadry);
+                                    echo "\" class=\"zaokraglij\" height=\"48px\" title=\"";st_nazwisko_imie($r->SzefEskadry);echo"\" align=\"absmiddle\">";
+                                    echo "</a>";
+                                    }
+                                    echo "</td>";
+                                }
+
+                                if (isset($idEdytuj) && $idEdytuj==$r->idEskadry){
+                                    echo "<input type=\"hidden\" name=\"eskadra\" value=\"$r->idEskadry\">";
+                                    echo "<td><input type=\"submit\" class=\"aktualizuj\" name=\"zapisz_e\" value=\"Zapisz\" title=\"Zapisz do bazy\"/></td>";
+                                    echo "<td><a class=\"anuluj\" href=\"$edytuj_e\">Anuluj</a></td>";
+                                }else{
+                                    echo "<td class=\"w60\"><a class=\"edytuj\" href=\"$adres&edytuj_e=".$r->idEskadry."\">Edytuj</a></td>";
+                                    echo "<td class=\"w60\"><a class=\"usun\" href=\"$usun_e&usun_e=".$r->idEskadry."\">Usuń</a></td>";
+                                }
+                        echo "</tr>";
+                    }
+                echo "</tbody>";
+                echo "</form>"; 
+            echo "</table>";   
+        }else{
+            echo"Nie dodałeś jeszcze eskadr, skorzystaj z PA, aby to zrobić lub kliknij <a href=\"index.php?id=panele/admin/dodajEskadre\">tutaj</a>";
+        }
+    
 }
+
+function dodaneKlucze($idEskadry, $idEdytuj){
+$url = $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];
+   if(isset($_GET[klucz])){
+        $url = explode("&klucz=", $url); //wyrzucamy deklaracje zmiennej get z adresu
+        $url = $url[0];
+        $adres=$url;
+    }  else {
+        $adres=$url;
+    } 
+    if(isset($_GET[edytuj_k])){
+        $url = explode("&edytuj_k=", $url); //wyrzucamy deklaracje zmiennej get z adresu
+        $url = $url[0];
+        $edytuj_k=$url;
+    }  else {
+        $edytuj_k=$url;
+    } 
+    
+    if(isset($_GET[usun_k])){
+        $url = explode("&usun_k=", $url); //wyrzucamy deklaracje zmiennej get z adresu
+        $url = $url[0];
+        $usun_k=$url;
+    }  else {
+        $usun_k=$url;
+    } 
+    
+//ZAPISUJEMY ZMIENIONE DANE W GRUPIE
+    $idZapisz_k = $_POST['zapisz_k'];
+        if(isset($idZapisz_k) && !empty($idZapisz_k)){//najpierw sprawdzamy czy zmienna istnieje
+                    $dowodca = $_POST['zolnierze'];
+                    $up_id_klucze = $_POST['klucz'];
+                    $skrot = mysql_real_escape_string($_POST['skrot']);
+                    $nazwa = mysql_real_escape_string($_POST['nazwa']);
+                    
+                    
+                $sprawdzenie = mysql_query("SELECT * FROM `klucze` WHERE `idKlucza`='$up_id_klucze'");// zapytanie sprawdzajace czy uzytkownik o danym loginie jest w bazie 
+                if((int)mysql_num_rows($sprawdzenie) > 0) {
+                    if(empty($dowodca)){
+                      $edytuj = mysql_query("UPDATE `klucze` SET `Skrot`='$skrot', `Nazwa`='$nazwa' WHERE `idKlucza`='$up_id_klucze';");  
+                    }else{
+                      $edytuj = mysql_query("UPDATE `klucze` SET `Skrot`='$skrot', `Nazwa`='$nazwa', `DcaKlucza`='$dowodca' WHERE `idKlucza`='$up_id_klucze';");  
+                    }
+                    
+                }else{
+                    $komunikat = "Nie ma co edytować, klucz nie istnieje";
+                }
+            
+            header("Location: $edytuj_k");
+            exit;  
+        }
+    
+    
+    
+     //USUWAMY GRUPE
+$idUsun_k = mysql_real_escape_string($_GET['usun_k']);
+        if(isset($idUsun_k) && !empty($idUsun_k)){//najpierw sprawdzamy czy zmienna istnieje
+            $sprawdzenie = mysql_query("SELECT * FROM `klucze` WHERE `idKlucza`='$idUsun_k'");// zapytanie sprawdzajace czy nadgodzina o danym id jest w bazie 
+            if((int)mysql_num_rows($sprawdzenie) > 0) {
+                
+                while($check = mysql_fetch_object($sprawdzenie)) {  
+                    $zgoda = $check->Skrot;
+                }
+                        $usun = mysql_query("DELETE FROM `klucze` WHERE `idKlucza`='$idUsun_k'");
+                                    
+            header("Location: $usun_k");
+            exit;
+                        $komunikat = "Usunięto Klucz: $zgoda";
+                     
+            }else{
+                $komunikat = "Nie można usunąć, lub nie istnieje."; //niewypisany, wiec go nie zobaczymy
+            }
+
+        }
+    
+    
+    
+    $klucze = mysql_query("SELECT * FROM klucze where idEskadry LIKE '$idEskadry'") or die('Błąd zapytania'); 
+       
+        if(mysql_num_rows($klucze) > 0) { //jezeli zapytanie zwrocilo wiecej zapytan od 0 to wykonaj sie
+            /* jeżeli wynik jest pozytywny, to wyświetlamy dane */    
+            echo "<table>";
+                echo "<caption class=\"mb-10\">Dodanych kluczy: ".mysql_num_rows($klucze)."<br>$komunikat</caption>";
+                echo "<form class=\"nadgodzinki\" name=\"edytuj_g\" method=\"post\" action=\"\">";
+                echo "<thead>";
+                    echo "<tr class=\"blekitne empty-cells\">";
+                        echo "<th class=\"left\">skrót</th>"; 
+                        echo "<th class=\"left\">pełna nazwa</th>";
+                        echo "<th class=\"left\">dowódca</th>";
+                        echo "<th colspan=\"2\"></th>";
+                    echo "</tr>";
+                echo "</thead>";
+                echo "<tbody>";
+                    while($r = mysql_fetch_object($klucze)) {
+                        echo "<tr class=\"blekitne\" >";
+                                if (isset($idEdytuj) && $idEdytuj==$r->idKlucza){/*jezeli istnieje zmienna edytuj i jest rowna id nadgodziny to wyswietl edycje*/
+                                    echo "<td><input type=\"text\" class=\"wysrodkuj\" name=\"skrot\" placeholder=\"$r->Skrot\" value=\"$r->Skrot\" required=\"true\" size=\"10\"></td>";
+                                    echo "<td><input type=\"text\" class=\"wysrodkuj\" name=\"nazwa\" placeholder=\"$r->Nazwa\" value=\"$r->Nazwa\" required=\"true\" size=\"30\"></td>";
+                                    echo "<td class=\"left\">";
+                                    lista_zolnierzy($r->DcaKlucza, null);
+                                    echo"</td>"; /*wyswietlamy zolnierzy*/
+                                }else{
+                                    echo "<td class=\"left\"><p class=\"nowrap\">$r->Skrot</p></td>";   /*wyswietlamy daty*/ 
+                                    echo "<td class=\"left\">$r->Nazwa</td>"; /*wyswietlamy godziny*/
+                                    echo "<td class=\"left\">";
+                                    if(isset($r->DcaKlucza)){
+                                    echo "<a href=\"index.php?id=panele/profil/zolnierz&profil=$r->DcaKlucza\">";
+                                    echo "<img src=\"img/avatars/";avatar($r->DcaKlucza);
+                                    echo "\" class=\"zaokraglij mr-10\" height=\"48px\" title=\"Profil\" align=\"absmiddle\">";
+                                    st_nazwisko_imie($r->DcaKlucza);
+                                    echo "</a>";
+                                    }
+                                    echo "</td>";
+                                }
+
+                                if (isset($idEdytuj) && $idEdytuj==$r->idKlucza){
+                                    echo "<input type=\"hidden\" name=\"klucz\" value=\"$r->idKlucza\">";
+                                    echo "<td class=\"w60\"><input type=\"submit\" class=\"aktualizuj\" name=\"zapisz_k\" value=\"Zapisz\" title=\"Zapisz do bazy\"/></td>";
+                                    echo "<td class=\"w60\"><a class=\"anuluj\" href=\"$edytuj_k\">Anuluj</a></td>";
+       
+                                }else{
+                                    echo "<td class=\"w60\"><a class=\"edytuj\" href=\"$adres&edytuj_k=".$r->idKlucza."\">Edytuj</a></td>";
+                                    echo "<td class=\"w60\"><a class=\"usun\" href=\"$adres&usun_k=".$r->idKlucza."\">Usuń</a></td>";
+                                }
+                        echo "</tr>";
+                    }
+                echo "</tbody>";
+                echo "</form>"; 
+            echo "</table>";   
+        }else{
+            echo"Nie dodałeś jeszcze klucza, skorzystaj z PA, aby to zrobić lub kliknij <a href=\"index.php?id=panele/admin/dodajKlucz\">tutaj</a>";
+        }
+    
+}
+
 //dodane w niosku widoczne na pulpicie uzytkownika
 function dodaneWnioski($czyje_id, $idUsun) {
     //USUWAMY DODANE NADGODZINY    

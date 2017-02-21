@@ -8,10 +8,9 @@
              <a href="index.php?id=panele/dodaj/nadgodziny" class="addovertime">nadgodziny</a>
              <a href="index.php?id=panele/dodaj/sluzby" class="addovertime">służby</a>
              <a href="index.php?id=panele/dodaj/wniosek" class="addovertime">wniosek</a>
-          <?php if($_SESSION['permissions']==1){
-             echo "<a href=\"index.php?id=panele/admin/dodajUzytkownika\" class=\"addovertime\">uzytkownika</a>";
-             echo "<a href=\"index.php?id=panele/admin/dodajEskadre\" class=\"addovertime\">eskadre</a>";
-             echo "<a href=\"index.php?id=panele/admin/dodajZolnierza\" class=\"addovertime\">żołnierza</a>";
+             <a href="index.php?id=panele/moje/wolne" class="addovertime noimg">twoje wolne</a>
+          <?php if($_SESSION['permissions']<6){
+             echo "<a href=\"index.php?id=panele/moje/moi&zolnierze\" class=\"addovertime noimg\">moi zołnierze</a>";
           }
           ?>
                 </div>

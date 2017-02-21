@@ -54,7 +54,7 @@ foreach($data as $idkiedy) {
 }
  */
 
-
+/*
 //sprawdzamy czy podana data do sobota, niedziela lub piatek
 for ($j=1;$j<13;$j++) { 
     for ($i=1;$i<32;$i++) { 
@@ -65,7 +65,7 @@ for ($j=1;$j<13;$j++) {
         echo $datex." - - - ".$daterest."<br>"; 
         } 
     } 
-} 
+} */
 
 ?>
 <script>

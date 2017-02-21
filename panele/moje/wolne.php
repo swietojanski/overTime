@@ -185,7 +185,9 @@ function kalendarz($idZolnierza)
                         echo "</a>";
                         echo "</div>";
                         echo "<div class=\"zawartosc wysrodkuj\" >";
+                        if($_SESSION['permissions']<6){
                         echo "<input type=\"submit\" name=\"usun_za_nad\" class=\"zapisz animacja\" value=\"usuń\" title=\"Usuń wolne\"/>";  
+                        }
                         echo "</form>";
                         echo "</div>";
           }
