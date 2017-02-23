@@ -104,11 +104,12 @@ h2 {
      padding-left: 10px;
      cursor: pointer;
 }
-.aside li:hover {
+.aside li:hover, li.wybrany {
      color: #363636;
      background-color: whitesmoke;
      color: black;
 }
+
 .aside li > span {
     color: white;
         background-color: #212121;
@@ -727,7 +728,7 @@ text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
         width: 100px;
     }
     .panel.czterdziesci {
-        width: 53px;
+        width: 95px;
     }
 }
 
@@ -777,7 +778,7 @@ text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
         width: 100px;
     }
     .panel.czterdziesci {
-        width: 53px;
+        width: 95px;
     }
 }
 

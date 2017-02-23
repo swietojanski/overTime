@@ -4,6 +4,7 @@
 // $liczba = $_POST['godzina'];
 //$liczba = str_replace(",",".",$liczba);
 //echo $liczba; 
+if( isset($_SESSION['user']) && $_GET['profil'] == mamDostepDo($_GET['profil'])) {
 ?>
 <h1> Dodaj słuzby </h1>
 <h2 class="podpowiedzi zaokraglij">Skorzystaj z formularza i dodaj sluzby.</h2>
@@ -46,7 +47,18 @@
     </div>
 </div>
 <?php
-    dodajSluzby();
+    dodajSluzby($_GET[profil]);
+    }else{
+            //wyrzucamy komunikat o braku dostepu z funkcji, lub mozemy napisac swoj
+            echo '<div class="flex-container">';
+                echo '<div class="panel trzysta">';
+                    echo '<div class="tytul"><p>błąd!</p></div>';
+                    echo '<div class="zawartosc wysrodkuj">';
+                    echo "Nie masz tutaj dostępu!<br> Przypadek? Nie sądzę.";    
+                    echo '</div>';    
+                echo '</div>';  
+            echo '</div>'; 
+        }
 
 /*
 foreach($data as $idkiedy) {

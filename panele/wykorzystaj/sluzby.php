@@ -18,7 +18,14 @@ $liczenie=count($data); //zliczenie ilosci wystapien pola data input
 if(!empty($data) && !empty($godzina))//sprawdzamy czy pole data nie jest puste
 {
     
-    $czyje_id = id_zolnierza();    // pobranie id zalogowanego zolnierza z konta uzytkownika
+    if(isset($czyje_id)) { //&& $kogo != id_zolnierza() drugi warunek ale nie pamietam po co go dalem
+            //zmienna pomocnicza do wyswietlania nadgodzin uzytkownika
+        $czyje_id;
+    }elseif(empty ($czyje_id)){
+        $kogo = id_zolnierza();
+            //zmienna pomocnicza do wyswietlania nadgodzin uzytkownika
+        $czyje_id = $kogo;
+    }
     $kto_dodal = $_SESSION['user']; //wyciagniecie z sesji nazwy uzytkownika
     echo "<div class=\"flex-container\">";
         echo "<div class=\"panel szescset\">";
@@ -130,7 +137,7 @@ if(!empty($data) && !empty($godzina))//sprawdzamy czy pole data nie jest puste
     </div>
 </div>
 <?php
-wykorzystaj_sluzby(id_zolnierza(), $_POST['data'], $_POST['godzina']);
+wykorzystaj_sluzby($_GET['profil'], $_POST['data'], $_POST['godzina']);
     //dodajNadgodziny();
     
     echo "<div id=\"dialog\" title=\"Ile godzin?\">";

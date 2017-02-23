@@ -12,8 +12,12 @@ switch ($_SESSION['permissions']){
         break;
     case 2:
         //dowodca grupy
-        $szukaj = mysql_query("SELECT *, stopnie.Skrot AS StSkrot FROM zolnierze, stopnie WHERE stopnie.idStopien = zolnierze.idStopien AND CONCAT_WS(' ',stopnie.Skrot, zolnierze.Nazwisko, zolnierze.Imie) LIKE '%".$wyrazenia."%' ORDER BY Nazwisko") 
-        or die('Błąd zapytania');
+        $idGrupy = czyDowodcaGrupy();
+            if (empty($idGrupy)){
+                $idGrupy = id_grupy();
+            }
+        $szukaj = mysql_query("SELECT *, stopnie.Skrot AS StSkrot FROM stopnie left join zolnierze USING (idStopien) left join eskadry USING (idEskadry) left join grupy using (idGrupy) WHERE grupy.idGrupy = '$idGrupy' AND CONCAT_WS(' ',stopnie.Skrot, zolnierze.Nazwisko, zolnierze.Imie) LIKE '%$wyrazenia%' ORDER BY Nazwisko") 
+        or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry'); 
         break; 
     case 3:
         //dowodca eskadry

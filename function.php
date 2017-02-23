@@ -147,13 +147,16 @@ czy zapytanie zwróciło wartość większą od 0 w sumie to rowna 1
 
 function skrotGrupy($id){
     if( isset($id) ) {
-            $ideskadry = $id;
+        $ideskadry = $id;
+         $zapytanie = mysql_query("SELECT grupy.Skrot, grupy.Nazwa FROM grupy WHERE grupy.idGrupy = '$ideskadry'") or die('Błąd zapytania');
     }else{
         $ideskadry = id_eskadry(); // jezeli nie podane $kogo to wyswietl id zalogowanego uzytkownika
+        $zapytanie = mysql_query("SELECT grupy.Skrot, grupy.Nazwa FROM grupy WHERE grupy.idGrupy = (SELECT eskadry.idGrupy FROM eskadry where eskadry.idEskadry='$ideskadry') or die('Błąd zapytania'");
     }
 
-$zapytanie = mysql_query("SELECT grupy.Skrot, grupy.Nazwa FROM grupy WHERE grupy.idGrupy = (SELECT eskadry.idGrupy FROM eskadry where eskadry.idEskadry='$ideskadry')") 
-or die('Błąd zapytania'); 
+
+
+ 
 /* 
 wyświetlamy wyniki, sprawdzamy, 
 czy zapytanie zwróciło wartość większą od 0 w sumie to rowna 1
@@ -329,6 +332,24 @@ czy zapytanie zwróciło wartość większą od 0
         } 
     }else{
         echo "avatar.png";
+    }
+}
+
+//WYSWIETLAMY ZDJECIE PROFILOWE
+function profilowe($idZolnierza) {
+$zdjecie = mysql_query("SELECT zolnierze.Zdjecie FROM zolnierze WHERE zolnierze.idZolnierza='$idZolnierza' limit 1") 
+or die(mysql_error()); 
+/* 
+wyświetlamy wyniki, sprawdzamy, 
+czy zapytanie zwróciło wartość większą od 0 
+*/ 
+    if(mysql_num_rows($zdjecie) > 0) { 
+        /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
+        while($nazwa = mysql_fetch_object($zdjecie)) { 
+            return $nazwa->Zdjecie; 
+        } 
+    }  else {
+        echo $nazwa="zdjecie.jpg";    //jezeli profil nie jest przypisany to wyswietl login
     }
 }
 
@@ -1459,7 +1480,7 @@ function sumaSluzb ($czyje_id, $rozszerz){ //pobieramy id zolnierza oraz wybiera
     
 }
 
-function dodajNadgodziny (){
+function dodajNadgodziny ($idZolnierza){
     //zmienne pobraane z formularza
 $data = $_POST['data'];
 $godzina = $_POST['godzina'];
@@ -1470,7 +1491,24 @@ $liczenie=count($data); //zliczenie ilosci wystapien pola data input
 if(isset($_POST['data']) && isset($_POST['godzina']))//sprawdzamy czy pole data nie jest puste
 {
     
+    if(empty($idZolnierza)){
     $czyje_id = id_zolnierza();    // pobranie id zalogowanego zolnierza z konta uzytkownika
+    }else{
+        if($idZolnierza == mamDostepDo($idZolnierza)) {
+        $czyje_id = $idZolnierza;    // pobranie id zolnierza podanego przez uzytkownika
+            }else{
+            //wyrzucamy komunikat o braku dostepu z funkcji, lub mozemy napisac swoj
+            echo '<div class="flex-container">';
+                echo '<div class="panel trzysta">';
+                    echo '<div class="tytul"><p>błąd!</p></div>';
+                    echo '<div class="zawartosc wysrodkuj">';
+                    echo "Nie masz tutaj dostępu!<br> Przypadek? Nie sądzę.";    
+                    echo '</div>';    
+                echo '</div>';  
+            echo '</div>'; 
+        }
+    }
+    
     $kto_dodal = $_SESSION['user']; //wyciagniecie z sesji nazwy uzytkownika
     echo "<div class=\"flex-container\">";
         echo "<div class=\"panel szescset\">";
@@ -1528,7 +1566,7 @@ echo "</div>";
 //DODAWANIE SLUZB DODWANIE SLUZB DODAWANIE SLUZB
 //Dodawanie sluzb sobie samemu
 //DODAWANIE SLUZB DODWANIE SLUZB DODAWANIE SLUZB
-function dodajSluzby (){
+function dodajSluzby ($idZolnierza){
     //zmienne pobraane z formularza
 $data = $_POST['data'];
 $iledni = $_POST['iledni'];
@@ -1537,7 +1575,23 @@ $liczenie=count($data); //zliczenie ilosci wystapien pola data input
 
 if(isset($_POST['data']) && isset($_POST['iledni']))//sprawdzamy czy pole data nie jest puste
 {
+    if(empty($idZolnierza)){
     $czyje_id = id_zolnierza();    // pobranie id zalogowanego zolnierza z konta uzytkownika
+    }else{
+        if($idZolnierza == mamDostepDo($idZolnierza)) {
+        $czyje_id = $idZolnierza;    // pobranie id zolnierza podanego przez uzytkownika
+            }else{
+            //wyrzucamy komunikat o braku dostepu z funkcji, lub mozemy napisac swoj
+            echo '<div class="flex-container">';
+                echo '<div class="panel trzysta">';
+                    echo '<div class="tytul"><p>błąd!</p></div>';
+                    echo '<div class="zawartosc wysrodkuj">';
+                    echo "Nie masz tutaj dostępu!<br> Przypadek? Nie sądzę.";    
+                    echo '</div>';    
+                echo '</div>';  
+            echo '</div>'; 
+        }
+    }
     $kto_dodal = $_SESSION['user']; //wyciagniecie z sesji nazwy uzytkownika
     echo "<div class=\"flex-container\">";
         echo "<div class=\"panel szescset\">";
@@ -2235,36 +2289,57 @@ or die('Błąd zapytania');
 //wyswietlenie liczby oczekujacych wnioskow
 
 function licz_oczekujace(){
+    $dzisiaj = date("Y-m-d");
     switch ($_SESSION['permissions']){
         case 1:
             //admin
             $wnioski = mysql_query("SELECT * FROM wnioski left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien)") 
-            or die('Błąd zapytania'); 
+            or die('Błąd zapytania');
+            $licz_terminy = mysql_query("SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_nadgodzin WHERE DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' GROUP BY idZolnierza
+                                         union all
+                                         SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_sluzb WHERE DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' GROUP BY idZolnierza") 
+            or die('Błąd zapytania liczenia terminow');             
             break;
         case 2:
             //dowodca grupy
-            $idGrupy = id_grupy();
+            $idGrupy = czyDowodcaGrupy();
             $wnioski = mysql_query("SELECT * FROM wnioski left join zolnierze on kogo=idZolnierza left join eskadry using(idEskadry) left join stopnie using (idStopien) where idGrupy='$idGrupy'") 
-            or die('Błąd zapytania');
+            or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do grupy');
+            $licz_terminy = mysql_query("SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_nadgodzin left join zolnierze using (idZolnierza) left join eskadry using(idEskadry) left join grupy using (idGrupy) WHERE idGrupy='$idGrupy' and DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' GROUP BY idZolnierza
+                                         union all
+                                         SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_sluzb left join zolnierze using (idZolnierza) left join eskadry using(idEskadry) left join grupy using (idGrupy) WHERE idGrupy='$idGrupy' and DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' GROUP BY idZolnierza") 
+            or die('Błąd zapytania liczenia'); 
             break; 
         case 3:
             //dowodca eskadry
             $idDowodcy = id_zolnierza();
             $idEskadry = id_eskadry();
             $wnioski = mysql_query("SELECT * FROM wnioski left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) where idEskadry='$idEskadry'") 
-            or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry'); 
+            or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry');
+            $licz_terminy = mysql_query("SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_nadgodzin left join zolnierze using (idZolnierza) WHERE DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' and idEskadry='$idEskadry' GROUP BY idZolnierza
+                                         union all
+                                         SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_sluzb left join zolnierze using (idZolnierza) WHERE DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' and idEskadry='$idEskadry' GROUP BY idZolnierza") 
+            or die('Błąd zapytania liczenia'); 
             break;
         case 4:
             //szef eskadry
             $idEskadry = id_eskadry();
             $wnioski = mysql_query("SELECT * FROM wnioski left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) where idEskadry='$idEskadry'") 
-            or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry'); 
+            or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry');
+            $licz_terminy = mysql_query("SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_nadgodzin left join zolnierze using (idZolnierza) WHERE DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' and idEskadry='$idEskadry' GROUP BY idZolnierza
+                                         union all
+                                         SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_sluzb left join zolnierze using (idZolnierza) WHERE DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' and idEskadry='$idEskadry' GROUP BY idZolnierza") 
+            or die('Błąd zapytania liczenia');
             break;
         case 5:
             //dowodca klucza
             $idKlucza = id_klucza();
             $wnioski = mysql_query("SELECT * FROM wnioski left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) where idKlucza='$idKlucza'") 
-            or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry'); 
+            or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry');
+            $licz_terminy = mysql_query("SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_nadgodzin left join zolnierze using (idZolnierza) WHERE DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' and idKlucza='$idKlucza' GROUP BY idZolnierza
+                                         union all
+                                         SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_sluzb left join zolnierze using (idZolnierza) WHERE DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' and idKlucza='$idKlucza' GROUP BY idZolnierza") 
+            or die('Błąd zapytania liczenia');
             break;
         case 6:
             //zolnierz
@@ -2273,8 +2348,9 @@ function licz_oczekujace(){
 or die('Błąd zapytania'); 
             break;
     }
-    $oczekujace = mysql_num_rows($wnioski);
-    return $oczekujace;
+    $oczekujace_w = mysql_num_rows($wnioski);
+    $oczekujace_t = mysql_num_rows($licz_terminy);
+    return $oczekujace_w + $oczekujace_t;
 }
 
 

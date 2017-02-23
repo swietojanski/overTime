@@ -45,50 +45,69 @@ function terminy($kogo) {
             or die('Błąd zapytania'); 
             $terminy_s = mysql_query("SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_sluzb left join zolnierze using (idZolnierza) WHERE DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' GROUP BY idZolnierza ORDER BY ma_wykorzystac DESC LIMIT $ile OFFSET $strona") 
             or die('Błąd zapytania'); 
-            $licz_wnioski = mysql_query("SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_nadgodzin WHERE DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' GROUP BY idZolnierza
+            $licz_terminy = mysql_query("SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_nadgodzin WHERE DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' GROUP BY idZolnierza
                                          union all
                                          SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_sluzb WHERE DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' GROUP BY idZolnierza") 
             or die('Błąd zapytania liczenia'); 
             break;
         case 2:
             //dowodca grupy
-            $idGrupy = id_grupy();
-            $wnioski = mysql_query("SELECT *, CONCAT_WS(' ',stopnie.Skrot, UPPER(zolnierze.Nazwisko), zolnierze.Imie) as wnioskujacy FROM wnioski left join zolnierze on kogo=idZolnierza left join eskadry using(idEskadry) left join stopnie using (idStopien) where idGrupy='$idGrupy' ORDER BY wolne LIMIT $ile OFFSET $strona") 
-            or die('Błąd zapytania');
-            $licz_wnioski = mysql_query("SELECT *, CONCAT_WS(' ',stopnie.Skrot, UPPER(zolnierze.Nazwisko), zolnierze.Imie) as wnioskujacy FROM wnioski left join zolnierze on kogo=idZolnierza left join eskadry using(idEskadry) left join stopnie using (idStopien) where idGrupy='$idGrupy'") 
-            or die('Błąd zapytania');
+            $idGrupy = czyDowodcaGrupy();
+            if (empty($idGrupy)){
+                $idGrupy = id_grupy();
+            }
+            $terminy_n = mysql_query("SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_nadgodzin left join zolnierze using (idZolnierza) left join eskadry using(idEskadry) left join grupy using (idGrupy) WHERE idGrupy='$idGrupy' and DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' GROUP BY idZolnierza ORDER BY ma_wykorzystac DESC LIMIT $ile OFFSET $strona") 
+            or die('Błąd zapytania'); 
+            $terminy_s = mysql_query("SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_sluzb left join zolnierze using (idZolnierza) left join eskadry using(idEskadry) left join grupy using (idGrupy) WHERE idGrupy='$idGrupy' and DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' GROUP BY idZolnierza ORDER BY ma_wykorzystac DESC LIMIT $ile OFFSET $strona") 
+            or die('Błąd zapytania'); 
+            $licz_terminy = mysql_query("SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_nadgodzin left join zolnierze using (idZolnierza) left join eskadry using(idEskadry) left join grupy using (idGrupy) WHERE idGrupy='$idGrupy' and DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' GROUP BY idZolnierza
+                                         union all
+                                         SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_sluzb left join zolnierze using (idZolnierza) left join eskadry using(idEskadry) left join grupy using (idGrupy) WHERE idGrupy='$idGrupy' and DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' GROUP BY idZolnierza") 
+            or die('Błąd zapytania liczenia'); 
             break; 
         case 3:
             //dowodca eskadry
             $idDowodcy = id_zolnierza();
             $idEskadry = id_eskadry();
-            $wnioski = mysql_query("SELECT *, CONCAT_WS(' ',stopnie.Skrot, UPPER(zolnierze.Nazwisko), zolnierze.Imie) as wnioskujacy FROM wnioski left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) where idEskadry='$idEskadry' ORDER BY wolne LIMIT $ile OFFSET $strona") 
-            or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry'); 
-            $licz_wnioski = mysql_query("SELECT *, CONCAT_WS(' ',stopnie.Skrot, UPPER(zolnierze.Nazwisko), zolnierze.Imie) as wnioskujacy FROM wnioski left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) where idEskadry='$idEskadry'") 
-            or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry'); 
+            $terminy_n = mysql_query("SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_nadgodzin left join zolnierze using (idZolnierza) WHERE DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' and idEskadry='$idEskadry' GROUP BY idZolnierza ORDER BY ma_wykorzystac DESC LIMIT $ile OFFSET $strona") 
+            or die('Błąd zapytania'); 
+            $terminy_s = mysql_query("SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_sluzb left join zolnierze using (idZolnierza) WHERE DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' and idEskadry='$idEskadry' GROUP BY idZolnierza ORDER BY ma_wykorzystac DESC LIMIT $ile OFFSET $strona") 
+            or die('Błąd zapytania'); 
+            $licz_terminy = mysql_query("SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_nadgodzin left join zolnierze using (idZolnierza) WHERE DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' and idEskadry='$idEskadry' GROUP BY idZolnierza
+                                         union all
+                                         SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_sluzb left join zolnierze using (idZolnierza) WHERE DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' and idEskadry='$idEskadry' GROUP BY idZolnierza") 
+            or die('Błąd zapytania liczenia');  
             break;
         case 4:
             //szef eskadry
             $idEskadry = id_eskadry();
-            $wnioski = mysql_query("SELECT *, CONCAT_WS(' ',stopnie.Skrot, UPPER(zolnierze.Nazwisko), zolnierze.Imie) as wnioskujacy FROM wnioski left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) where idEskadry='$idEskadry' ORDER BY wolne LIMIT $ile OFFSET $strona") 
-            or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry'); 
-            $licz_wnioski = mysql_query("SELECT *, CONCAT_WS(' ',stopnie.Skrot, UPPER(zolnierze.Nazwisko), zolnierze.Imie) as wnioskujacy FROM wnioski left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) where idEskadry='$idEskadry'") 
-            or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry'); 
+            $terminy_n = mysql_query("SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_nadgodzin left join zolnierze using (idZolnierza) WHERE DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' and idEskadry='$idEskadry' GROUP BY idZolnierza ORDER BY ma_wykorzystac DESC LIMIT $ile OFFSET $strona") 
+            or die('Błąd zapytania'); 
+            $terminy_s = mysql_query("SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_sluzb left join zolnierze using (idZolnierza) WHERE DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' and idEskadry='$idEskadry' GROUP BY idZolnierza ORDER BY ma_wykorzystac DESC LIMIT $ile OFFSET $strona") 
+            or die('Błąd zapytania'); 
+            $licz_terminy = mysql_query("SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_nadgodzin left join zolnierze using (idZolnierza) WHERE DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' and idEskadry='$idEskadry' GROUP BY idZolnierza
+                                         union all
+                                         SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_sluzb left join zolnierze using (idZolnierza) WHERE DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' and idEskadry='$idEskadry' GROUP BY idZolnierza") 
+            or die('Błąd zapytania liczenia');  
             break;
         case 5:
             //dowodca klucza
             $idKlucza = id_klucza();
-            $wnioski = mysql_query("SELECT *, CONCAT_WS(' ',stopnie.Skrot, UPPER(zolnierze.Nazwisko), zolnierze.Imie) as wnioskujacy FROM wnioski left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) where idKlucza='$idKlucza' ORDER BY wolne LIMIT $ile OFFSET $strona") 
-            or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry'); 
-            $licz_wnioski = mysql_query("SELECT *, CONCAT_WS(' ',stopnie.Skrot, UPPER(zolnierze.Nazwisko), zolnierze.Imie) as wnioskujacy FROM wnioski left join zolnierze on kogo=idZolnierza left join stopnie using (idStopien) where idKlucza='$idKlucza'") 
-            or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do eskadry'); 
+            $terminy_n = mysql_query("SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_nadgodzin left join zolnierze using (idZolnierza) WHERE DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' and idKlucza='$idKlucza' GROUP BY idZolnierza ORDER BY ma_wykorzystac DESC LIMIT $ile OFFSET $strona") 
+            or die('Błąd zapytania'); 
+            $terminy_s = mysql_query("SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_sluzb left join zolnierze using (idZolnierza) WHERE DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' and idKlucza='$idKlucza' GROUP BY idZolnierza ORDER BY ma_wykorzystac DESC LIMIT $ile OFFSET $strona") 
+            or die('Błąd zapytania'); 
+            $licz_terminy = mysql_query("SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_nadgodzin left join zolnierze using (idZolnierza) WHERE DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' and idKlucza='$idKlucza' GROUP BY idZolnierza
+                                         union all
+                                         SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_sluzb left join zolnierze using (idZolnierza) WHERE DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' and idKlucza='$idKlucza' GROUP BY idZolnierza") 
+            or die('Błąd zapytania liczenia');  
             break;
         case 6:
             //zolnierz
             header('Location: index.php');
             break;
     }
-    $wpisow = (int)mysql_num_rows($licz_wnioski);
+    $wpisow = (int)mysql_num_rows($licz_terminy);
     $stron = ceil($wpisow/$ile); //ilosc stron
     if($stron > 1) {
     //Pętla po stronach

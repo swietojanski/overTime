@@ -1,4 +1,5 @@
 <?php
+
 if($_SESSION['permissions']>0 && $_SESSION['permissions']<10){
 
 $nadco=$_SESSION['user']."-nadgodziny";    

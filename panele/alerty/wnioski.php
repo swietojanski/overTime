@@ -270,7 +270,10 @@ function wnioski($kogo) {
             break;
         case 2:
             //dowodca grupy
-            $idGrupy = id_grupy();
+            $idGrupy = czyDowodcaGrupy();
+            if (empty($idGrupy)){
+                $idGrupy = id_grupy();
+            }
             $wnioski = mysql_query("SELECT *, CONCAT_WS(' ',stopnie.Skrot, UPPER(zolnierze.Nazwisko), zolnierze.Imie) as wnioskujacy FROM wnioski left join zolnierze on kogo=idZolnierza left join eskadry using(idEskadry) left join stopnie using (idStopien) where idGrupy='$idGrupy' ORDER BY wolne LIMIT $ile OFFSET $strona") 
             or die('Błąd zapytania');
             $licz_wnioski = mysql_query("SELECT *, CONCAT_WS(' ',stopnie.Skrot, UPPER(zolnierze.Nazwisko), zolnierze.Imie) as wnioskujacy FROM wnioski left join zolnierze on kogo=idZolnierza left join eskadry using(idEskadry) left join stopnie using (idStopien) where idGrupy='$idGrupy'") 
@@ -367,7 +370,7 @@ function wnioski($kogo) {
                         echo "<tr class=\"blekitne\">";
                             echo "<td class=\"left\">";
                                 echo "<a href=\"index.php?id=panele/profil/zolnierz&profil=".$r->kogo."\">";
-                                echo "<img src=\"img/avatars/";avatar($r->kogo);
+                                echo "<img src=\"img/profiles/thumbnail/";echo profilowe($r->kogo);                              
                                 echo "\" class=\"zaokraglij\" height=\"26px\" title=\"".$r->wnioskujacy."<br>Dodane: ".$r->kiedy_zlozyl."\" align=\"absmiddle\">";
                                 echo "</a>";
                             echo "</td>";
@@ -383,6 +386,7 @@ function wnioski($kogo) {
                                     echo "<td><a class=\"edytuj\" href=\"index.php?id=alerty$czyje_url&strona=".$dousuniecia."&akceptuj=".$r->idWniosku."\">Akceptuj</a></td>";
                                     echo "<td><a class=\"usun\" href=\"index.php?id=alerty$czyje_url&strona=".$dousuniecia."&odrzuc=".$r->idWniosku."\">Odrzuć</a></td>";   
                         echo "</tr>";
+                        
                     }
                 echo "</tbody>";
                 echo "<tr class=\"blekitne empty-cells\">";
@@ -396,7 +400,8 @@ function wnioski($kogo) {
                                 echo "<input type=\"submit\" name=\"odrzuc\" id=\"odrzuczaz\" class=\"usunwszystkie\" value=\"odrzuć zaznaczone\" title=\"odrzuć zaznaczone\"/></th>";
                     echo "</tr>";
                 echo "</form>"; 
-            echo "</table>";   
+            echo "</table>";  
+            
         }else{
             echo "Brak wniosków do wyświetlenia";
         }
