@@ -93,9 +93,9 @@ function kalendarz($idZolnierza)
 
   echo("<table class=\"dniwolne\">");
   echo("<caption>");
-  echo "<a href='$miesiac&m=".$_m."' class=\"nawikal wlinii\"><</a>";
-  echo"<a href='index.php?id=panele/moje/wolne'><span class=\"datakal\">".$nazwa_miesiaca." ".$wybrany_rok."</span></a>";
-  echo "<a href='$miesiac&m=".$m_."' class=\"nawikal wlinii\">></a>";
+  echo "<a href='$miesiac&m=".$_m."#kalendarz' class=\"nawikal wlinii\"><</a>";
+  echo"<a href='$miesiac#kalendarz'><span class=\"datakal\">".$nazwa_miesiaca." ".$wybrany_rok."</span></a>";
+  echo "<a href='$miesiac&m=".$m_."#kalendarz' class=\"nawikal wlinii\">></a>";
    if(isset($komunikat)){echo "<br>".$komunikat;}
   echo("</caption><tr class=\"blekitne empty-cells\">");
   ?>
@@ -141,7 +141,7 @@ function kalendarz($idZolnierza)
             if(mysql_num_rows($sprawdzenie) > 0) {
                 $r = mysql_fetch_object($zapytanie);
                 echo("<td class=\"zlozony-4\">");
-                echo "<a href=\"".$adres."&zobacz=".$like_data."\" title=\"".(($r->wolnego)/60)."\"";if(isset($_GET['zobacz']) &&  $_GET['zobacz']==$like_data){echo'class="dopelniajacy-1"';}
+                echo "<a href=\"".$adres."&zobacz=".$like_data."#kalendarz\" title=\"".(($r->wolnego)/60)."\"";if(isset($_GET['zobacz']) &&  $_GET['zobacz']==$like_data){echo'class="dopelniajacy-1"';}
                 echo" godz.\">".($i - $pierwszy_dzien_miesiaca + 2)."</a>";
                 echo("</td>");
             }else{
@@ -192,7 +192,9 @@ function kalendarz($idZolnierza)
                         echo "</a>";
                         echo "</div>";
                         echo "<div class=\"zawartosc wysrodkuj\" >";
+                        if($_SESSION['permissions']<6){
                         echo "<input type=\"submit\" name=\"usun_za_nad\" class=\"zapisz animacja\" value=\"usuń\" title=\"Usuń wolne\"/>";  
+                        }
                         echo "</form>";
                         echo "</div>";
           }
@@ -224,7 +226,9 @@ function kalendarz($idZolnierza)
                         echo "</a>";
                         echo "</div>";
                         echo "<div class=\"zawartosc wysrodkuj\" >";
+                        if($_SESSION['permissions']<6){
                         echo "<input type=\"submit\" name=\"usun_za_slu\" class=\"zapisz animacja\" value=\"usuń\" title=\"Usuń wolne\"/>";  
+                        }
                         echo "</form>";
                         echo "</div>";
           }

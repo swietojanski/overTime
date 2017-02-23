@@ -134,7 +134,7 @@ function kalendarz($idZolnierza)
             if(mysql_num_rows($sprawdzenie) > 0) {
                 $r = mysql_fetch_object($zapytanie);
                 echo("<td class=\"zlozony-4\">");
-                echo "<a href=\"".$adres."&zobacz=".$like_data."\" title=\"".(($r->wolnego)/60)." godz.\"";if(isset($_GET['zobacz']) &&  $_GET['zobacz']==$like_data){echo'class="dopelniajacy-1"';}
+                echo "<a href=\"".$adres."&zobacz=".$like_data."#kalendarz\" title=\"".(($r->wolnego)/60)." godz.\"";if(isset($_GET['zobacz']) &&  $_GET['zobacz']==$like_data){echo'class="dopelniajacy-1"';}
                 echo" godz.\">".($i - $pierwszy_dzien_miesiaca + 2)."</a>";
                 echo("</td>");
             }else{
@@ -232,7 +232,7 @@ function kalendarz($idZolnierza)
 
 <h1>Kalendarz dni wolnych</h1>
 <h2 class="podpowiedzi zaokraglij">Sprawdzisz tutaj kiedy miałeś lub będziesz miał wolne</h2>
-<div class="flex-container">
+<div class="flex-container" id="kalendarz">
     <div class="panel tysiac">
        <div class="tytul">
           <p>kalendarz</p>

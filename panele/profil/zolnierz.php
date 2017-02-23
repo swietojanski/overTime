@@ -87,7 +87,7 @@ if(isset($_GET[edytuj])){
 <div class="flex-container">
     <div class="panel szescset">
        <div class="tytul">
-          <p>kalendarz</p>
+          <p id="kalendarz">kalendarz</p>
 <!--          <p class="right"><a href="#index.php?id=panele/admin/uzytkownicy" class="pl-10 pr-10 edytuj valing40" title="wyświetl wszystkich użytkowników">opcja</a></p>-->
        </div>
        <div class="zawartosc" >
