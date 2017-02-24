@@ -154,7 +154,7 @@ function terminy($kogo) {
                     while($r = mysql_fetch_object($terminy_n)) {
 
             echo "<div class=\"flex-container\">";
-                echo "<a href=\"index.php?id=panele/profil/zolnierz&profil=$r->idZolnierza\" id=\"profil\">"
+                echo "<a href=\"index.php?id=panele/wykorzystaj/nadgodziny&profil=$r->idZolnierza\" id=\"profil\">"
                 . "<div class=\"panel\">";
                                     echo "<div class=\"podpis\">";
                         echo "<p class=\"dane\">";st_nazwisko_imie($r->idZolnierza);echo"</p>";
@@ -175,7 +175,7 @@ function terminy($kogo) {
                     while($r = mysql_fetch_object($terminy_s)) {
 
             echo "<div class=\"flex-container\">";
-                echo "<a href=\"index.php?id=panele/profil/zolnierz&profil=$r->idZolnierza\" id=\"profil\">"
+                echo "<a href=\"index.php?id=panele/wykorzystaj/sluzby&profil=$r->idZolnierza\" id=\"profil\">"
                 . "<div class=\"panel\">";
                                     echo "<div class=\"podpis\">";
                         echo "<p class=\"dane\">";st_nazwisko_imie($r->idZolnierza);echo"</p>";

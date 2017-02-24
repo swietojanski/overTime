@@ -470,7 +470,7 @@ text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
         width: 100px;
     }
     .panel.czterdziesci {
-        width: 53px;
+        width: 95px;
     }
 }
 
@@ -534,7 +534,7 @@ text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
         width: 100px;
     }
     .panel.czterdziesci {
-        width: 53px;
+        width: 70px;
     }
         .flex-item {
         width: 150px;
@@ -602,7 +602,7 @@ text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
         width: 100px;
     }
     .panel.czterdziesci {
-        width: 53px;
+        width: 90px;
     }
 }
 
@@ -664,7 +664,7 @@ text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
         width: 100px;
     }
     .panel.czterdziesci {
-        width: 53px;
+        width: 95px;
     }
     
        
@@ -798,6 +798,7 @@ text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
   height:60px;
   background: #336666;
 }
+
 #headcenter:hover {
 background-color:#34734f;
 }
