@@ -12,6 +12,15 @@ echo "<div class=\"flex-container\">";
         echo "<div class=\"panel siedemset\">";
             echo "<div class=\"tytul\">";
                 echo "<p>wszystkie nadgodziny</p>";
+                echo "<p class=\"right mr-5\">";
+                    if(!empty($_GET['profil'])){
+                        echo "<a href=\"index.php?id=panele/profil/zolnierz&profil=".$_GET['profil']."\">";
+                            echo "<img src=\"img/profiles/thumbnail/";echo profilowe($_GET['profil']);                              
+                            echo "\" class=\"zaokraglij\" height=\"26px\" title=\"";
+                            st_nazwisko_imie($_GET['profil']); echo "\" align=\"absmiddle\">";
+                        echo "</a>";
+                    }   
+                echo "</p>";
             echo "</div>";
             echo "<div class=\"zawartosc\" >";
                 mojeNadgodziny($_GET[profil]);

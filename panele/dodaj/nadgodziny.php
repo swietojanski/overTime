@@ -13,6 +13,17 @@ if( isset($_SESSION['user']) or $_GET['profil'] == mamDostepDo($_GET['profil']))
     <div class="panel szescset">
         <div class="tytul">
             <p>nadgodzinki</p>
+            <p class="right mr-5">
+                <?php
+                    if(!empty($_GET['profil'])){
+                        echo "<a href=\"index.php?id=panele/profil/zolnierz&profil=".$_GET['profil']."\">";
+                            echo "<img src=\"img/profiles/thumbnail/";echo profilowe($_GET['profil']);                              
+                            echo "\" class=\"zaokraglij\" height=\"26px\" title=\"";
+                            st_nazwisko_imie($_GET['profil']); echo "\" align=\"absmiddle\">";
+                        echo "</a>";
+                    }
+                ?>
+            </p>
         </div>
         <div class="zawartosc wysrodkuj">
             <form class="nadgodzinki" name="nadgodzinki" method="post">        

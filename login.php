@@ -9,7 +9,7 @@
 <!-- Mimic Internet Explorer Edge -->
 <meta http-equiv="x-ua-compatible" content="IE=edge" >
 <meta charset="UTF-8" />
-<link href="login.css" rel="stylesheet" type="text/css">
+<link href="css/login.css" rel="stylesheet" type="text/css">
 <title><?php print $title;?></title>
 </head>
 <!-- Początek tła strony -->

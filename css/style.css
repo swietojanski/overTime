@@ -414,7 +414,7 @@ text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
     }
     a.szukajmin {
             display:block;
-            background-image:url(img/lay/lupaduza.png);
+            background-image:url(../img/lay/lupaduza.png);
             background-repeat:no-repeat;
             background-position:center;
             width:100%;
@@ -864,7 +864,7 @@ input[type=search] { /* klasa do szukajki*/
 	-khtml-border-radius:0 5px 5px 0;
 	-moz-border-radius:0 5px 5px 0;
 	border-radius:0 5px 5px 0;
-	/*background-image:url(img/lay/lupa.png);*/
+	/*background-image:url(../img/lay/lupa.png);*/
 }
 
 input[type=search][name=szukaj] { /* tę klasę należy umieścić w elemencie input typu szukającego*/
@@ -872,12 +872,12 @@ input[type=search][name=szukaj] { /* tę klasę należy umieścić w elemencie i
 	width:500px;
 	cursor: text;
 	border:1px solid #000;
-	/*background-image:url(img/lay/lupa.png);*/
+	/*background-image:url(../img/lay/lupa.png);*/
 }
 
 a.logo {
 	display:block;
-	background-image:url(img/lay/logo.png);
+	background-image:url(../img/lay/logo.png);
 	background-repeat:no-repeat;
 	background-position:center;
 	width:60px;
@@ -894,7 +894,7 @@ a.addovertime {
 
 	display:block;
 	float:left;
-	background-image:url(img/lay/plus.png);
+	background-image:url(../img/lay/plus.png);
 	background-repeat:no-repeat;
 	background-position:8px 8px;
 	text-align:left;
@@ -934,7 +934,7 @@ a.wyloguj:hover {
 a.ustawienia {
         padding:0 8px 0 8px;
 	display:block;
-	background-image:url(img/lay/settings.png);
+	background-image:url(../img/lay/settings.png);
 	background-repeat:no-repeat;
 	background-position:center;
 	width:29px;
@@ -947,7 +947,7 @@ a.ustawienia:hover {
 a.alerty {
         padding:0px;
 	display:block;
-	background-image:url(img/lay/alert.png);
+	background-image:url(../img/lay/alert.png);
 	background-repeat:no-repeat;
 	background-position:left;
         font: 14px/60px "Arial", Gadget, sans-serif;
@@ -973,7 +973,7 @@ a.alerty span {
 a.panadmin {
     padding:0 8px 0 8px;
 	display:block;
-	background-image:url(img/lay/admin.png);
+	background-image:url(../img/lay/admin.png);
 	background-repeat:no-repeat;
 	background-position:center;
 	width:29px;
@@ -1062,6 +1062,9 @@ p {
 }
 .ml-10 {
     margin-left: 10px;
+}
+.mr-5 {
+    margin-right: 5px;
 }
 .mr-10 {
     margin-right: 10px;

@@ -8,8 +8,8 @@
 
 <meta http-equiv="x-ua-compatible" content="IE=edge" >
 <meta charset="UTF-8" />
-<link href="ikony.css" rel="stylesheet" type="text/css">
-<link href="style.css" rel="stylesheet" type="text/css">
+<link href="css/ikony.css" rel="stylesheet" type="text/css">
+<link href="css/style.css" rel="stylesheet" type="text/css">
 <link href="js/jquery-ui-1.11.4/jquery-ui.css" rel="stylesheet" type="text/css">
 <script src="js/jquery-ui-1.11.4/jquery.min.js"></script>
 <script src="js/jquery-ui-1.11.4/jquery-ui.js"></script>
