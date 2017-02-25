@@ -126,7 +126,7 @@ function kalendarz($idZolnierza)
         $staradata="$dzien-$miesiac-$rok";
         $like_data=date("Y-m-d", strtotime($staradata));//generujemy date do porownania w mysql
 
-        $sprawdzenie = mysql_query("SELECT * FROM v_dni_wolne where idZolnierza='$idZolnierza' and kiedy = '$like_data'") 
+        $sprawdzenie = mysql_query("SELECT * FROM v_dni_wolne where idZolnierza='$idZolnierza' and kiedy = '$like_data' group by kiedy") 
         or die('Błąd zapytania');
         $zapytanie = mysql_query("SELECT *, sum(ile) as wolnego FROM v_dni_wolne where idZolnierza='$idZolnierza' and v_dni_wolne.kiedy = '$like_data'") 
         or die('Błąd zapytania');
