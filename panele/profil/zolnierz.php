@@ -1,16 +1,34 @@
 <?php require_once 'panele/profil/kalendarzyk.php'; ?>
 <?php 
 $url = $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING']; //generujemy aktualny adres wyswietlanej strony
-if(isset($_GET[edytuj])){
+if(isset($_GET['edytuj'])){
         $url = explode("&edytuj", $url); //wyrzucamy deklaracje zmiennej get z adresu
         $url = $url[0];
         $adres=$url;
         $akcja="wyjdź";
         $class="anuluj";
+        $akcja_d="zmień dane";
+        $class_d="edytuj";
+        $adres_d=$url."&dane";
 }  else {
         $adres=$url."&edytuj";
         $akcja="edytuj";
         $class="edytuj";
+}
+
+if(isset($_GET['dane'])){
+        $url = explode("&dane", $url); //wyrzucamy deklaracje zmiennej get z adresu
+        $url = $url[0];
+        $adres=$url;
+        $akcja="wyjdź";
+        $class="anuluj";
+        $akcja_d="zmień dane";
+        $class_d="edytuj";
+        $adres_d=$url."&edytuj";
+}  else {
+       /* $adres=$url."&edytuj";
+        $akcja="edytuj";
+        $class="edytuj";*/
 }
 ?>
 
@@ -49,7 +67,7 @@ if(isset($_GET[edytuj])){
 
 <div class="flex-container">
     <div class="panel szescset">
-        <div class="tytul"><p>dane profilowe</p><p class="right"><a href="<?php echo $adres?>" class="pl-10 pr-10 <?php echo $class ?> valing40" title="<?php echo $akcja?>"><?php echo $akcja?></a></p></div>
+                <div class="tytul"><p>dane profilowe</p><p class="right"><?php if(isset($_GET['edytuj'])){ ?><a href="<?php echo $adres_d?>" class="pl-10 pr-10 <?php echo $class_d ?> valing40" title="<?php echo $akcja_d?>"><?php echo $akcja_d?></a><?php } ?><a href="<?php echo $adres?>" class="pl-10 pr-10 <?php echo $class ?> valing40" title="<?php echo $akcja?>"><?php echo $akcja?></a></p></div>
         <div class="zawartosc">
             <?php profil($_GET['profil']);?>
         </div>    

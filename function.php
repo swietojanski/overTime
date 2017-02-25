@@ -695,7 +695,7 @@ function profil($profil) {
             echo "<div class=\"flex-container\">"; 
             while($r = mysql_fetch_object($zolnierz)) {  
                 echo "<div class=\"panel zdjecie\">"; 
-                    if(isset($_GET['edytuj'])){//edycja zdjecia w profilu
+                    if(isset($_GET['edytuj']) && !isset($_GET['dane'])){//edycja zdjecia w profilu
                         echo "<div class=\"zawartosc blekitne\">"; edytujZdjecie($_GET['profil']); echo "</div>";    
                     }else{
                         echo "<div class=\"zawartosc blekitne\"><img src=\"img/profiles/thumbnail/$r->Zdjecie\" width=\"200px\" align=\"absmiddle\" alt=\"Zdjęcie profiliwe\" class=\"zaokraglij\"></div>";
@@ -705,26 +705,52 @@ function profil($profil) {
 
                         
                 echo "<div class=\"panel dane\">"; 
-                    echo "<div class=\"zawartosc blekitne mb-10\"><h2>".mb_convert_case($r->Nazwisko, MB_CASE_UPPER, "UTF-8")." ".$r->Imie."</h2></div>";
-                    echo "<div class=\"zawartosc blekitne\">Stopień: ".$r->Pelna."</div>";
+                    if(isset($_GET['dane'])){//edycja danych w profilu
+                        echo "<div class=\"zawartosc blekitne\"><input type=\"text\" class=\"fod\" name=\"nazwisko\" placeholder=\"$r->Nazwisko\" value=\"$r->Nazwisko\" required ></div>";
+                        echo "<div class=\"zawartosc blekitne mb-10\"><input type=\"text\" class=\"fod\" name=\"imie\" placeholder=\"$r->Imie\" value=\"$r->Imie\" required ></div>";
+                        echo "<div class=\"zawartosc blekitne\">";stopnie();echo"</div>";
                     
-                    if(isset($r->Eskadra)){
-                        echo "<div class=\"zawartosc blekitne\">Eskadra: ".$r->Eskadra."</div>";   
-                    }
-                    if (isset($r->Klucz)){
-                        echo "<div class=\"zawartosc blekitne\">Klucz: ".$r->Klucz."</div>";
-                    }
-                        $dowodca_grupy = czyDowodcaGrupy($profil);
-                        $dowodca = czyDowodca($profil);
-                        $szef = czySzef($profil);
-                    if(isset($dowodca_grupy)){
-                        echo "<div class=\"zawartosc blekitne mt-10\">Dowódca "; echo skrotGrupy($dowodca_grupy); echo "</div>";
-                    }
-                    if(isset($dowodca)){
-                        echo "<div class=\"zawartosc blekitne mt-10\">Dowódca "; echo skrotEskadry($dowodca); echo "</div>";
-                    }
-                    if (isset($szef)) {
-                        echo "<div class=\"zawartosc blekitne mt-10\">Szef "; echo skrotEskadry($szef); echo" </div>";
+                        if(isset($r->Eskadra)){
+                            echo "<div class=\"zawartosc blekitne\">";listaEskadr(id_grupy($r->idZolnierza));echo"</div>";   
+                        }
+                        if (isset($r->Klucz)){
+                            echo "<div class=\"zawartosc blekitne\">";listaKluczy(id_eskadry($r->idZolnierza));echo"</div>";
+                        }
+                            $dowodca_grupy = czyDowodcaGrupy($profil);
+                            $dowodca = czyDowodca($profil);
+                            $szef = czySzef($profil);
+                        if(isset($dowodca_grupy)){
+                            echo "<div class=\"zawartosc blekitne mt-10\">Dowódca "; echo skrotGrupy($dowodca_grupy); echo "</div>";
+                        }
+                        if(isset($dowodca)){
+                            echo "<div class=\"zawartosc blekitne mt-10\">Dowódca "; echo skrotEskadry($dowodca); echo "</div>";
+                        }
+                        if (isset($szef)) {
+                            echo "<div class=\"zawartosc blekitne mt-10\">Szef "; echo skrotEskadry($szef); echo" </div>";
+                        }
+                        echo "<div class=\"zawartosc wysrodkuj mt-10\"><input type=\"submit\" class=\"zapisz animacja\" name=\"zapisz\" value=\"Zapisz\"/></div>";
+                    }else{
+                        echo "<div class=\"zawartosc blekitne mb-10\"><h2>".mb_convert_case($r->Nazwisko, MB_CASE_UPPER, "UTF-8")." ".$r->Imie."</h2></div>";
+                        echo "<div class=\"zawartosc blekitne\">Stopień: ".$r->Pelna."</div>";
+
+                        if(isset($r->Eskadra)){
+                            echo "<div class=\"zawartosc blekitne\">Eskadra: ".$r->Eskadra."</div>";   
+                        }
+                        if (isset($r->Klucz)){
+                            echo "<div class=\"zawartosc blekitne\">Klucz: ".$r->Klucz."</div>";
+                        }
+                            $dowodca_grupy = czyDowodcaGrupy($profil);
+                            $dowodca = czyDowodca($profil);
+                            $szef = czySzef($profil);
+                        if(isset($dowodca_grupy)){
+                            echo "<div class=\"zawartosc blekitne mt-10\">Dowódca "; echo skrotGrupy($dowodca_grupy); echo "</div>";
+                        }
+                        if(isset($dowodca)){
+                            echo "<div class=\"zawartosc blekitne mt-10\">Dowódca "; echo skrotEskadry($dowodca); echo "</div>";
+                        }
+                        if (isset($szef)) {
+                            echo "<div class=\"zawartosc blekitne mt-10\">Szef "; echo skrotEskadry($szef); echo" </div>";
+                        }
                     }
                 echo "</div>";
             } 
