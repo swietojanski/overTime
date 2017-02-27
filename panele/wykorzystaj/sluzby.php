@@ -137,7 +137,7 @@ if(!empty($data) && !empty($godzina))//sprawdzamy czy pole data nie jest puste
                         <tr class="blekitne">
                             <td>1</td>
                             <td><input type="text" name="data[]" class="datanadgodzin" placeholder="20-05-2016" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])-(0[1-9]|1[012])-[0-9]{4}" required="true" size="19"></td>
-                            <td><input type="number" name="godzina[]" class="ggodzin" placeholder="2.5" pattern="((\d{1,2}\.[5])|(\d{1,2}))" required="true" size="19" id="godzina-1" min="1" max="8" step="0.5"></td>
+                            <td><input type="number" name="godzina[]" class="ggodzin" placeholder="2.5" pattern="((\d{1,2}\.[5])|(\d{1,2}))" required size="19" id="godzina-1" min="1" max="8" step="0.5"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -200,7 +200,7 @@ $(document).ready(function() {
         var f1  = '<td><input type="text" name="data[]" class="datanadgodzin" placeholder="20-05-2016" pattern="(0[1-9]|1[0-9]|2[0-9]|3[01])-(0[1-9]|1[012])-[0-9]{4}" required="true" size="19"></td>';
  
         //druga kom�rka
-        var f2  = '<td><input type="number" name="godzina[] '+liczba+'" class="ggodzin" placeholder="2.5" required="true" size="19" id="godzina-'+liczba+'" min="1" max="8" step="0.5"></td>';
+        var f2  = '<td><input type="number" name="godzina[] '+liczba+'" class="ggodzin" placeholder="2.5" required size="19" id="godzina-'+liczba+'" min="1" max="8" step="0.5"></td>';
  
         //trzecia kom�rka
         var f3  = '<td><a class="delete plr-5" href="#">Usuń</a></td>';

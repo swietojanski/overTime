@@ -210,6 +210,10 @@ h2 {
     padding: 0px 0px 0px 5px;
      width: 344px;
 }
+.overTime input.prof, select.prof {
+    padding: 0px 0px 0px 5px;
+     width: 305px;
+}
 .overTime input.zh {
      width: 363px;
 }

@@ -1,5 +1,5 @@
 <?PHP
-
+if($_SESSION['permissions']<5){
 function rozkaz()
 {
     
@@ -95,8 +95,43 @@ function rozkaz()
         $staradata="$dzien-$miesiac-$rok";
         $like_data=date("Y-m-d", strtotime($staradata));//generujemy date do porownania w mysql
 
-        $sprawdzenie = mysql_query("SELECT kiedy FROM v_dni_wolne where kiedy = '$like_data' group by kiedy") 
-        or die('Błąd zapytania');
+        
+            switch ($_SESSION['permissions']){
+        case 1:
+            //admin
+            $sprawdzenie = mysql_query("SELECT kiedy FROM v_dni_wolne where kiedy = '$like_data' group by kiedy") 
+            or die('Błąd zapytania');
+            break;
+        case 2:
+            //dowodca grupy
+            $idGrupy = czyDowodcaGrupy();
+                if (empty($idGrupy)){
+                    $idGrupy = id_grupy();
+                }
+            $sprawdzenie = mysql_query("SELECT kiedy FROM v_dni_wolne left join zolnierze using (idZolnierza) left join eskadry on zolnierze.idEskadry=eskadry.idEskadry left join grupy using(idGrupy) where idGrupy='$idGrupy' and kiedy = '$like_data' group by kiedy") or die('Błąd zapytania');
+            break; 
+        case 3:
+            //dowodca eskadry
+            $idDowodcy = id_zolnierza(); //tego nie uzywam
+            $idEskadry = id_eskadry();
+            $sprawdzenie = mysql_query("SELECT kiedy FROM v_dni_wolne left join zolnierze using (idZolnierza) left join eskadry on zolnierze.idEskadry=eskadry.idEskadry left join grupy using(idGrupy) where zolnierze.idEskadry = '$idEskadry' and kiedy = '$like_data' group by kiedy") or die('Błąd zapytania');
+            
+            break;
+        case 4:
+            //szef eskadry
+            $idEskadry = id_eskadry();
+            $sprawdzenie = mysql_query("SELECT kiedy FROM v_dni_wolne left join zolnierze using (idZolnierza) left join eskadry on zolnierze.idEskadry=eskadry.idEskadry left join grupy using(idGrupy) where zolnierze.idEskadry = '$idEskadry' and kiedy = '$like_data' group by kiedy") or die('Błąd zapytania');
+            break;
+        case 5:
+            //dowodca klucza
+            header('Location: index.php');
+            break;
+        case 6:
+            //zolnierz
+            header('Location: index.php');
+            break;
+    }
+
         /*$zapytanie = mysql_query("SELECT *, sum(ile) as wolnego FROM v_dni_wolne where idZolnierza='$idZolnierza' and v_dni_wolne.kiedy = '$like_data'") 
         or die('Błąd zapytania');*/
 
@@ -193,15 +228,48 @@ function rozkaz()
   
   function punkty($like_data){
       
-        $lista = mysql_query("SELECT idZolnierza FROM v_dni_wolne group by idZolnierza order by idZolnierza") or die('Błąd zapytania');
+    switch ($_SESSION['permissions']){
+        case 1:
+            //admin
+            $lista = mysql_query("SELECT idZolnierza FROM v_dni_wolne group by idZolnierza order by idZolnierza") or die('Błąd zapytania');
+            break;
+        case 2:
+            //dowodca grupy
+            $idGrupy = czyDowodcaGrupy();
+                if (empty($idGrupy)){
+                    $idGrupy = id_grupy();
+                }
+            $lista = mysql_query("SELECT * FROM v_dni_wolne left join zolnierze using (idZolnierza) left join eskadry on zolnierze.idEskadry=eskadry.idEskadry left join grupy using(idGrupy) where idGrupy='$idGrupy' group by idZolnierza order by idGrupy, idZolnierza, zolnierze.idEskadry, zolnierze.idKlucza, idStopien desc") or die('Błąd zapytania');
+            break; 
+        case 3:
+            //dowodca eskadry
+            $idDowodcy = id_zolnierza(); //tego nie uzywam
+            $idEskadry = id_eskadry();
+            $lista = mysql_query("SELECT * FROM v_dni_wolne left join zolnierze using (idZolnierza) left join eskadry on zolnierze.idEskadry=eskadry.idEskadry left join grupy using(idGrupy) where zolnierze.idEskadry = '$idEskadry' group by idZolnierza order by idGrupy, idZolnierza, zolnierze.idEskadry, zolnierze.idKlucza, idStopien desc") or die('Błąd zapytania');
+            break;
+        case 4:
+            //szef eskadry
+            $idEskadry = id_eskadry();
+            $lista = mysql_query("SELECT * FROM v_dni_wolne left join zolnierze using (idZolnierza) left join eskadry on zolnierze.idEskadry=eskadry.idEskadry left join grupy using(idGrupy) where zolnierze.idEskadry = '$idEskadry' group by idZolnierza order by idGrupy, idZolnierza, zolnierze.idEskadry, zolnierze.idKlucza, idStopien desc") or die('Błąd zapytania');
+            break;
+        case 5:
+            //dowodca klucza
+            header('Location: index.php');
+            break;
+        case 6:
+            //zolnierz
+            header('Location: index.php');
+            break;
+    }
+      
+        //przefiltrowanie zolnierzy, ktorych wolne zostana wyswietlone w kalendarzu
         while($zolnierze = mysql_fetch_object($lista)) {      
       
       
-        $sprawdzenie = mysql_query("SELECT idNadgodziny, idSluzby FROM v_dni_wolne where v_dni_wolne.kiedy = '$like_data' and idZolnierza='$zolnierze->idZolnierza'") 
-        or die('Błąd zapytania');
-        $r = mysql_fetch_object($sprawdzenie);
-        $nadgodzina=$r->idNadgodziny;
-        $sluzba=$r->idSluzby;
+            $sprawdzenie = mysql_query("SELECT idNadgodziny, idSluzby FROM v_dni_wolne where v_dni_wolne.kiedy = '$like_data' and idZolnierza='$zolnierze->idZolnierza'") or die('Błąd zapytania');
+            $r = mysql_fetch_object($sprawdzenie);
+            $nadgodzina=$r->idNadgodziny;
+            $sluzba=$r->idSluzby;
         
         if(!empty($nadgodzina)){
             $nadgodziny = mysql_query("SELECT powod.Opis as powod, powod.naPolecenie as naPolecenie, v_dni_wolne.kto_dodal as zaakceptowal, DATE_FORMAT(nadgodziny.kiedy, '%d.%m.%Y') as wolne_z_dnia, DATE_FORMAT(v_dni_wolne.kiedy, '%d.%m.%Y') as wolne_na_dzien, v_dni_wolne.ile AS minut FROM v_dni_wolne left join nadgodziny using(idNadgodziny) left join powod using (idPowod) where idZolnierza='$zolnierze->idZolnierza' and v_dni_wolne.kiedy = '$like_data' order by nadgodziny.kiedy") 
@@ -276,4 +344,5 @@ function rozkaz()
        </div>    
     </div>
 </div>
-<?php } ?>
+<?php }
+}?>

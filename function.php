@@ -28,7 +28,7 @@ czy zapytanie zwróciło wartość większą od 0 w sumie to rowna 1
 //sprawdzamy ID ESKADRY po podaniu loginu lub id do jakiej eskadry nalezy zolnierz
 function id_eskadry($kogo) {
     
-    if( isset($kogo) ) {
+    if(isset($kogo)) {
             $uzytkownik = $kogo;
     }else{
         $uzytkownik = $_SESSION['user']; // jezeli nie podane $kogo to wyswietl id zalogowanego uzytkownika
@@ -198,7 +198,7 @@ function id_klucza($kogo) {
         $uzytkownik = $_SESSION['user']; // jezeli nie podane $kogo to wyswietl id zalogowanego uzytkownika
     }
 
-$zapytanie = mysql_query("SELECT zolnierze.idKlucza FROM zolnierze, uzytkownicy WHERE zolnierze.idZolnierza = uzytkownicy.idZolnierza AND uzytkownicy.Login = '$uzytkownik'") 
+$zapytanie = mysql_query("SELECT zolnierze.idKlucza FROM zolnierze left join uzytkownicy using(idZolnierza) WHERE zolnierze.idZolnierza='$uzytkownik' or uzytkownicy.Login = '$uzytkownik'") 
 or die('Błąd zapytania'); 
 /* 
 wyświetlamy wyniki, sprawdzamy, 
@@ -677,9 +677,38 @@ function zrobAvatar($profil, $uzytkownik){
 
 //Wyswietlanie danych profiliwych zolnierza - podstrona profil
 function profil($profil) {
-//jeżeli istnieje zmienna profil sprawdzamy czy mamy dostep do danego profilu     
-    if( isset($profil) && $profil == mamDostepDo($profil)) {
-        $zolnierz = mysql_query("SELECT stopnie.Pelna, zolnierze.Imie, zolnierze.Nazwisko, zolnierze.Zdjecie, eskadry.Nazwa AS Eskadra, eskadry.Skrot AS SkrotEskadra, klucze.Nazwa AS Klucz FROM stopnie INNER join zolnierze USING (idStopien) LEFT join eskadry USING (idEskadry) LEFT JOIN klucze USING (idKlucza) WHERE zolnierze.idZolnierza='$profil'")
+//jeżeli istnieje zmienna profil sprawdzamy czy mamy dostep do danego profilu  
+    $url = $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING']; //generujemy aktualny adres wyswietlanej strony
+
+    //ZAPISUJEMY ZMIENIONE DANE ZOLNIERZA
+        if(isset($_POST['zapisz_dane'])){//najpierw sprawdzamy czy zmienna istnieje
+            $stopien = $_POST['stopien'];
+            $imie = mysql_real_escape_string($_POST['imie']);
+            $nazwisko = mysql_real_escape_string($_POST['nazwisko']);
+            $eskadra = $_POST['eskadra'];
+            $klucz = $_POST['klucz'];
+            $profil;
+                    
+                    
+                $sprawdzenie = mysql_query("SELECT * FROM `zolnierze` WHERE `idZolnierza`='$profil'");// zapytanie sprawdzajace czy zolnierz o danym id jest w bazie 
+                if((int)mysql_num_rows($sprawdzenie) > 0) {
+                    if(empty($klucz)){
+                      $edytuj = mysql_query("UPDATE `zolnierze` SET `idStopien`='$stopien', `Imie`='$imie', `Nazwisko`='$nazwisko', `idEskadry`='$eskadra', `idKlucza`=null WHERE `idZolnierza`='$profil';");  
+                    }else{
+                      $edytuj = mysql_query("UPDATE `zolnierze` SET `idStopien`='$stopien', `Imie`='$imie', `Nazwisko`='$nazwisko', `idEskadry`='$eskadra', `idKlucza`='$klucz' WHERE `idZolnierza`='$profil';");  
+                    }
+
+                }
+                /*
+                $url = explode("&dane", $url); //wyrzucamy deklaracje zmiennej get z adresu
+                $url = $url[0];
+                $adres=$url;
+            header("Location: $adres");
+            exit;  */
+        }
+    
+    if(isset($profil) && $profil == mamDostepDo($profil)) {
+        $zolnierz = mysql_query("SELECT stopnie.idStopien, stopnie.Pelna, zolnierze.Imie, zolnierze.Nazwisko, zolnierze.Zdjecie, eskadry.idEskadry, eskadry.Nazwa AS Eskadra, eskadry.Skrot AS SkrotEskadra, klucze.Nazwa AS Klucz FROM stopnie INNER join zolnierze USING (idStopien) LEFT join eskadry USING (idEskadry) LEFT JOIN klucze USING (idKlucza) WHERE zolnierze.idZolnierza='$profil'")
         //$zolnierz = mysql_query("SELECT stopnie.Pelna, zolnierze.Imie, zolnierze.Zdjecie, zolnierze.Nazwisko,  eskadry.Nazwa AS Eskadra, klucze.Nazwa AS Klucz FROM stopnie, zolnierze, eskadry, klucze WHERE stopnie.idStopien = zolnierze.idStopien AND eskadry.idEskadry=zolnierze.idEskadry AND klucze.idKlucza=zolnierze.idKlucza OR klucze.idKlucza IS NULL AND zolnierze.idZolnierza='$profil'") 
         or die('Błąd zapytania'); 
         /* 
@@ -701,24 +730,23 @@ function profil($profil) {
                         echo "<div class=\"zawartosc blekitne\"><img src=\"img/profiles/thumbnail/$r->Zdjecie\" width=\"200px\" align=\"absmiddle\" alt=\"Zdjęcie profiliwe\" class=\"zaokraglij\"></div>";
                     }
                 echo "</div>";
-                
 
-                        
                 echo "<div class=\"panel dane\">"; 
-                    if(isset($_GET['dane'])){//edycja danych w profilu
-                        echo "<div class=\"zawartosc blekitne\"><input type=\"text\" class=\"fod\" name=\"nazwisko\" placeholder=\"$r->Nazwisko\" value=\"$r->Nazwisko\" required ></div>";
-                        echo "<div class=\"zawartosc blekitne mb-10\"><input type=\"text\" class=\"fod\" name=\"imie\" placeholder=\"$r->Imie\" value=\"$r->Imie\" required ></div>";
-                        echo "<div class=\"zawartosc blekitne\">";stopnie();echo"</div>";
-                    
-                        if(isset($r->Eskadra)){
-                            echo "<div class=\"zawartosc blekitne\">";listaEskadr(id_grupy($r->idZolnierza));echo"</div>";   
-                        }
-                        if (isset($r->Klucz)){
-                            echo "<div class=\"zawartosc blekitne\">";listaKluczy(id_eskadry($r->idZolnierza));echo"</div>";
-                        }
+                    if(isset($_GET['dane']) && $_SESSION['permissions']<5){//edycja danych w profilu
+                        echo "<form name=\"zmien_dane\" method=\"post\" action=\"\">";
+                        echo "<div class=\"zawartosc blekitne\"><input type=\"text\" class=\"prof\" name=\"nazwisko\" placeholder=\"$r->Nazwisko\" value=\"$r->Nazwisko\" required ></div>";
+                        echo "<div class=\"zawartosc blekitne mb-10\"><input type=\"text\" class=\"prof\" name=\"imie\" placeholder=\"$r->Imie\" value=\"$r->Imie\" required ></div>";
+                        echo "<div class=\"zawartosc blekitne\">";stopnie($r->idStopien,'prof');echo"</div>";
                             $dowodca_grupy = czyDowodcaGrupy($profil);
                             $dowodca = czyDowodca($profil);
                             $szef = czySzef($profil);
+                        if(empty($dowodca_grupy)){
+                            echo "<div class=\"zawartosc blekitne\">";listaEskadr(id_grupy($r->idZolnierza),$r->idEskadry,'prof');echo"</div>";   
+                        }
+                        if (empty($dowodca) or empty($szef)){
+                            echo "<div class=\"zawartosc blekitne\">";listaKluczy(id_eskadry($profil),null,'prof');echo"</div>";
+                        }
+
                         if(isset($dowodca_grupy)){
                             echo "<div class=\"zawartosc blekitne mt-10\">Dowódca "; echo skrotGrupy($dowodca_grupy); echo "</div>";
                         }
@@ -728,7 +756,8 @@ function profil($profil) {
                         if (isset($szef)) {
                             echo "<div class=\"zawartosc blekitne mt-10\">Szef "; echo skrotEskadry($szef); echo" </div>";
                         }
-                        echo "<div class=\"zawartosc wysrodkuj mt-10\"><input type=\"submit\" class=\"zapisz animacja\" name=\"zapisz\" value=\"Zapisz\"/></div>";
+                        echo "<div class=\"zawartosc wysrodkuj mt-10\"><input type=\"submit\" class=\"zapisz animacja\" name=\"zapisz_dane\" value=\"Zapisz\"/></div>";
+                        echo "</form>"; 
                     }else{
                         echo "<div class=\"zawartosc blekitne mb-10\"><h2>".mb_convert_case($r->Nazwisko, MB_CASE_UPPER, "UTF-8")." ".$r->Imie."</h2></div>";
                         echo "<div class=\"zawartosc blekitne\">Stopień: ".$r->Pelna."</div>";
@@ -798,16 +827,18 @@ function uprawnienia($multi) {
 
 }
 
-function stopnie() {
+function stopnie($selected, $css) {
 $stopnie = mysql_query("SELECT stopnie.idStopien, stopnie.Skrot  FROM stopnie") 
 or die('Błąd zapytania'); 
 if(mysql_num_rows($stopnie) > 0) { 
     /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
-    echo "<select name=\"stopien\" class=\"fod\">"; 
+    echo "<select name=\"stopien\" class=\"";if(empty($css)){echo "fod";}else{echo $css;}echo"\">"; 
     while($r = mysql_fetch_object($stopnie)) {  
-         
-        echo "<option value=\"$r->idStopien\">".$r->Skrot."</option>";
-
+                if ($selected==$r->idStopien){
+                    echo "<option selected value=\"$r->idStopien\">".$r->Skrot."</option>";
+                }  else {
+                    echo "<option value=\"$r->idStopien\">".$r->Skrot."</option>";
+                }
     } 
     echo "</select>"; 
 }
@@ -1713,33 +1744,37 @@ or die('Błąd zapytania');
 }
 
 //WYŚWIETLENIE LISTY ESKADR DLA PRZYPISANIA ŻOŁNIERZA
-function listaEskadr($idGrupy) {
+function listaEskadr($idGrupy, $selected, $css) {
 $esk = mysql_query("SELECT *  FROM eskadry WHERE idGrupy='".$idGrupy."'") 
 or die('Błąd zapytania'); 
     if(mysql_num_rows($esk) > 0) { 
         /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
-        echo "<select name=\"eskadra\" class=\"fod\" id=\"eskadra\">"; 
+        echo "<select name=\"eskadra\" class=\"";if(empty($css)){echo "fod";}else{echo $css;}echo"\" id=\"eskadra\">"; 
         echo "<option value=\"\" selected disabled id=\"puste\">Wybierz eskadrę</option>";
         while($r = mysql_fetch_object($esk)) {  
-
-            echo "<option value=\"$r->idEskadry\">".$r->Nazwa."</option>";
-
+                if ($selected==$r->idEskadry){
+                    echo "<option selected value=\"$r->idEskadry\">".$r->Nazwa."</option>";
+                }  else {
+                    echo "<option value=\"$r->idEskadry\">".$r->Nazwa."</option>"; 
+                }
         } 
         echo "</select>"; 
     }
 }
 //WYŚWIETLENIE LISTY ESKADR DLA PRZYPISANIA ŻOŁNIERZA
-function listaKluczy($idEskadry) {
+function listaKluczy($idEskadry, $selected, $css) {
 $kl = mysql_query("SELECT *  FROM klucze WHERE idEskadry='".$idEskadry."'") 
 or die('Błąd zapytania'); 
     if(mysql_num_rows($kl) > 0) { 
         /* jeżeli wynik jest pozytywny, to wyświetlamy dane */ 
-        echo "<select name=\"klucz\" class=\"fod\" id=\"klucz\">"; 
+        echo "<select name=\"klucz\" class=\"";if(empty($css)){echo "fod";}else{echo $css;}echo"\" id=\"klucz\">"; 
         echo "<option value=\"\" selected disabled>Wybierz klucz</option>";
         while($r = mysql_fetch_object($kl)) {  
-
-            echo "<option value=\"$r->idKlucza\">".$r->Nazwa."</option>";
-
+                if ($selected==$r->idKlucza){
+                    echo "<option selected value=\"$r->idKlucza\">".$r->Nazwa."</option>";
+                }  else {
+                    echo "<option value=\"$r->idKlucza\">".$r->Nazwa."</option>"; 
+                }
         } 
         echo "</select>"; 
     }
