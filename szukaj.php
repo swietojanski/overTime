@@ -7,7 +7,7 @@ $wyrazenia = mysql_real_escape_string($go);
 switch ($_SESSION['permissions']){
     case 1:
         //admin
-        $szukaj = mysql_query("SELECT *, stopnie.Skrot AS StSkrot FROM zolnierze, stopnie WHERE stopnie.idStopien = zolnierze.idStopien AND CONCAT_WS(' ',stopnie.Skrot, zolnierze.Nazwisko, zolnierze.Imie) LIKE '%".$wyrazenia."%' ORDER BY Nazwisko") 
+        $szukaj = mysql_query("SELECT *, stopnie.Skrot AS StSkrot FROM zolnierze left join stopnie using (idStopien) left join eskadry using (idEskadry) WHERE CONCAT_WS(' ',stopnie.Skrot, zolnierze.Nazwisko, zolnierze.Imie) LIKE '%".$wyrazenia."%' or eskadry.Nazwa LIKE '%".$wyrazenia."%' ORDER BY Nazwisko") 
         or die('Błąd zapytania'); 
         break;
     case 2:
