@@ -8,7 +8,7 @@ switch ($_SESSION['permissions']){
     case 1:
         //admin
         $szukaj = mysql_query("SELECT *, stopnie.Skrot AS StSkrot FROM zolnierze left join stopnie using (idStopien) left join eskadry using (idEskadry) WHERE CONCAT_WS(' ',stopnie.Skrot, zolnierze.Nazwisko, zolnierze.Imie) LIKE '%".$wyrazenia."%' or eskadry.Nazwa LIKE '%".$wyrazenia."%' ORDER BY Nazwisko") 
-        or die('Błąd zapytania'); 
+        or die(mysql_error()); 
         break;
     case 2:
         //dowodca grupy

@@ -7,7 +7,7 @@
     }  else {
         $adres_d=$url;
     } 
-function stopnie_wojskowe(){
+function powody_nadgodzin(){
     $url = $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];
    if(isset($_GET['edytuj'])){
         $url = explode("&edytuj=", $url); //wyrzucamy deklaracje zmiennej get z adresu
@@ -34,8 +34,9 @@ function stopnie_wojskowe(){
     //ZMIENNE DO ZAPISANIA EDYTOWANYCH NADGODZIN
     $skrot = $_POST['skrot'];
     $pelna = $_POST['pelna_nazwa'];
-    $kolejnosc = $_POST['waga'];
+    $na_polecenie = $_POST['na_polecenie'];
     $skrot = str_replace(",",".",$skrot);
+    
     
     $zaznaczone = $_POST['edytuj'];
     $liczenie = count($skrot); //zliczenie ilosci wystapien pola skrot input
@@ -43,10 +44,10 @@ function stopnie_wojskowe(){
 
     //USUWAMY DODANE STOPNIE    
         if(isset($idUsun)){//najpierw sprawdzamy czy zmienna istnieje
-            $sprawdzenie = mysql_query("SELECT * FROM `stopnie` WHERE `idStopien`='$idUsun'");// zapytanie sprawdzajace czy stopien o danym id jest w bazie 
+            $sprawdzenie = mysql_query("SELECT * FROM `powod` WHERE `idPowod`='$idUsun'");// zapytanie sprawdzajace czy stopien o danym id jest w bazie 
             if((int)mysql_num_rows($sprawdzenie) > 0) {
-                        $usun = mysql_query("DELETE FROM `stopnie` WHERE `idStopien`='$idUsun'");
-                        $komunikat = "Stopień został usunięty";
+                        $usun = mysql_query("DELETE FROM `powod` WHERE `idPowod`='$idUsun'");
+                        $komunikat = "Powód nadgodzin został usunięty";
             }else{
                 $komunikat = "Nie ma co usunąć, zrobiłeś to wcześniej"; //niewypisany, wiec go nie zobaczymy
             }
@@ -60,16 +61,16 @@ function stopnie_wojskowe(){
                 echo $idZapisz=$zaznaczone[$a]; //wybranie id z checboxow
                 echo $skrotq = $skrot[$a]; //mnozymy podana ilosc godzin przez 60 minut i zapisujemy jako inty do bazy
                 echo $pelnaq = $pelna[$a]; 
-                echo $waga = $kolejnosc[$a];
-                $sprawdzenie = mysql_query("SELECT * FROM `stopnie` WHERE `idStopien`='$idZapisz'");// zapytanie sprawdzajace czy nadpelna o danym id jest w bazie 
+                echo $opis = $na_polecenie[$a];
+                $sprawdzenie = mysql_query("SELECT * FROM `powod` WHERE `idPowod`='$idZapisz'");// zapytanie sprawdzajace czy nadpelna o danym id jest w bazie 
                 if((int)mysql_num_rows($sprawdzenie) > 0) { 
-                    if(empty($waga)){
-                        $edytuj = mysql_query("UPDATE `stopnie` SET `Skrot`='$skrotq', `Pelna`='$pelnaq' WHERE `idStopien`='$idZapisz';");
+                    if(empty($opis)){
+                        $edytuj = mysql_query("UPDATE `powod` SET `Skrot`='$skrotq', `Opis`='$pelnaq', `naPolecenie`='Dowódcy' WHERE `idPowod`='$idZapisz';");
                     }else{
-                        $edytuj = mysql_query("UPDATE `stopnie` SET `Skrot`='$skrotq', `Pelna`='$pelnaq', `Waga`='$waga' WHERE `idStopien`='$idZapisz';");
+                        $edytuj = mysql_query("UPDATE `powod` SET `Skrot`='$skrotq', `Opis`='$pelnaq', `naPolecenie`='$opis' WHERE `idPowod`='$idZapisz';");
                     }
                 }else{
-                    echo $komunikat = "Nie ma co edytować, stopień nie istnieje";
+                    echo $komunikat = "Nie ma co edytować, powód nie istnieje";
                 }
             }
 
@@ -80,7 +81,7 @@ function stopnie_wojskowe(){
 
      //POBIERAMY DODANE NADGODZINY
     
-    $zapytanie = mysql_query("SELECT * FROM stopnie order by Waga, idStopien") 
+    $zapytanie = mysql_query("SELECT * FROM powod order by Skrot") 
     or die('Błąd zapytania'); 
     $wpisow = (int)mysql_num_rows($zapytanie);
 
@@ -95,15 +96,12 @@ function stopnie_wojskowe(){
                     echo "<tr class=\"blekitne empty-cells\">";
                         echo "<th><input type=\"checkbox\" id=\"select-all\" disabled=\"disabled\"></th>";
                         echo "<th class=\"left\">skrót</th>";
-                        echo "<th class=\"left\">nazwa</th>";
-                        if(isset($_GET['edytuj']) or isset($_POST['edytuj'])){
-                        echo "<th class=\"left\">waga</th>";
-                        }else{
-                            echo "<th class=\"left\"></th>";
-                        }
+                        echo "<th class=\"left\">w związku z</th>";
+                        echo "<th class=\"left\">na polecenie</th>";
+
                         echo "<th colspan=\"2\">";
                         if(!isset($_GET['edytuj'])){
-                            if ($zaznaczone[$liczEdytuj]==$r->idStopien){
+                            if ($zaznaczone[$liczEdytuj]==$r->idPowod){
                                 echo "<input type=\"submit\" id=\"edytujgodzinki\" class=\"edytuj\" value=\"edytuj zaz.\" title=\"edytuj zaznaczone\"/></th>";
                             }else{
                                 echo "<input type=\"submit\" name=\"aktualizuj\" class=\"aktualizuj\" value=\"zapisz zaz.\" title=\"zapisz zaznaczone\"/></th>";
@@ -117,29 +115,29 @@ function stopnie_wojskowe(){
                     while($r = mysql_fetch_object($zapytanie)) {
                         echo "<tr class=\"blekitne\">";
 
-                                if (isset($idEdytuj) && $idEdytuj==$r->idStopien OR $zaznaczone[$liczEdytuj]==$r->idStopien){/*jezeli istnieje zmienna edytuj i jest rowna id nadgodziny to wyswietl edycje*/
+                                if (isset($idEdytuj) && $idEdytuj==$r->idPowod OR $zaznaczone[$liczEdytuj]==$r->idPowod){/*jezeli istnieje zmienna edytuj i jest rowna id nadgodziny to wyswietl edycje*/
                                     echo "<td>";
-                                        echo "<input type=\"checkbox\" name=\"edytuj[]\" value=\"$r->idStopien\" checked>";
+                                        echo "<input type=\"checkbox\" name=\"edytuj[]\" value=\"$r->idPowod\" checked>";
                                     echo "</td>";
-                                    echo "<td class=\"left\"><input type=\"text\" class=\"pl-5\" name=\"skrot[]\" placeholder=\"$r->Skrot\" value=\"$r->Skrot\" required size=\"10\"></td>"; /*wyswietlamy edycje daty*/ 
-                                    echo "<td class=\"left\"><input type=\"text\" class=\"pl-5\" name=\"pelna_nazwa[]\" placeholder=\"$r->Pelna\" value=\"$r->Pelna\" required size=\"20\"></td>";
-                                    echo "<td class=\"left\"><input type=\"text\" class=\"wysrodkuj\" name=\"waga[]\" placeholder=\"$r->Waga\" value=\"$r->Waga\" size=\"2\"></td>"; /*wyswietlamy godziny*/
+                                    echo "<td class=\"left\"><input type=\"text\" class=\"pl-5\" name=\"skrot[]\" placeholder=\"$r->Skrot\" value=\"$r->Skrot\" required size=\"20\"></td>"; /*wyswietlamy edycje daty*/ 
+                                    echo "<td class=\"left\"><input type=\"text\" class=\"pl-5\" name=\"pelna_nazwa[]\" placeholder=\"$r->Opis\" value=\"$r->Opis\" required size=\"40\"></td>";
+                                    echo "<td class=\"left\"><input type=\"text\" class=\"wysrodkuj\" name=\"na_polecenie[]\" placeholder=\"$r->naPolecenie\" value=\"$r->naPolecenie\" size=\"20\"></td>"; /*wyswietlamy godziny*/
                                 }else{
                                     echo "<td>";
-                                        echo "<input type=\"checkbox\" name=\"edytuj[]\" value=\"$r->idStopien\">";
+                                        echo "<input type=\"checkbox\" name=\"edytuj[]\" value=\"$r->idPowod\">";
                                     echo "</td>";
                                     echo "<td class=\"left\">$r->Skrot</td>"; /*wyswietlamy skrot*/
-                                    echo "<td class=\"left\">$r->Pelna</td>"; /*wyswietlamy pelna nazwe*/
-                                    echo "<td class=\"left\"></td>"; /*wyswietlamy pelna nazwe*/
+                                    echo "<td class=\"left\">$r->Opis</td>"; /*wyswietlamy pelna nazwe*/
+                                    echo "<td class=\"left\">$r->naPolecenie</td>"; /*wyswietlamy pelna nazwe*/
                                 }
-                                if (isset($idEdytuj) && $idEdytuj==$r->idStopien OR $zaznaczone[$liczEdytuj]==$r->idStopien){
-                                    echo "<input type=\"hidden\" name=\"zapisz\" value=\"$r->idStopien\">";
+                                if (isset($idEdytuj) && $idEdytuj==$r->idPowod OR $zaznaczone[$liczEdytuj]==$r->idPowod){
+                                    echo "<input type=\"hidden\" name=\"zapisz\" value=\"$r->idPowod\">";
                                     echo "<td class=\"w60\"><input type=\"submit\" class=\"aktualizuj\" name=\"aktualizuj\" value=\"Zapisz\" title=\"Zapisz do bazy\"/></td>";
                                     echo "<td class=\"w60\"><a class=\"anuluj\" href=\"$adres\">Anuluj</a></td>";
                                     $liczEdytuj++;
                                 }else{
-                                    echo "<td class=\"w60\"><a class=\"edytuj\" href=\"".$adres."&edytuj=".$r->idStopien."\">Edytuj</a></td>";
-                                    echo "<td class=\"w60\"><a class=\"usun\" href=\"".$adres_u."&usun=".$r->idStopien."\">Usuń</a></td>";
+                                    echo "<td class=\"w60\"><a class=\"edytuj\" href=\"".$adres."&edytuj=".$r->idPowod."\">Edytuj</a></td>";
+                                    echo "<td class=\"w60\"><a class=\"usun\" href=\"".$adres_u."&usun=".$r->idPowod."\">Usuń</a></td>";
                                 }
                         echo "</tr>";
                     }
@@ -152,11 +150,11 @@ function stopnie_wojskowe(){
     
 }
 
-function dodaj_stopnie_wojskowe($skrot,$nazwa){
-            if(!empty($skrot)&&!empty($nazwa)) {
-                $zapytanie = "INSERT INTO `stopnie` (`Skrot`, `Pelna`) VALUES ('$skrot', '$nazwa');";
+function dodaj_powody_nadgodzin($skrot,$nazwa, $na_polecenie){
+            if(!empty($skrot)&&!empty($nazwa)&&!empty($na_polecenie)) {
+                $zapytanie = "INSERT INTO `powod` (`Skrot`, `Opis`, `naPolecenie`) VALUES ('$skrot', '$nazwa', '$na_polecenie');";
                 $wykonaj = mysql_query($zapytanie) or die("Błąd zapytania dodania");
-                echo "Dodałeś stopień do bazy danych";
+                echo "Dodałeś powód do bazy danych";
             }else{
                 echo "Nie wprowadziłeś danych do dodania";
             }
@@ -164,37 +162,33 @@ function dodaj_stopnie_wojskowe($skrot,$nazwa){
 
     
 ?>
-<h1> Stopnie </h1>
-<h2 class="podpowiedzi zaokraglij">Lista stopni wojskowych, które możesz dodać, usunąc lub edytować</h2>
+<h1> Powody nadgodzin </h1>
+<h2 class="podpowiedzi zaokraglij">Lista powodów, które możesz wybrać, dodając nadgodziny</h2>
 
 <?php if(isset($_GET['dodaj'])){ ?>
 <div class="flex-container">
     <div class="panel szescset">
         <div class="tytul">
-            <p>dodaj stopien</p><p class="right"><a href="<?php echo $adres_d;?>" class="pl-10 pr-10 anuluj valing40" title="wróć do spisu">wróć</a></p>
+            <p>dodaj powód</p><p class="right"><a href="<?php echo $adres_d;?>" class="pl-10 pr-10 anuluj valing40" title="wróć do spisu">wróć</a></p>
         </div>
         <div class="zawartosc wysrodkuj">
             <?php 
                 if(isset($_POST['skrot'])){
                 $skrot = mysql_real_escape_string($_POST['skrot']);
                 $nazwa = mysql_real_escape_string($_POST['pelna_nazwa']);
-                dodaj_stopnie_wojskowe($skrot,$nazwa);}
+                $na_polecenie = mysql_real_escape_string($_POST['na_polecenie']);
+                dodaj_powody_nadgodzin($skrot,$nazwa, $na_polecenie);}
             ?>
             
-                <form name="stopnie_wosjkowe" method="post" action="">
+            <form name="powody_nadgodzin" method="post" action="">
             <table>
-                <thead>
-                    <tr class="empty-cells">
-                        <th>skrót</th>
-                        <th>nazwa</th>
-                    </tr>
-                </thead>
                 <tbody>
-                        <td><input type="text" class="pl-5" name="skrot" placeholder="np. szer."  required size="20"></td>
-                        <td><input type="text" class="pl-5" name="pelna_nazwa" placeholder="np. szeregowy"  required size="20"></td>
+                    <tr><th class="right">skrót</th><td class="left pl-10"><input type="text" class="pl-5" name="skrot" placeholder="np. szkolenie lotnicze"  required size="44"></td></tr>
+                    <tr><th class="right">w związku z</th><td class="left pl-10"><input type="text" class="pl-5" name="pelna_nazwa" placeholder="np. zabezpieczeniem szkolenia lotniczego"  required size="44"></td></tr>
+                    <tr><th class="right">na polecenie</th><td class="left pl-10"><input type="text" class="pl-5" name="na_polecenie" placeholder="np. Dowódcy Eskadry"  required size="44"></td></tr>
                     </tbody> 
             </table> 
-        <input type="submit" name="dodaj" class="zapisz animacja" value="zapisz" title="Dodaj stopień wojskowy"/> 
+        <input type="submit" name="dodaj" class="zapisz animacja" value="zapisz" title="Dodaj powód"/> 
     </form> 
             
 
@@ -205,12 +199,12 @@ function dodaj_stopnie_wojskowe($skrot,$nazwa){
 </div>
 <?php }else{ ?>
 <div class="flex-container">
-    <div class="panel szescset">
+    <div class="panel tysiac">
         <div class="tytul">
-            <p>stopnie</p><p class="right"><a href="<?php echo $adres_d;?>&dodaj" class="pl-10 pr-10 edytuj valing40" title="dodaj nowy stopień">dodaj</a></p>
+            <p>stopnie</p><p class="right"><a href="<?php echo $adres_d;?>&dodaj" class="pl-10 pr-10 edytuj valing40" title="dodaj nowy powód">dodaj</a></p>
         </div>
         <div class="zawartosc wysrodkuj">
-            <?php stopnie_wojskowe();  ?>
+            <?php powody_nadgodzin();  ?>
         </div>  
     </div>
 </div>

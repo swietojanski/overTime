@@ -12,8 +12,8 @@
             <a href="index.php?id=panele/admin/dodajUzytkownika"><li class="flex-box dopelniajacy-1">dodaj użytkownika</li></a>
             <a href="index.php?id=panele/admin/uzytkownicy"><li class="flex-box dopelniajacy-1">przeglądaj użytkowników</li></a>    
             <a href="index.php?id=panele/admin/stopnie"><li class="flex-box dopelniajacy-2">stopnie wojskowe</li></a>
-            <a href="index.php?id=panele/admin/sluzby"><li class="flex-box dopelniajacy-1">powody nadgodzin</li></a>
-            <a href="index.php?id=panele/admin/sluzby"><li class="flex-box triada-2">dyżury</li></a>
+            <a href="index.php?id=panele/admin/powody"><li class="flex-box dopelniajacy-1">powody nadgodzin</li></a>
+            <a href="index.php?id=panele/admin/dyzury"><li class="flex-box triada-2">nazwy służb</li></a>
         </ul>
     </div>
 <?php

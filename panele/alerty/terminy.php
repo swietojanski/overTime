@@ -192,10 +192,10 @@ function terminy($kogo) {
             
                 
         }
+           echo "</div>"; 
         if(mysql_num_rows($terminy_s) == 0 && mysql_num_rows($terminy_n) == 0){
             echo "Czas ponadnormatywny nie przekroczył terminu ważności";
         }
-           echo "</div>"; 
     }else{
         echo mamDostepDo($kogo); //funkcja zwraca blad
     }
