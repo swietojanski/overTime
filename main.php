@@ -51,11 +51,12 @@
 <?php if($_SESSION['permissions']<6){?>
                         <a href="index.php?id=alerty"><li <?php if(isset($_GET['id']) &&  $_GET['id']=="alerty"){echo'class="wybrany"';}?>>Centrum powiadomień <span><?php echo licz_oczekujace(); ?></span></li></a>
                           <a href="index.php?id=panele/moje/moi&zolnierze"><li <?php if(isset($_GET['id']) &&  $_GET['id']=="panele/moje/moi"){echo'class="wybrany"';}?>>Moi żołnierze</li></a>
+                          <a href="index.php?id=panele/moje/stan"><li <?php if(isset($_GET['id']) &&  $_GET['id']=="panele/moje/stan"){echo'class="wybrany"';}?>>Stan osobowy <span>aktualny</span></li></a>
 <?php } ?>
 <?php if($_SESSION['permissions']<5){?>
                         <a href="index.php?id=rozkaz"><li <?php if(isset($_GET['id']) &&  $_GET['id']=="rozkaz"){echo'class="wybrany"';}?>>Rozkaz dzienny <span>punkty</span></li></a>
 <?php } ?>
-                          <li <?php if(isset($_GET['id']) &&  $_GET['id']=="dowodcy"){echo'class="wybrany"';}?>>Dowódcy</li>
+                          
                           <a href="index.php?id=panele/moje/wolne"><li <?php if(isset($_GET['id']) &&  $_GET['id']=="panele/moje/wolne"){echo'class="wybrany"';}?>>Twoje wolne <span>kalendarz</span></li></a>
 
                     <ul>

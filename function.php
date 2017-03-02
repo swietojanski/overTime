@@ -2364,7 +2364,11 @@ function licz_oczekujace(){
         case 2:
             //dowodca grupy
             $idGrupy = czyDowodcaGrupy();
-            $wnioski = mysql_query("SELECT * FROM wnioski left join zolnierze on kogo=idZolnierza left join eskadry using(idEskadry) left join stopnie using (idStopien) where idGrupy='$idGrupy'") 
+            if (empty($idGrupy)){
+                $idGrupy = id_grupy();
+            }
+            $idZol=id_zolnierza(null);
+            $wnioski = mysql_query("SELECT * FROM wnioski left join zolnierze on kogo=idZolnierza left join eskadry using(idEskadry) left join stopnie using (idStopien) where idGrupy='$idGrupy' or zolnierze.idZolnierza='$idZol'") 
             or die('Masz uprawnienia dowódcy, ale nie jesteś przypisany jako dowódca do grupy');
             $licz_terminy = mysql_query("SELECT *, sum(pozostalo) as ma_wykorzystac, DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%d-%m-%Y') AS waznosc FROM v_zestawienie_nadgodzin left join zolnierze using (idZolnierza) left join eskadry using(idEskadry) left join grupy using (idGrupy) WHERE idGrupy='$idGrupy' and DATE_FORMAT(DATE_ADD(DATE_ADD(termin, INTERVAL 4 MONTH),INTERVAL 1 DAY), '%Y-%m-%d')<'$dzisiaj' and pozostalo!='0' GROUP BY idZolnierza
                                          union all
@@ -2412,6 +2416,23 @@ or die('Błąd zapytania');
     $oczekujace_w = mysql_num_rows($wnioski);
     $oczekujace_t = mysql_num_rows($licz_terminy);
     return $oczekujace_w + $oczekujace_t;
+}
+
+//funkcja sprawdza czy osoba o podanym id jest aktualnie na
+function na_wolnym($czyje_id, $data) {
+   
+        if(!empty($czyje_id) && !empty($data)){//najpierw sprawdzamy czy zmienna nie jest pusta
+            $sprawdzenie = mysql_query("SELECT *, sum(ile) as minut FROM v_dni_wolne where kiedy='$data' and idZolnierza='$czyje_id' group by idZolnierza");// zapytanie sprawdzajace czy wniosek o danym id jest w bazie 
+            if((int)mysql_num_rows($sprawdzenie) > 0) {
+                while($check = mysql_fetch_object($sprawdzenie)) {  
+                    $ile = intval($check->minut/60);
+                    return $ile;
+                }             
+            }else{
+                $komunikat = "Nie podałeś id żołnierza, którego chcesz sprawidzić"; //niewypisany, wiec go nie zobaczymy
+                return 0;
+            }
+        }
 }
 
 
