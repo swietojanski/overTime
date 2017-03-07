@@ -1,5 +1,12 @@
 ﻿<?php session_start();
           require_once('config.php');
+          /*
+//dla testow
+          $_SESSION['auth'] = TRUE;
+          $_SESSION['user'] = 'admin';
+          $_SESSION['permissions'] = '1';
+           * 
+           */
 ?>
 <!DOCTYPE html>
 <html>

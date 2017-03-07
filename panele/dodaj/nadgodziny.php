@@ -77,7 +77,8 @@ foreach($data as $idkiedy) {
 <script>
 //kalendarzyk po kliknieciu w input
  $( ".datanadgodzin" ).datepicker({dateFormat: 'dd-mm-yy'});//tutaj jest datapicker, ktory odpowiada za kalendarz, dziala tylko w pierwszym inpucie
-    var delete_handler = function (e) {
+
+var delete_handler = function (e) {
 e.preventDefault();
         //znajdz najblizszy wiersz bedacy elementem nadrzednym dla linka usuwajacego ten wiersz
         //i wykonaj animacje
@@ -93,6 +94,7 @@ e.preventDefault();
             });
         });
 }
+
 $(document).ready(function() {
     //funkcja odczytujaca klikniecie w element o id: dodajWiersz
     //i wykonujaca akcje dodawania nowego wiersza do tabeli

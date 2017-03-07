@@ -4,16 +4,16 @@
 
 <div class="flex-container">
         <ul class="flex-container">
-            <a href="index.php?id=panele/admin/dodajGrupe"><li class="flex-box dopelniajacy-2">dodaj grupę</li></a>
-            <a href="index.php?id=panele/admin/dodajEskadre"><li class="flex-box dopelniajacy-2">dodaj eskadrę</li></a>
-            <a href="index.php?id=panele/admin/dodajKlucz"><li class="flex-box dopelniajacy-2">dodaj klucz</li></a>
-            <a href="index.php?id=panele/admin/struktury"><li class="flex-box dopelniajacy-1">przeglądaj struktury</li></a>
-            <a href="index.php?id=panele/admin/dodajZolnierza"><li class="flex-box triada-4">dodaj żołnierza</li></a>
-            <a href="index.php?id=panele/admin/dodajUzytkownika"><li class="flex-box dopelniajacy-1">dodaj użytkownika</li></a>
-            <a href="index.php?id=panele/admin/uzytkownicy"><li class="flex-box dopelniajacy-1">przeglądaj użytkowników</li></a>    
-            <a href="index.php?id=panele/admin/stopnie"><li class="flex-box dopelniajacy-2">stopnie wojskowe</li></a>
-            <a href="index.php?id=panele/admin/powody"><li class="flex-box dopelniajacy-1">powody nadgodzin</li></a>
-            <a href="index.php?id=panele/admin/dyzury"><li class="flex-box triada-2">nazwy służb</li></a>
+            <li><a href="index.php?id=panele/admin/dodajGrupe" class="flex-box dopelniajacy-2">dodaj grupę</a></li>
+            <li><a href="index.php?id=panele/admin/dodajEskadre" class="flex-box dopelniajacy-2">dodaj eskadrę</a></li>
+            <li><a href="index.php?id=panele/admin/dodajKlucz" class="flex-box dopelniajacy-2">dodaj klucz</a></li>
+            <li><a href="index.php?id=panele/admin/struktury" class="flex-box dopelniajacy-1">przeglądaj struktury</a></li>
+            <li><a href="index.php?id=panele/admin/dodajZolnierza" class="flex-box triada-4">dodaj żołnierza</a></li>
+            <li><a href="index.php?id=panele/admin/dodajUzytkownika" class="flex-box dopelniajacy-1">dodaj użytkownika</a></li>
+            <li><a href="index.php?id=panele/admin/uzytkownicy" class="flex-box dopelniajacy-1">przeglądaj użytkowników</a></li>    
+            <li><a href="index.php?id=panele/admin/stopnie" class="flex-box dopelniajacy-2">stopnie wojskowe</a></li>
+            <li><a href="index.php?id=panele/admin/powody" class="flex-box dopelniajacy-1">powody nadgodzin</a></li>
+            <li><a href="index.php?id=panele/admin/dyzury" class="flex-box triada-2">nazwy służb</a></li>
         </ul>
     </div>
 <?php

@@ -23,7 +23,7 @@
           if($_SESSION['permissions']==6){
              }else{
                   echo "<form action=\"index.php?id=szukaj\" class=\"displaynone\" method=\"get\">";
-                  echo "<input type=\"hidden\" name=\"id\" value=\"szukaj\"/><input type=\"search\" required=\"true\" results=\"5\" minlength=\"2\" maxlength=\"50\" autosave=\"some_unique_value\" placeholder=\"Szukaj żołnierza...\" name=\"zolnierze\" title=\"Wpisz nazwisko, imię lub stopień żołnierza\"/><input type=\"submit\" value=\"Szukaj\" class=\"szukaj\" />";
+                  echo "<input type=\"hidden\" name=\"id\" value=\"szukaj\"/><input type=\"search\" required minlength=\"2\" maxlength=\"50\" placeholder=\"Szukaj żołnierza...\" name=\"zolnierze\" title=\"Wpisz nazwisko, imię lub stopień żołnierza\"/><input type=\"submit\" value=\"Szukaj\" class=\"szukaj\" />";
                   echo "</form>";
                   echo "<a href=\"index.html?id=szukaj\" class=\"szukajmin displaynonemax\"></a>";
              }
@@ -33,7 +33,7 @@
                  <?php if($_SESSION['permissions']<6){?>
                  <a href="index.php?id=alerty" class="alerty" title="Alerty"><span><?php echo licz_oczekujace(); ?></span></a>
                  <?php } ?>
-                 <a href="index.php?id=profil" class="profil"><img src="img/avatars/<?php avatar($_SESSION['user']);?>" width="30" align="absmiddle" height="30" alt="Avatar" class="avatar"><span class="displaynone"> <?php imie();?></span></a>
+                 <a href="index.php?id=profil" class="profil"><img src="img/avatars/<?php avatar($_SESSION['user']);?>" width="30" height="30" alt="Avatar" class="avatar"><span class="displaynone"> <?php imie();?></span></a>
                  <?php if($_SESSION['permissions']==1){
                  echo "<a href=\"index.php?id=panele/admin\" class=\"panadmin\" id=\"pa\"></a>";
                          }
@@ -85,7 +85,13 @@
     </footer>
 </div>
 <script>
-
+    /*
+ $( "*", document.body ).click(function( event ) {
+  event.stopPropagation();
+  var domElement = $( this ).get( 0 );
+  $( "th:first" ).text( "Clicked on - " + domElement.nodeName );
+});
+*/
  //dymki z podpowiedziami
 $('div').tooltip({
     
@@ -100,34 +106,61 @@ $('div').tooltip({
 });
 
 
-      //zamieniamy 
-      
-$(".ggodzin").bind("change keyup input",function(){
-    text = this.value.replace(",",".");
-    $(".ggodzin").val(text);
-});
+var nowy_input = function (e) {
+e.preventDefault();
+        //znajdz najblizszy wiersz bedacy elementem nadrzednym dla linka usuwajacego ten wiersz
+        //i wykonaj animacje
+        
+        //alert($(this).text() + "Kurde cos sie wyswietla");
+
+}
+
+
       
 $( function() {
+    
+        var grow =  $('#tabela').find('tbody').find('.ggodzin').last();
+        grow.parent().parent().find(".ggodzin").first().on('click', nowy_input);
+        
+    $( ".ggodzin" ).bind( "click", function() {       
+            var identyfikator = "";
+                if ($(this).attr("id") !== null) {                    
+                    identyfikator = $(this).attr("id");
+		}
+                
 
-    $( ".ggodzin" ).on( "click", function() {
+                
+    $("#"+identyfikator).bind("change keyup input",function(){
+    text = this.value.replace(",",".");
+    $("#"+identyfikator).val(text);
+    });
+
+        
       $( "#dialog" ).dialog( "open" );
       $(".ui-dialog-titlebar-close").hide();
       $("span.ui-dialog-title").text('Ile nadgodzin?'); 
-      $( "#dialog" ).dialog( "option", "position", { my: "left top", at: "left bottom", of: ".ggodzin" } );
+      $( "#dialog" ).dialog( "option", "position", { my: "left top", at: "left bottom", of: "#"+identyfikator } );
 
-    $( ".mainContent" ).mousedown(function() {
-      $( "#mainContent" ).dialog( "close" );
-      $( "#dialog" ).dialog( "close" );
-      $('.ggodzin').datepicker('destroy');
-});
+
       
-    $( "button" ).click(function() {
-      var text = $( this ).text();
-      $( ".ggodzin" ).val( text );
-      $( "#dialog" ).dialog( "close" );
-      });  
+        $( "button" ).click(function() {
+        var text = $( this ).text();
+        $( "#"+identyfikator ).val( text );
+        $( "#dialog" ).dialog( "close" );
+        identyfikator = "";
+        });
+      
+      $( ".mainContent" ).mousedown(function() {
+        $( "#mainContent" ).dialog( "close" );
+        $( "#dialog" ).dialog( "close" );
+        $("#"+identyfikator).datepicker('destroy');
+        identyfikator = "";
+       });
+       
+        
     });
 } );
+
 
 $( "#dialog" ).dialog({
       dialogClass: "addhour",

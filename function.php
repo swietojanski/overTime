@@ -2454,7 +2454,7 @@ function zmienHaslo($kogo) {
         //formularz zmiany hasla
         function formZmiana($errorpas, $placepas = "wpisz nowe hasło")
         {
-            echo "<form name=\"zmienHaslo\" method=\"post\" action=\"\">";
+            echo "<form name=\"zmienHaslo\" method=\"post\" action=\"#\">";
             echo "<div class=\"zawartosc wysrodkuj\">";
             echo "<input type=\"password\" name=\"podajhaslo\" maxlength=\"40\" placeholder=\"$placepas...\" class=\"mb-10 pl-5 zh $errorpas\" pattern='(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$' title=\"Min. 8 znaków, wielka i mała litera oraz znak specjalny\"><br>";  
             
