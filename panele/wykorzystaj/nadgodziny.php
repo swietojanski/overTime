@@ -45,11 +45,11 @@ if(!empty($data) && !empty($godzina))//sprawdzamy czy pole data nie jest puste
             $re = mysql_fetch_object($wnioski);
             $oczekujace = $re->wnioski;
             //$wystapien = (int)mysql_num_rows($sprawdzenie); //zliczenie ilosci wystapien zapytania, powinno dac zero jezeli daty nie ma
-            /* komunikat o ilosci godzin do wykorzystania i ilosci oczekujacych wnioskow
-            echo "Oczekujące: $oczekujace<br>";
+            //komunikat o ilosci godzin do wykorzystania i ilosci oczekujacych wnioskow
+            //echo "Oczekujące: $oczekujace<br>";
             (int)$zdolny=$nakoncie-$nowy_wniosek-$oczekujace;
-            echo "Do wykorzystania: ".(($nakoncie-$oczekujace)/60)."<br>";
-            */
+            //echo "Do wykorzystania: ".(($nakoncie-$oczekujace)/60)."<br>";
+            
             
             if($zdolny>=0){
                     for($a=0;$a<$liczenie;$a++)

@@ -51,6 +51,8 @@ if (!isset($_POST[grupa])){
 
     if (!isset($_POST[krok1]) && isset($_POST[krok0])){
         $progres=20;
+        $esk = mysql_query("SELECT * FROM eskadry") or die('Błąd zapytania'); 
+        if(mysql_num_rows($esk) > 0) { 
     echo "            <form name=\"krok1\" method=\"post\">";
     echo "                  <input type=\"hidden\" name=\"grupa\" value=\"$grupa\">";
     echo "                <table>";
@@ -74,7 +76,10 @@ if (!isset($_POST[grupa])){
     echo "                        <tr class=\"blekitne\">";
     echo "                            <th class=\"right\">eskadra</th>";
     echo "                            <td>";
+                
+                                        
                                         listaEskadr($grupa);
+                                        
     echo "                            </td>";
     echo "                        </tr>";
     echo "                        <tr class=\"blekitne\">";
@@ -88,9 +93,14 @@ if (!isset($_POST[grupa])){
     echo "                </table>";
     echo "                    <input type=\"submit\" name=\"krok1\" class=\"zapisz animacja\" value=\"dalej\" title=\"Krok 2\"/>"; 
     echo "            </form>";
+                }else{
+                    echo"Nie dodałeś jeszcze eskadr, skorzystaj z PA, aby to zrobić lub kliknij <a href=\"index.php?id=panele/admin/dodajEskadre\">tutaj</a>";
+                }
     
     } elseif(isset ($_POST[krok1])) {
-    $progres=70;    
+    $progres=70; 
+        $esk = mysql_query("SELECT * FROM klucze") or die('Błąd zapytania'); 
+        if(mysql_num_rows($esk) > 0) { 
     echo "            <form name=\"dodaj\" method=\"post\">";
     echo "                  <input type=\"hidden\" name=\"stopien\" value=\"$stopien\">";
     echo "                  <input type=\"hidden\" name=\"imie\" value=\"$imie\">";
@@ -130,6 +140,9 @@ if (!isset($_POST[grupa])){
     echo "                </table>";
     echo "                    <input type=\"submit\" name=\"dodaj\" class=\"zapisz animacja\" value=\"zapisz\" title=\"Krok 3\"/>"; 
     echo "            </form>";
+                }else{
+                    echo"Nie dodałeś jeszcze kluczy, skorzystaj z PA, aby to zrobić lub kliknij <a href=\"index.php?id=panele/admin/dodajKlucz\">tutaj</a>";
+                }
     
     }
 

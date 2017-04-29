@@ -26,6 +26,10 @@ if( isset($_SESSION['user']) && $_GET['profil'] == mamDostepDo($_GET['profil']))
             </p>
         </div>
         <div class="zawartosc wysrodkuj">
+            <?php
+            $esk = mysql_query("SELECT * FROM dyzurny") or die('Błąd zapytania'); 
+            if(mysql_num_rows($esk) > 0) { 
+            ?>
             <form class="nadgodzinki" name="nadgodzinki" method="post">        
                 <table id="tabela">
                     <thead>
@@ -54,6 +58,11 @@ if( isset($_SESSION['user']) && $_GET['profil'] == mamDostepDo($_GET['profil']))
                     <input type="submit" name="dodajnadgodziny" class="zapisz animacja" value="zapisz" title="Zapisz do bazy"/> 
                     <input type="button" id="dodajWiersz" class="zapisz animacja" value="więcej"/>  
             </form>
+            <?php
+                }else{
+                    echo"Nie dodałeś jeszcze nazw służb, skorzystaj z PA, aby to zrobić lub kliknij <a href=\"index.php?id=panele/admin/dyzury\">tutaj</a>";
+                }
+            ?>
         </div>  
     </div>
 </div>
