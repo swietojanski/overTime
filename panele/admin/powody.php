@@ -145,7 +145,7 @@ function powody_nadgodzin(){
                 echo "</form>"; 
             echo "</table>";  
         }else{
-            echo "Brak stopni do wyświetlenia. Dodaj nowe.";
+            echo "Brak powodów do wyświetlenia. Dodaj nowe.";
         }
     
 }
@@ -163,7 +163,7 @@ function dodaj_powody_nadgodzin($skrot,$nazwa, $na_polecenie){
     
 ?>
 <h1> Powody nadgodzin </h1>
-<h2 class="podpowiedzi zaokraglij">Lista powodów, które możesz wybrać, dodając nadgodziny</h2>
+<h2 class="podpowiedzi zaokraglij">Lista powodów, które możesz wybrać dodając nadgodziny</h2>
 
 <?php if(isset($_GET['dodaj'])){ ?>
 <div class="flex-container">
@@ -201,7 +201,7 @@ function dodaj_powody_nadgodzin($skrot,$nazwa, $na_polecenie){
 <div class="flex-container">
     <div class="panel tysiac">
         <div class="tytul">
-            <p>stopnie</p><p class="right"><a href="<?php echo $adres_d;?>&dodaj" class="pl-10 pr-10 edytuj valing40" title="dodaj nowy powód">dodaj</a></p>
+            <p>powody nadgodzin</p><p class="right"><a href="<?php echo $adres_d;?>&dodaj" class="pl-10 pr-10 edytuj valing40" title="dodaj nowy powód">dodaj</a></p>
         </div>
         <div class="zawartosc wysrodkuj">
             <?php powody_nadgodzin();  ?>

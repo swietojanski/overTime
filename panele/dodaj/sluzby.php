@@ -6,13 +6,13 @@
 //echo $liczba; 
 if( isset($_SESSION['user']) && $_GET['profil'] == mamDostepDo($_GET['profil'])) {
 ?>
-<h1> Dodaj słuzby </h1>
-<h2 class="podpowiedzi zaokraglij">Skorzystaj z formularza i dodaj sluzby.</h2>
+<h1> Dodaj służby </h1>
+<h2 class="podpowiedzi zaokraglij">Skorzystaj z formularza i dodaj służby.</h2>
 
 <div class="flex-container">
     <div class="panel szescset">
         <div class="tytul">
-            <p>nadgodzinki</p>
+            <p>służby</p>
             <p class="right mr-5">
                 <?php
                     if(!empty($_GET['profil'])){

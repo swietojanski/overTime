@@ -163,7 +163,7 @@ function dodaj_dyzury($skrot,$nazwa, $na_polecenie){
     
 ?>
 <h1> Nazwy służb </h1>
-<h2 class="podpowiedzi zaokraglij">Lista dyżurów, które możesz wybrać, dodając służby</h2>
+<h2 class="podpowiedzi zaokraglij">Lista dyżurów, które możesz wybrać dodając służby</h2>
 
 <?php if(isset($_GET['dodaj'])){ ?>
 <div class="flex-container">
@@ -197,7 +197,7 @@ function dodaj_dyzury($skrot,$nazwa, $na_polecenie){
 <div class="flex-container">
     <div class="panel tysiac">
         <div class="tytul">
-            <p>dyżury</p><p class="right"><a href="<?php echo $adres_d;?>&dodaj" class="pl-10 pr-10 edytuj valing40" title="dodaj nowy powód">dodaj</a></p>
+            <p>dyżury</p><p class="right"><a href="<?php echo $adres_d;?>&dodaj" class="pl-10 pr-10 edytuj valing40" title="dodaj nowy dyżur">dodaj</a></p>
         </div>
         <div class="zawartosc wysrodkuj">
             <?php dyzury();  ?>

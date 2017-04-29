@@ -1653,7 +1653,7 @@ if(isset($_POST['data']) && isset($_POST['iledni']))//sprawdzamy czy pole data n
     echo "<div class=\"flex-container\">";
         echo "<div class=\"panel szescset\">";
             echo "<div class=\"tytul\">";
-                echo "<p>dodane nadgodziny</p>";
+                echo "<p>dodane służby</p>";
             echo "</div>";
     
     for($a=0;$a<$liczenie;$a++)

@@ -8,7 +8,7 @@ $edytuj_k = mysql_real_escape_string($_GET['edytuj_k']);
     
 ?>
 <h1> Struktury </h1>
-<h2 class="podpowiedzi zaokraglij">Lista grup, eskadr, kluczy, które możesz usunąc lub edytować</h2>
+<h2 class="podpowiedzi zaokraglij">Lista grup, eskadr, kluczy, które możesz usunąć lub edytować</h2>
 
 <div class="flex-container">
     <div class="panel tysiac">

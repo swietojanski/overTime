@@ -23,6 +23,10 @@ echo "        </div>";
 echo "        <div class=\"zawartosc wysrodkuj\">";
 
 if (!isset($_POST[grupa])){
+                
+            $esk = mysql_query("SELECT * FROM grupy") or die('Błąd zapytania'); 
+            if(mysql_num_rows($esk) > 0) { 
+               
     echo "            <form name=\"krok0\" method=\"post\">";      
     echo "                <table>";
     echo "                    <thead>";
@@ -31,7 +35,7 @@ if (!isset($_POST[grupa])){
     echo "                        <tr class=\"blekitne\">";
     echo "                            <th class=\"right\">grupa</th>";
     echo "                            <td>";
-                                            listaGrup();
+                                            listaGrup(true);
     echo "                            </td>";
     echo "                        </tr>"; 
  
@@ -39,6 +43,9 @@ if (!isset($_POST[grupa])){
     echo "                </table>";
     echo "                    <input type=\"submit\" name=\"krok0\" class=\"zapisz animacja\" value=\"dalej\" title=\"Krok 1\"/>"; 
     echo "            </form>";
+    }else{
+            echo"Nie dodałeś jeszcze grup, skorzystaj z PA, aby to zrobić lub kliknij <a href=\"index.php?id=panele/admin/dodajGrupe\">tutaj</a>";
+    }
 }
 
 

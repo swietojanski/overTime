@@ -49,16 +49,16 @@ if(isset($_GET['dane'])){
        <div class="tytul triada-1"><p>+ służby</p></div>
     </div>
     <div class="panel czterdziesci"><a href="index.php?id=panele/moje/nadgodziny&profil=<?php echo $_GET['profil'];?>" title="przeglądaj nadgodziny">
-       <div class="tytul zlozony-3"><p>przeglądaj nadgodziny</p></div></a>
+       <div class="tytul zlozony-3"><p>p. nadgodziny</p></div></a>
     </div>
     <div class="panel czterdziesci"><a href="index.php?id=panele/moje/sluzby&profil=<?php echo $_GET['profil'];?>" title="przeglądaj służby">
-            <div class="tytul zlozony-4"><p>przeglądaj służby</p></div></a>
+            <div class="tytul zlozony-4"><p>p. służby</p></div></a>
     </div>
     <div class="panel czterdziesci"><a href="index.php?id=panele/wykorzystaj/nadgodziny&profil=<?php echo $_GET['profil'];?>" title="wykorzystaj nadgodziny">
-       <div class="tytul dopelniajacy-1"><p>wykorzystaj nadgodziny</p></div></a>
+       <div class="tytul dopelniajacy-1"><p>wyk. nadgodziny</p></div></a>
     </div>
     <div class="panel czterdziesci"><a href="index.php?id=panele/wykorzystaj/sluzby&profil=<?php echo $_GET['profil'];?>" title="wykorzystaj służby">
-       <div class="tytul dopelniajacy-2"><p>wykorzystaj służby</p></div></a>
+       <div class="tytul dopelniajacy-2"><p>wyk. służby</p></div></a>
     </div>
 
 

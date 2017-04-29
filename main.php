@@ -7,10 +7,14 @@
                  <a href="index.php" class="logo" title="Pulpit"></a>
              <a href="index.php?id=panele/dodaj/nadgodziny" class="addovertime">nadgodziny</a>
              <a href="index.php?id=panele/dodaj/sluzby" class="addovertime">służby</a>
-             <a href="index.php?id=panele/dodaj/wniosek" class="addovertime">wniosek</a>
-             <a href="index.php?id=panele/moje/wolne" class="addovertime noimg">twoje wolne</a>
+             <a href="index.php?id=panele/wykorzystaj/nadgodziny" class="addovertime noimg">wyk. nadgodziny</a>
+             <a href="index.php?id=panele/wykorzystaj/sluzby" class="addovertime noimg">wyk. służby</a>
+             <a href="index.php?id=panele/moje/nadgodziny" class="addovertime noimg">moje nadgodziny</a>
+             <a href="index.php?id=panele/moje/sluzby" class="addovertime noimg">moje służby</a>
+
           <?php if($_SESSION['permissions']<6){
-             echo "<a href=\"index.php?id=panele/moje/moi&zolnierze\" class=\"addovertime noimg\">moi zołnierze</a>";
+              /*dodatkowe opcje w menu*/
+             /*echo "<a href=\"index.php?id=panele/moje/moi&zolnierze\" class=\"addovertime noimg\">moi zołnierze</a>";*/
           }
           ?>
                 </div>
